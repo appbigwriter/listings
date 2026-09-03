@@ -27,12 +27,20 @@ Regras rígidas:
     "title": "Título otimizado",
     "bullets": "Bullet 1\\nBullet 2\\nBullet 3\\nBullet 4\\nBullet 5",
     "description": "<p>Descrição detalhada usando HTML básico.</p>",
-    "keywords": "palavra1 palavra2 palavra3..."
+    "keywords": "palavra1 palavra2 palavra3...",
+    "pkg_length": "apenas número (polegadas), se encontrado",
+    "pkg_width": "apenas número (polegadas), se encontrado",
+    "pkg_height": "apenas número (polegadas), se encontrado",
+    "pkg_weight": "apenas número (libras), se encontrado",
+    "material": "material extraído",
+    "color": "cor extraída",
+    "included": "itens inclusos"
   }
 - O título (title) deve ser claro, factual, entre 100 e 150 caracteres, e começar preferencialmente com a Marca e o Tipo de Produto.
 - Os "bullets" devem conter exatamente 5 tópicos (uma quebra de linha entre cada), cada um com menos de 200 caracteres, destacando benefícios principais, facilidade de uso, durabilidade/material e o que inclui.
 - A "description" deve ser rica em detalhes, usar tags HTML permitidas na Amazon (<b>, <br>, <p>, <ul>, <li>) e detalhar mais as qualidades e uso do produto.
 - As "keywords" (generic_keywords) devem ser termos de busca separados por espaço (não use vírgulas), omitindo palavras que já estão no título, máximo 240 bytes.
+- Se as dimensões, peso, material, cor ou included não existirem no texto base, retorne uma string vazia ("") nesses campos. NÃO invente valores para dimensões e peso!
 - Se o usuário forneceu dados base, reescreva-os para melhorar a qualidade comercial. Se ele forneceu apenas dicas, crie do zero de forma criativa e realista para o nicho de sinalização comercial/industrial.
 - Evite exageros, promessas infundadas ou palavras proibidas na Amazon (ex: "best seller", "free shipping", "guaranteed").
 - A marca é "FBRSigns", sempre que apropriado.`;
