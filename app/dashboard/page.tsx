@@ -33,6 +33,7 @@ export default function Dashboard() {
         <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[.14em] text-slate-500">Workspace</div>
         <Link href="/" className="block mt-1 px-3 py-2.5 text-sm text-slate-400 hover:text-white">✦ Novo pré-cadastro</Link>
         <div className="rounded-lg bg-slate-800 px-3 py-2.5 text-sm text-white">▤ Catálogo em preparação</div>
+        <Link href="/marketing" className="block mt-1 px-3 py-2.5 text-sm text-slate-400 hover:text-white">▣ Marketing readiness</Link>
         <div className="px-3 py-2.5 text-sm text-slate-400">✓ Checklist Amazon</div>
         
         <div className="absolute bottom-5 left-4 text-[11px] leading-5 text-slate-500">
