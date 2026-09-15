@@ -1,0 +1,10 @@
+{
+  "run_id": "fixture-001",
+  "user_id": "e2e-user",
+  "organization_id": "e2e-org",
+  "skus": ["FBR-E2E-fixture-001-A", "FBR-E2E-fixture-001-B"],
+  "listings": [
+    {"sku":"FBR-E2E-fixture-001-A","title":"Sanitized fixture A","status":"draft","human_reviewed":false},
+    {"sku":"FBR-E2E-fixture-001-B","title":"Sanitized fixture B","status":"draft","human_reviewed":false}
+  ]
+}

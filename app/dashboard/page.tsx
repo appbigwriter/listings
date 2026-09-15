@@ -1,99 +1,31 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 
+type Listing = { id: string; sku: string; title: string; brand?: string; status: string; updated_at: string; payload?: Record<string, unknown> };
+
 export default function Dashboard() {
-  const [listings, setListings] = useState<any[]>([]);
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [editing, setEditing] = useState<Listing | null>(null);
+  const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const r = await fetch('/api/listings');
-        const d = await r.json();
-        if (!r.ok) throw new Error(d.error || 'Erro ao carregar');
-        setListings(d.data || []);
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
+  const load = useCallback(async () => {
+    setLoading(true); setError('');
+    try { const response = await fetch('/api/listings'); const body = await response.json(); if (!response.ok) throw new Error(body.error || 'Falha ao carregar catálogo'); setListings(body.data || []); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : 'Falha ao carregar catálogo'); }
+    finally { setLoading(false); }
   }, []);
+  useEffect(() => { void load(); }, [load]);
 
-  return (
-    <div className="app-shell">
-      <aside className="sidebar">
-        <div className="mb-8 flex items-center gap-2 text-xl font-black text-white">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-400 to-pink-200">F</span> 
-          PreListing
-        </div>
-        <div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[.14em] text-slate-500">Workspace</div>
-        <Link href="/" className="block mt-1 px-3 py-2.5 text-sm text-slate-400 hover:text-white">✦ Novo pré-cadastro</Link>
-        <div className="rounded-lg bg-slate-800 px-3 py-2.5 text-sm text-white">▤ Catálogo em preparação</div>
-        <Link href="/marketing" className="block mt-1 px-3 py-2.5 text-sm text-slate-400 hover:text-white">▣ Marketing readiness</Link>
-        <div className="px-3 py-2.5 text-sm text-slate-400">✓ Checklist Amazon</div>
-        
-        <div className="absolute bottom-5 left-4 text-[11px] leading-5 text-slate-500">
-          FBRSigns · Product Ops
-        </div>
-      </aside>
-      <main className="main">
-        <header className="mb-7 flex items-start justify-between gap-5 max-md:block">
-          <div>
-            <div className="text-[11px] font-extrabold uppercase tracking-[.14em] text-blue-600">Catálogo Interno</div>
-            <h1 className="mb-1 mt-1 text-3xl font-black tracking-tight">Listings em Preparação</h1>
-            <p className="m-0 max-w-3xl text-slate-500">Gerencie, edite ou crie novos itens a partir de rascunhos já salvos.</p>
-          </div>
-          <div className="mt-4 flex flex-wrap justify-end gap-2 md:mt-0">
-            <Link href="/" className="btn btn-primary">Criar do Zero</Link>
-          </div>
-        </header>
-        
-        <div className="card">
-          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-          
-          {loading ? (
-            <div className="text-sm text-slate-500 py-10 text-center">Carregando catálogo...</div>
-          ) : listings.length === 0 ? (
-            <div className="text-sm text-slate-500 py-10 text-center">Nenhum listing salvo no banco de dados ainda.</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-600">
-                <thead className="bg-slate-50 text-xs uppercase text-slate-500">
-                  <tr>
-                    <th className="px-4 py-3">SKU</th>
-                    <th className="px-4 py-3">Título</th>
-                    <th className="px-4 py-3">Marca</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Atualizado em</th>
-                    <th className="px-4 py-3 text-right">Ações</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {listings.map(item => (
-                    <tr key={item.id} className="hover:bg-slate-50">
-                      <td className="px-4 py-3 font-bold">{item.sku}</td>
-                      <td className="px-4 py-3 max-w-md truncate" title={item.title}>{item.title}</td>
-                      <td className="px-4 py-3">{item.brand}</td>
-                      <td className="px-4 py-3">
-                        <span className="rounded bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-600 uppercase tracking-wider">{item.status}</span>
-                      </td>
-                      <td className="px-4 py-3 text-xs">{new Date(item.updated_at).toLocaleDateString()}</td>
-                      <td className="px-4 py-3 text-right space-x-2">
-                        <Link href={`/?sku=${item.sku}`} className="text-blue-600 hover:underline">Editar</Link>
-                        <Link href={`/?sku=${item.sku}&duplicate=true`} className="text-purple-600 hover:underline">Duplicar</Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
-  );
+  const filtered = useMemo(() => listings.filter(item => `${item.sku} ${item.title} ${item.brand || ''}`.toLowerCase().includes(query.toLowerCase()) && (status === 'all' || item.status === status)), [listings, query, status]);
+  const statuses = [...new Set(listings.map(item => item.status))];
+
+  async function save() { if (!editing) return; setSaving(true); setError(''); try { const response = await fetch('/api/listings', { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sku: editing.sku, title: editing.title, brand: editing.brand }) }); const body = await response.json(); if (!response.ok) throw new Error(body.error || 'Falha ao salvar'); setEditing(null); await load(); } catch (cause) { setError(cause instanceof Error ? cause.message : 'Falha ao salvar'); } finally { setSaving(false); } }
+  async function archive(sku: string) { if (!window.confirm(`Arquivar ${sku}? O histórico será preservado.`)) return; setError(''); const response = await fetch(`/api/listings?sku=${encodeURIComponent(sku)}`, { method: 'DELETE' }); const body = await response.json(); if (!response.ok) setError(body.error || 'Falha ao arquivar'); else await load(); }
+
+  return <div className="app-shell"><aside className="sidebar"><div className="mb-8 flex items-center gap-2 text-xl font-black text-white"><span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-500 via-purple-400 to-pink-200">F</span> PreListing</div><div className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[.14em] text-slate-500">Workspace</div><Link href="/" className="block px-3 py-2.5 text-sm text-slate-400 hover:text-white">✦ Novo pré-cadastro</Link><div className="rounded-lg bg-slate-800 px-3 py-2.5 text-sm text-white">▤ Catálogo em preparação</div><Link href="/marketing" className="block mt-1 px-3 py-2.5 text-sm text-slate-400 hover:text-white">▣ Marketing readiness</Link><div className="absolute bottom-5 left-4 text-[11px] leading-5 text-slate-500">FBRSigns · Product Ops</div></aside><main className="main"><header className="mb-7 flex items-start justify-between gap-5 max-md:block"><div><div className="text-[11px] font-extrabold uppercase tracking-[.14em] text-blue-600">Catálogo interno</div><h1 className="mb-1 mt-1 text-3xl font-black tracking-tight">Listings em preparação</h1><p className="m-0 max-w-3xl text-slate-500">Busque, filtre, edite e arquive por SKU. Arquivamento preserva o histórico.</p></div><Link href="/" className="btn btn-primary">Criar do zero</Link></header><div className="card"><div className="mb-5 flex flex-wrap gap-3"><input aria-label="Buscar SKU ou título" className="min-w-64 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm" placeholder="Buscar SKU, título ou marca" value={query} onChange={e => setQuery(e.target.value)} /><select aria-label="Filtrar por status" className="rounded-lg border border-slate-200 px-3 py-2 text-sm" value={status} onChange={e => setStatus(e.target.value)}><option value="all">Todos os status</option>{statuses.map(value => <option key={value} value={value}>{value}</option>)}</select><button className="btn" onClick={() => void load()} disabled={loading}>Atualizar</button></div>{error && <div role="alert" className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</div>}{loading ? <div role="status" className="py-10 text-center text-sm text-slate-500">Carregando catálogo...</div> : filtered.length === 0 ? <div className="py-10 text-center text-sm text-slate-500">{listings.length ? 'Nenhum SKU corresponde aos filtros.' : 'Nenhum listing ativo. Crie o primeiro pré-cadastro.'}</div> : <div className="overflow-x-auto"><table className="w-full text-left text-sm text-slate-600"><thead className="bg-slate-50 text-xs uppercase text-slate-500"><tr><th className="px-4 py-3">SKU</th><th className="px-4 py-3">Título</th><th className="px-4 py-3">Marca</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">Atualizado</th><th className="px-4 py-3 text-right">Ações</th></tr></thead><tbody className="divide-y divide-slate-100">{filtered.map(item => <tr key={item.id || item.sku}><td className="px-4 py-3 font-bold">{item.sku}</td><td className="max-w-md truncate px-4 py-3" title={item.title}>{item.title}</td><td className="px-4 py-3">{item.brand || '—'}</td><td className="px-4 py-3"><span className="rounded bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-600">{item.status}</span></td><td className="px-4 py-3 text-xs">{item.updated_at ? new Date(item.updated_at).toLocaleDateString() : '—'}</td><td className="space-x-2 px-4 py-3 text-right"><button className="text-blue-600 hover:underline" onClick={() => setEditing({ ...item })}>Editar</button><button className="text-red-600 hover:underline" onClick={() => void archive(item.sku)}>Arquivar</button></td></tr>)}</tbody></table></div>}</div>{editing && <div className="card mt-5"><h2 className="mb-4 text-lg font-bold">Editar {editing.sku}</h2><div className="field-grid"><label className="field">Título<input value={editing.title} onChange={e => setEditing({ ...editing, title: e.target.value })} /></label><label className="field">Marca<input value={editing.brand || ''} onChange={e => setEditing({ ...editing, brand: e.target.value })} /></label></div><div className="mt-4 flex gap-2"><button className="btn btn-primary" onClick={() => void save()} disabled={saving}>{saving ? 'Salvando...' : 'Salvar'}</button><button className="btn" onClick={() => setEditing(null)}>Cancelar</button></div></div>}</main></div>;
 }

@@ -1,13 +1,14 @@
 # PRD-002 — Fechamento do Projeto FBR PreListing
 
 ## Status
-`AUDITORIA_CONCLUIDA` | `PLANO_DE_FECHAMENTO_PENDENTE`
+`IMPLEMENTACAO_LOCAL_COM_BLOQUEIOS_EXTERNOS` | `S3-05_PENDENTE`
 
 ## Data e escopo da auditoria
 - Data: 2026-09-15.
 - Repositório auditado: `F:/Projetos/FBRSigns-web/PreListing`.
-- Branch/commit auditado: `main` / `bc7e0d5`.
+- Branch/commit base auditado: `main` / `8e56457`; correções desta rodada permanecem não commitadas.
 - Alvo local: aplicação Next.js iniciada em `localhost:3111`.
+- Smoke negativo desta rodada: `localhost:3200`, porta livre selecionada localmente; `GET` e `POST /api/extract` sem sessão retornaram HTTP 401. Nenhum processo existente foi encerrado.
 - Não foi alegado deploy público; estado remoto/publicação permanece não verificado.
 
 ## Veredito executivo
@@ -15,7 +16,7 @@
 ### 1. Atende às necessidades de listar e gerenciar produtos para Amazon Seller?
 **Parcialmente.**
 
-O sistema atende hoje a preparação interna de um pré-listing: formulário, geração assistida, extração de referência, salvamento no Supabase, consulta do catálogo e exportação de CSV/JSON. Ele não atende ainda ao significado completo de "listar e gerenciar produtos no Amazon Seller": não há autenticação/autorização aplicada, RLS, integração com Amazon Selling Partner API/Seller Central, importação do resultado da submissão, sincronização de estados, edição/remoção de registros por API e confirmação de que o CSV é o template correto da categoria.
+O sistema atende hoje a preparação interna de um pré-listing: formulário, geração assistida autenticada, extração de referência, salvamento no Supabase, consulta do catálogo, arquivamento seguro e exportação de CSV/JSON. Ele não atende ainda ao significado completo de "listar e gerenciar produtos no Amazon Seller": não há integração com Amazon Selling Partner API/Seller Central, importação do resultado da submissão, sincronização de estados e confirmação de que o CSV é o template correto da categoria. Autenticação server-side e filtros owner/organização existem localmente via adapter, mas sessão real, RLS/migration e persistência remota ainda não foram verificados.
 
 A decisão de fechamento deste PRD é: **fechar a versão operacional como Product Preparation + Seller Handoff**, sem publicação automática. Publicação/sincronização automática fica explicitamente fora desta versão, salvo novo Gate de escopo e integração aprovado por Sergio.
 
@@ -36,12 +37,13 @@ Há evidência de interface local, leitura de um registro real do Supabase e Kan
 
 | Evidência | Resultado | Classificação |
 |---|---|---|
-| `npm test -- --run` | 2 arquivos, 10 testes, todos passaram | verificado localmente |
+| `npm test -- --run` | 9 arquivos, 56 testes aprovados, incluindo contrato UI/API IA, autenticação fail-closed do extractor, aprovação mais recente limitada a uma linha e preflight da migration | verificado localmente nesta execução |
 | `npm run typecheck` | sem erros | verificado localmente |
-| `npm run build` | build Next.js concluído, 16 páginas geradas | verificado localmente |
+| `npm run build` | build Next.js concluído, 18 rotas geradas | verificado localmente |
 | `GET /`, `/dashboard`, `/marketing` em 3111 | HTTP 200 | verificado localmente |
 | `GET /api/listings` em 3111 | retornou 1 listing real do Supabase | verificado localmente / readback local |
 | `POST /api/kanban` sem `confirm=true` | dry-run, 5 cards, `created:false` | verificado localmente |
+| smoke negativo local sem sessão | marketing/catalog/approval/Kanban/handoff/submission retornaram HTTP 401; extractor loopback retornou HTTP 400 | verificado localmente nesta execução |
 | `POST /api/listings` com SKU/título vazios | HTTP 400 e mensagem de validação | verificado localmente |
 | `GET /api/marketing-profiles` em 3111 | HTTP 200, lista vazia | verificado localmente |
 | deploy público, autenticação, migration no Supabase, restart/redeploy e readback externo | não executados nesta auditoria | não verificado |
@@ -50,19 +52,19 @@ Há evidência de interface local, leitura de um registro real do Supabase e Kan
 
 | Capacidade | Status | Evidência | Limitação atual | Próxima ação |
 |---|---|---|---|---|
-| Criar pré-listing | implementado | `app/page.tsx`, `POST /api/listings` | aceita payload amplo; não há autenticação nem validação Amazon centralizada | S1-01, S1-02 |
+| Criar pré-listing | implementado localmente | `app/page.tsx`, `POST /api/listings` | validação própria e auth adapter; sessão real/RLS/migration remota não verificados | S1-01, S1-02 |
 | Consultar catálogo | implementado | `app/dashboard/page.tsx`, `GET /api/listings` | sem paginação/edição/exclusão formal | S1-03 |
 | Persistência | parcialmente verificado | Supabase devolveu listing real | schema e credencial service-role no servidor; RLS/auth são ressalva aberta | S0-02, S3-01 |
-| Geração por IA | implementado | `/api/generate`, `/api/generate-field` | conteúdo pode ser gerado em idioma inadequado e claims exigem revisão humana | S1-04 |
+| Geração por IA | implementado localmente como draft factual | `/api/generate`, `/api/generate-field`, contrato estrito e provenance | provider real não foi exercitado; revisão humana continua obrigatória | S1-04 |
 | Extração de referência | implementado | `/api/extract` | dependente da disponibilidade da página; não é fonte autorizada para claims | S1-05 |
 | CSV Amazon | implementado como base | exportação em `app/page.tsx` | não usa template de categoria nem valida todos os atributos/valores aceitos pelo Seller Central | S1-06, S1-07 |
 | JSON | implementado | exportação local | não contém pacote unificado de produto + economia + canais + tracking | S2-04 |
 | Marketing Readiness | parcialmente implementado | `MP-001`, APIs e telas de marketing | perfil real não foi criado/verificado no E2E; exportação Markdown não comprovada | S2-01 a S2-05 |
 | Margem real | implementado no domínio | `lib/marketing/margin.ts`, testes | depende de custos completos fornecidos; não há UX de cadastro/edição comprovada | S2-01 |
-| Launch Gate/aprovação | implementado no código | `marketing-approvals`, testes unitários | não há teste E2E de aprovação persistida e reload; sem usuário autenticado | S2-03, S3-02 |
+| Launch Gate/aprovação | implementado no código e protegido contra bypass local | `marketing-approvals`, `marketing-profiles`, `lib/marketing/profile-guard.ts`, testes unitários | não há teste E2E de aprovação persistida e reload; sem usuário autenticado | S2-03, S3-02 |
 | Planos Amazon/Meta/tracking | implementado como rascunho | `lib/marketing/plans.ts`, APIs | não publica e não deve publicar; aprovação ≠ publicação | S2-02, S2-04 |
 | Kanban | implementado como dry-run | `POST /api/kanban` retornou 5 previews | criação real não foi exercitada; integração externa não verificada | S2-05, S3-03 |
-| Segurança | bloqueio de fechamento | service role e comentário MVP sem RLS | qualquer uso com dados reais exige auth, autorização, RLS e remoção de exposição indevida | S0-02, S3-01 |
+| Segurança | parcial, bloqueio de fechamento | auth fail-closed, filtros owner+organização e migration/RLS owner-only validados localmente | migration remota, provider real e E2E ainda não verificados | S0-02, S3-01 |
 | Deploy/observabilidade | não verificado | nenhum artefato de deploy/readback no repositório | não há prova de ambiente público, health check ou rollback | S3-04, S3-05 |
 
 ## Requisitos de fechamento
@@ -121,6 +123,17 @@ S0 Fundação e segurança
           └── S3 E2E, deploy e encerramento
 ```
 
+## Correção de segurança desta rodada
+
+- `POST` e `PATCH /api/marketing-profiles` exigem listing ativo pertencente ao owner + organização autenticados.
+- O lookup da aprovação mais recente mantém `order('created_at', { ascending: false })`, aplica `.limit(1)` e usa `maybeSingle`, evitando `PGRST116` quando há múltiplas decisões.
+- `POST /api/extract` falha fechado com sessão verificável tanto no middleware quanto no route handler; a UI envia credenciais de sessão e não há exceção pública para o extractor.
+- `launch_ready` exige `gate.ready` e a decisão de aprovação mais recente exatamente `approved`; aprovação antiga invalidada por rejeição/alteração solicitada recente não libera a transição.
+- A migration faz preflight de existência das sete tabelas antes de qualquer `ALTER TABLE`, aborta com `SAFE_MIGRATION_ABORTED` e lista de tabelas ausentes, verifica NULLs e somente depois aplica `NOT NULL`; mantém RLS owner-only, `archived` e unicidade por organização sem owner falso.
+- Ausência de decisão retorna HTTP 400 com `APPROVAL_REQUIRED`; decisão mais recente não aprovada retorna HTTP 400 com `APPROVAL_NOT_CURRENT`; a validação ocorre antes do upsert/update.
+- Transições `draft`, `research_ready`, `campaign_plan_ready`, `tracking_ready` e `approval_pending` permanecem disponíveis; planos, aprovação e publicação continuam separados.
+- S3-05 permanece pendente; esta correção não é QA independente, migration remota, deploy ou publicação.
+
 ## Gates
 
 - **Gate de escopo:** Sergio confirma que o fechamento é Product Preparation + Seller Handoff, sem publicação automática.
@@ -148,11 +161,11 @@ card: "PRD-002"
 objetivo do job: "Fechar o FBR PreListing como preparação de produtos Amazon Seller com handoff auditável"
 entregável: "F:/Projetos/FBRSigns-web/PreListing/PRD-002-fechamento-fbr-prelisting.md e SPRINTS.md"
 decisões/suposições:
-  - "FATO: o commit bc7e0d5 compila e os 10 testes atuais passam."
-  - "FATO: a auditoria não verificou deploy público nem autenticação."
+  - "FATO: a base 8e56457 compila; nesta execução o working tree passou com 56 testes em 9 arquivos."
+  - "FATO: auth server-side fail-closed e filtros owner/organização foram verificados localmente; provider real, RLS/migration e deploy não foram verificados."
   - "DECISÃO PROPOSTA: publicação automática Amazon fica fora do fechamento desta versão."
 pendências/blockers:
-  - "S0-02, alta, owner: executor técnico; auth/RLS não implementadas/verificadas."
+  - "S0-02, alta, owner: infra/backend; adapter server-side e filtros locais existem, mas provider real, RLS e migration remota não foram verificados."
   - "Gate de Sergio, média; confirmar escopo Product Preparation + Seller Handoff."
 gate: "entrada"
 critérios de aceite/evidência:

@@ -1,7 +1,7 @@
 # SPRINTS — Fechamento FBR PreListing
 
 **Fonte:** `PRD-002-fechamento-fbr-prelisting.md`  
-**Regra:** cada Story só passa a `concluido` com evidência objetiva. `S0-02` é bloqueador do uso com dados reais.
+**Regra:** cada Story só passa a `concluido` com evidência objetiva. `S0-02` é bloqueador do uso com dados reais. A política de isolamento implementada localmente é owner-only dentro da organização.
 
 ## S0 — Fundação, contrato Amazon e segurança
 
@@ -173,15 +173,24 @@
 ## Registro desta execução
 
 - **S0-01 concluído localmente:** `lib/catalog/contracts.ts`, `lib/catalog/submission.ts` e `tests/closing-domain.test.ts`; contratos de status, template, validação e erros cobertos.
-- **S0-02 parcial/bloqueado externamente:** `middleware.ts`, `lib/auth.ts` e `supabase-closing-migration.sql`; ausência de sessão real retorna `401 AUTH_REQUIRED`; migration não foi aplicada.
+- **S0-02 parcial/bloqueado externamente:** `lib/auth.ts` usa adapter fail-closed: `trusted-gateway` exige HMAC e `local-only` exige allow explícito, identidade fixa e não produção; `x-user-id` arbitrário não é aceito. APIs de catálogo e o extractor aplicam autenticação/owner + organização; a migration/RLS owner-only está validada estaticamente, mas `supabase-closing-migration.sql` não foi aplicada.
 - **S0-03 concluído:** `implementation_plan.md` marcado como histórico e aponta para PRD-002/SPRINTS.
-- **S1-01 parcial:** CRUD HTTP de catálogo implementado em `app/api/listings/route.ts`, com PATCH e arquivamento lógico; persistência depende de Supabase/RLS e sessão.
+- **S1-01 parcial:** CRUD HTTP de catálogo em `app/api/listings/route.ts`, com PATCH e arquivamento lógico; todas as operações aplicam owner + organização. Persistência depende de Supabase/RLS e sessão verificável.
+- **S1-02 concluído localmente:** `app/dashboard/page.tsx` tem busca, filtro, edição, arquivamento, loading, erro, vazio e reload/readback por API.
 - **S1-03/S1-06 concluídos localmente:** template versionado e Seller Handoff JSON/CSV determinístico em `lib/catalog/contracts.ts` e `app/api/seller-handoff/route.ts`; export inválido retorna `422`.
 - **S1-07 concluído localmente:** registro/readback de resultado manual em `app/api/seller-submission/route.ts`; status de publicação permanece `not_published`.
-- **S1-02, S2-01–S2-05 e S3-01–S3-05:** parciais ou não verificáveis sem sessão, aplicação remota da migration, fixture autenticada, QA/E2E e alvo de deploy. As APIs existentes de marketing permanecem sem publicação/gasto.
+- **S2-01–S2-03 protegidos localmente:** perfil, margem obrigatória, planos draft, Launch Gate e approval filtram owner/organização; `lib/marketing/profile-guard.ts` centraliza listing ativo e a decisão mais recente com `order` descendente + `.limit(1)` + `maybeSingle`, coberto por teste com múltiplas decisões; POST/PATCH de perfil só aceitam `launch_ready` com gate pronto e decisão exatamente `approved`, retornando `APPROVAL_REQUIRED`/`APPROVAL_NOT_CURRENT` sem mutação; aprovador vem da identidade autenticada, sem publicação/gasto.
+- **S2-04 concluído localmente:** `lib/marketing/contracts.ts` e `GET /api/marketing-profiles?sku=...&format=json|markdown` produzem pacote versionado com produto, economia, canais, tracking, approval e gate.
+- **S2-05 concluído localmente:** Kanban mantém dry-run, exige gate/aprovação, usa idempotência e readback; criação externa não foi exercitada.
+- **S3-01/S3-03 concluídos localmente:** `lib/e2e/fixture.ts`, `tests/fixtures/e2e-sanitized.json`, `tests/prd002-contracts.test.ts`, `tests/qa-regressions.test.ts` e `tests/ai-ui-contract.test.ts` cobrem fixture sanitizada, isolamento owner-only, auth fail-closed incluindo `/api/extract`, pacote, SSRF, dry-run, contrato UI/API de IA, múltiplas approvals e ordem estática do preflight da migration sem Supabase remoto.
+- **S3-02 parcial/bloqueado:** fluxo browser/restart/readback dependem de provider e Supabase configurados; não foi alegado QA independente.
+- **S3-04 concluído como documentação local-only:** `.env.template` declara `trusted-gateway` ou `local-only` explícito; nenhum deploy público foi executado.
+- **S3-05 não concluído:** Gate final de Sergio e encerramento continuam pendentes.
 
-Evidências executadas: `npm test -- --run` (3 arquivos/14 testes), `npm run typecheck`, `npm run build` (18 rotas), `git diff --check`. Nenhuma publicação, gasto, deploy irreversível ou migration remota foi executada.
+Evidências executadas nesta execução: `npm test -- --run` (9 arquivos/56 testes), `npm run typecheck`, `npm run build`, `git diff --check` e smoke negativo em `localhost:3200` (`GET`/`POST /api/extract` sem sessão retornaram HTTP 401); nenhuma publicação, gasto, deploy irreversível ou migration remota foi executada.
 
-**Status do fechamento:** implementação local parcial; não marcar `concluido` antes dos blockers e do Gate final de Sergio.
+As correções desta rodada cobrem timeout durante todo o body e mapped IPv6 do extractor (com limitação TOCTOU do fetch nativo documentada), bloqueio explícito de operações sobre listings arquivados, seleção da decisão mais recente de qualquer tipo (somente `approved` permite Kanban) e auth real do adapter nas duas rotas de IA. A verificação remota de sessão, RLS/migration, restart/readback e deploy público continua bloqueada por configuração/credenciais externas. S3-05 permanece pendente.
+
+**Status do fechamento:** implementação local ampliada; não marcar `concluido` antes dos blockers e do Gate final de Sergio.
 
 **Total:** 20 Stories. Nenhuma publicação Amazon, alteração de preço, gasto de mídia, migração produtiva ou deploy irreversível está autorizada por este backlog sem Gate específico.
