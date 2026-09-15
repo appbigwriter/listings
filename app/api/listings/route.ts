@@ -1,35 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabase } from '../../../lib/marketing/supabase';
+import { getAuthContext, unauthorized } from '../../../lib/auth';
+import { LISTING_STATUSES, validateListing } from '../../../lib/catalog/contracts';
 export const runtime='nodejs';
-export async function POST(req:NextRequest){try{const body=await req.json();if(!body?.sku||!body?.title)return NextResponse.json({error:'SKU e título são obrigatórios.'},{status:400});const url=process.env.NEXT_PUBLIC_SUPABASE_URL,key=process.env.SUPABASE_SERVICE_ROLE_KEY;if(!url||!key)return NextResponse.json({error:'Supabase não configurado. Preencha o .env.local a partir do .env.template.'},{status:503});const supabase=createClient(url,key);const {data,error}=await supabase.from('prelistings').upsert({sku:body.sku,title:body.title,brand:body.brand||'FBRSigns',payload:body,source_url:body.source_url||null,source_platform:body.source_platform||null,source_snapshot:body.source_snapshot||null,status:'draft',updated_at:new Date().toISOString()},{onConflict:'sku'}).select('id,sku,updated_at').single();if(error)throw error;return NextResponse.json({data})}catch(error){return NextResponse.json({error:error instanceof Error?error.message:'Falha ao salvar no Supabase.'},{status:500})}}
-
-export async function GET(req: NextRequest) {
-  try {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!url || !key) {
-      return NextResponse.json({ error: 'Supabase não configurado.' }, { status: 503 });
-    }
-    
-    // Optional: get a specific SKU if passed via query params, else list all
-    const searchParams = req.nextUrl.searchParams;
-    const sku = searchParams.get('sku');
-
-    const supabase = createClient(url, key);
-    
-    if (sku) {
-      const { data, error } = await supabase.from('prelistings').select('*').eq('sku', sku).single();
-      if (error) throw error;
-      return NextResponse.json({ data });
-    } else {
-      const { data, error } = await supabase.from('prelistings').select('*').order('updated_at', { ascending: false }).limit(100);
-      if (error) throw error;
-      return NextResponse.json({ data });
-    }
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Falha ao buscar dados no Supabase.' },
-      { status: 500 }
-    );
-  }
+const json=(body:unknown,status=200)=>NextResponse.json(body,{status});
+function guard(req:NextRequest){const auth=getAuthContext(req);return auth||null;}
+export async function GET(req:NextRequest){
+ const auth=guard(req); if(!auth)return json(unauthorized(),401); const db=getSupabase(); if(!db)return json({error:'Supabase não configurado.',code:'SUPABASE_NOT_CONFIGURED'},503);
+ try { const sku=req.nextUrl.searchParams.get('sku'); let q=db.from('prelistings').select('*').eq('organization_id',auth.organizationId).neq('status','archived').order('updated_at',{ascending:false}).limit(100); if(sku)q=q.eq('sku',sku); const {data,error}=sku?await q.maybeSingle():await q; if(error)throw error; if(sku&&!data)return json({error:'SKU não encontrado.'},404); return json({data}); } catch(e){return json({error:e instanceof Error?e.message:'Falha ao buscar catálogo.'},500)}
 }
+export async function POST(req:NextRequest){
+ const auth=guard(req); if(!auth)return json(unauthorized(),401); const db=getSupabase(); if(!db)return json({error:'Supabase não configurado.',code:'SUPABASE_NOT_CONFIGURED'},503);
+ try {const body=await req.json(); const validation=validateListing(body); if(!validation.valid)return json({error:'Listing inválido.',errors:validation.errors},400); const row={sku:String(body.sku).trim(),title:String(body.title).trim(),brand:body.brand||'FBRSigns',payload:body,source_url:body.source_url||null,source_platform:body.source_platform||null,source_snapshot:body.source_snapshot||null,status:'draft',owner_id:auth.userId,organization_id:auth.organizationId,template_key:body.template_key,template_version:body.template_version,human_reviewed:body.human_reviewed===true,updated_at:new Date().toISOString()}; const {data,error}=await db.from('prelistings').insert(row).select('id,sku,status,updated_at').single(); if(error){if(error.code==='23505')return json({error:'SKU já existe nesta organização.',code:'SKU_CONFLICT'},409);throw error} return json({data},201)} catch(e){return json({error:e instanceof Error?e.message:'Falha ao salvar no Supabase.'},500)}
+}
+export async function PATCH(req:NextRequest){
+ const auth=guard(req); if(!auth)return json(unauthorized(),401); const db=getSupabase(); if(!db)return json({error:'Supabase não configurado.'},503);
+ try {const body=await req.json();const sku=String(body.sku||'').trim();if(!sku)return json({error:'SKU obrigatório.'},400);const patch={...(body.payload?{payload:body.payload}:{}),...(body.title?{title:body.title}:{}),...(body.brand?{brand:body.brand}:{}),...(body.template_key?{template_key:body.template_key}:{}),...(body.template_version?{template_version:body.template_version}:{}),...(body.human_reviewed!==undefined?{human_reviewed:body.human_reviewed}:{}),updated_at:new Date().toISOString()};const {data,error}=await db.from('prelistings').update(patch).eq('sku',sku).eq('organization_id',auth.organizationId).neq('status','archived').select('id,sku,status,updated_at').maybeSingle();if(error)throw error;if(!data)return json({error:'SKU não encontrado.'},404);return json({data})}catch(e){return json({error:e instanceof Error?e.message:'Falha ao editar listing.'},500)}
+}
+export async function DELETE(req:NextRequest){
+ const auth=guard(req); if(!auth)return json(unauthorized(),401);const db=getSupabase();if(!db)return json({error:'Supabase não configurado.'},503);try{const sku=req.nextUrl.searchParams.get('sku');if(!sku)return json({error:'SKU obrigatório.'},400);const {data,error}=await db.from('prelistings').update({status:'archived',archived_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('sku',sku).eq('organization_id',auth.organizationId).neq('status','archived').select('id,sku,status,archived_at').maybeSingle();if(error)throw error;if(!data)return json({error:'SKU não encontrado.'},404);return json({data})}catch(e){return json({error:e instanceof Error?e.message:'Falha ao arquivar listing.'},500)}}

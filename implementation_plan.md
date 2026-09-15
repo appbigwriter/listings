@@ -1,4 +1,9 @@
-# Adição de Geração de Listing via IA
+# Histórico — Geração de Listing via IA
+
+Este documento descreve a implementação histórica da geração assistida por IA. A escolha de provedor já está resolvida no código: a rota usa OpenAI quando `OPENAI_API_KEY` está configurada e retorna fallback seguro quando não está.
+
+Para o estado atual e o fechamento operacional, consulte `PRD-002-fechamento-fbr-prelisting.md` e `SPRINTS.md`. Publicação Amazon e gasto de mídia permanecem fora do escopo.
+
 
 Este plano descreve como vamos adicionar a funcionalidade de geração de anúncios por Inteligência Artificial no PreListing, permitindo que você preencha algumas dicas iniciais e a IA construa ou reescreva o conteúdo otimizado para a Amazon.
 
