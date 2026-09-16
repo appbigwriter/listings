@@ -1,14 +1,14 @@
 # PRD-002 — Fechamento do Projeto FBR PreListing
 
 ## Status
-`IMPLEMENTACAO_LOCAL_COM_BLOQUEIOS_EXTERNOS` | `S3-05_PENDENTE`
+`QA_APROVADO_COM_BLOQUEIOS_EXTERNOS` | `S3-05_PENDENTE`
 
 ## Data e escopo da auditoria
 - Data: 2026-09-15.
 - Repositório auditado: `F:/Projetos/FBRSigns-web/PreListing`.
-- Branch/commit base auditado: `main` / `8e56457`; correções desta rodada permanecem não commitadas.
-- Alvo local: aplicação Next.js iniciada em `localhost:3111`.
-- Smoke negativo desta rodada: `localhost:3200`, porta livre selecionada localmente; `GET` e `POST /api/extract` sem sessão retornaram HTTP 401. Nenhum processo existente foi encerrado.
+- Branch/commit atual verificado: `main` / `33747c7` (sincronizado com `origin/main`).
+- Alvo local: aplicação Next.js iniciada em `localhost:3111`; o QA final usou `localhost:3201`.
+- Smoke negativo final: `localhost:3201`; páginas HTTP 200, APIs protegidas HTTP 401 e extractor para loopback HTTP 400. Nenhum processo existente foi encerrado.
 - Não foi alegado deploy público; estado remoto/publicação permanece não verificado.
 
 ## Veredito executivo
@@ -161,8 +161,9 @@ card: "PRD-002"
 objetivo do job: "Fechar o FBR PreListing como preparação de produtos Amazon Seller com handoff auditável"
 entregável: "F:/Projetos/FBRSigns-web/PreListing/PRD-002-fechamento-fbr-prelisting.md e SPRINTS.md"
 decisões/suposições:
-  - "FATO: a base 8e56457 compila; nesta execução o working tree passou com 56 testes em 9 arquivos."
+  - "FATO: o commit atual 33747c7 está em main e sincronizado com origin/main; a execução local passou com 56 testes em 9 arquivos."
   - "FATO: auth server-side fail-closed e filtros owner/organização foram verificados localmente; provider real, RLS/migration e deploy não foram verificados."
+  - "FATO: QA independente final classificou o código como APROVADO COM BLOQUEIOS EXTERNOS."
   - "DECISÃO PROPOSTA: publicação automática Amazon fica fora do fechamento desta versão."
 pendências/blockers:
   - "S0-02, alta, owner: infra/backend; adapter server-side e filtros locais existem, mas provider real, RLS e migration remota não foram verificados."
