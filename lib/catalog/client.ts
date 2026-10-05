@@ -1,5 +1,10 @@
 export async function api(path: string, body?: unknown) {
-  const response = await fetch(path, { credentials: 'include', ...(body === undefined ? {} : { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }) });
+  const request=() => fetch(path, { credentials: 'include', ...(body === undefined ? {} : { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }) });
+  let response = await request();
+  if(response.status===401 && path!=='/api/auth/session') {
+    const refreshed=await fetch('/api/auth/session',{credentials:'include'});
+    if(refreshed.ok)response=await request();
+  }
   const data = await response.json();
   if (response.status === 401) { window.location.href = '/login'; throw new Error('Entre para acessar o catálogo.'); }
   if (!response.ok) throw new Error(data.error || 'Não foi possível concluir a operação.');

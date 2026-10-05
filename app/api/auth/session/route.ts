@@ -32,7 +32,13 @@ export async function POST(req: NextRequest) {
   } catch (error) { return NextResponse.json({ error: error instanceof RequestBodyError ? error.message : 'Não foi possível autenticar.' }, { status: error instanceof RequestBodyError ? error.status : 503 }); }
 }
 export async function DELETE(req: NextRequest) {
-  const token = req.cookies.get('fbr_access_token')?.value;
+  let token = req.cookies.get('fbr_access_token')?.value;
+  const refresh=req.cookies.get('fbr_refresh_token')?.value;
+  if(refresh) {
+    const renewed=await client().auth.refreshSession({refresh_token:refresh});
+    if(renewed.data.session)token=renewed.data.session.access_token;
+    else if(renewed.error && ![400,401,403].includes(renewed.error.status || 0))return NextResponse.json({error:'Não foi possível revogar a sessão. Tente novamente.'},{status:503});
+  }
   if (token) {
     const db = getSupabase();
     if (!db) return NextResponse.json({ error: 'Não foi possível revogar a sessão.' }, { status: 503 });

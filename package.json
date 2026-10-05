@@ -11,8 +11,8 @@
     "lint": "next lint",
     "catalog:worker": "tsx --env-file=.env scripts/catalog-worker.ts",
     "catalog:check": "tsx --env-file=.env scripts/integration-check.ts",
-    "catalog:source-check": "tsx --env-file=.env scripts/source-check.ts"
-    ,"auth:provision": "tsx --env-file=.env scripts/provision-user.ts"
+    "catalog:source-check": "tsx --env-file=.env scripts/source-check.ts",
+    "auth:provision": "tsx --env-file=.env scripts/provision-user.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.112.4",
