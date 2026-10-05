@@ -7,4 +7,9 @@ README.md
 .git
 .env
 .env.local
+.env.*
+!.env.example
+.kilo
+artifacts
+backups
 .DS_Store

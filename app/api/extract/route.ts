@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 import { isSafeRemoteUrl, isSafeRemoteUrlSync, readResponseWithLimit } from '../../../lib/extract-security';
-import { getAuthContext, unauthorized } from '../../../lib/auth';
+import { resolveAuthContext, unauthorized } from '../../../lib/auth';
+import { publicRequest } from '../../../lib/net/public-request';
+import { readJsonBody,RequestBodyError } from '../../../lib/http';
 
 export const runtime = 'nodejs';
 const MAX = Number(process.env.EXTRACTION_MAX_BYTES || 2_000_000);
@@ -13,18 +15,18 @@ function platform(url: string) { try { const host = new URL(url).hostname; if (h
 function isAmazonBlock(title: string, body: string, hasProductData: boolean) { if (hasProductData) return false; const marker = `${title} ${body}`.toLowerCase(); return marker.includes('robot check') || marker.includes('captcha') || marker.includes('automated access') || marker.includes('sorry, something went wrong') || title.toLowerCase() === 'amazon.com' || title.toLowerCase() === 'amazon.com: low prices'; }
 
 export async function POST(req: NextRequest) {
-  if (!getAuthContext(req)) return NextResponse.json(unauthorized(), { status: 401 });
+  if (!await resolveAuthContext(req)) return NextResponse.json(unauthorized(), { status: 401 });
   try {
-    const { url: initialUrl } = await req.json();
+    const { url: initialUrl } = await readJsonBody(req,4096);
     if (!initialUrl || !isSafeRemoteUrlSync(initialUrl) || !(await isSafeRemoteUrl(initialUrl))) return NextResponse.json({ error: 'URL bloqueada: somente destinos públicos http(s) são permitidos.' }, { status: 400 });
     let url = initialUrl; let response: Response | undefined; let bodySignal: AbortSignal | undefined;
     for (let redirects = 0; redirects <= 3; redirects++) {
       if (!(await isSafeRemoteUrl(url))) return NextResponse.json({ error: 'Redirecionamento para rede privada ou metadata bloqueado.' }, { status: 400 });
       const signal = AbortSignal.timeout(TIMEOUT_MS);
       bodySignal = signal;
-      response = await fetch(url, { redirect: 'manual', signal, headers: { 'user-agent': 'FBRSigns PreListing/1.0', accept: 'text/html,application/xhtml+xml' } });
+      response = await publicRequest(url, { signal, headers: { 'user-agent': 'FBRSigns PreListing/1.0', accept: 'text/html,application/xhtml+xml' } });
       if (![301, 302, 303, 307, 308].includes(response.status)) break;
-      const location = response.headers.get('location'); if (!location) break; url = new URL(location, url).toString();
+      const location = response.headers.get('location'); if (!location) break; await response.body?.cancel();url = new URL(location, url).toString();
       if (redirects === 3) return NextResponse.json({ error: 'A fonte excedeu o limite de redirecionamentos.' }, { status: 502 });
     }
     if (!response) throw new Error('Sem resposta.');

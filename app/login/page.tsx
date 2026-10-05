@@ -1,0 +1,7 @@
+'use client';
+import { useState } from 'react';
+
+export default function Login() {
+  const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
+  return <main className="mx-auto max-w-md p-8 mt-16"><h1 className="text-3xl font-bold">FBR PreListing</h1><p className="mt-2 text-slate-500">Entre para preparar o catálogo e revisar as pendências.</p><form className="card mt-6 grid gap-4" onSubmit={async event => { event.preventDefault(); setBusy(true); setError(''); try { const response = await fetch('/api/auth/session', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email, password }) }); const data = await response.json(); if (!response.ok) throw new Error(data.error); window.location.href = '/catalog'; } catch (error) { setError(error instanceof Error ? error.message : 'Falha ao entrar.'); } finally { setBusy(false); } }}><label className="field">Email<input type="email" autoComplete="username" required value={email} onChange={event => setEmail(event.target.value)} /></label><label className="field">Senha<input type="password" autoComplete="current-password" required value={password} onChange={event => setPassword(event.target.value)} /></label>{error && <p role="alert" className="text-red-600">{error}</p>}<button disabled={busy} className="btn btn-primary">{busy ? 'Entrando…' : 'Entrar'}</button></form></main>;
+}

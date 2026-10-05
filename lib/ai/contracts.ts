@@ -40,7 +40,7 @@ export function validateAiInput(input: unknown): Validation<AiGenerationInput> {
   return { ok: true, value: input as AiGenerationInput };
 }
 
-function validateCandidate(candidate: unknown, input: unknown, field?: string): Validation<string> {
+function validateCandidate(candidate: unknown, input: unknown, field?: string, verifiedRewrite = false): Validation<string> {
   const parsed = validateAiInput(input);
   if (!parsed.ok) return parsed;
   const value = text(candidate);
@@ -48,11 +48,17 @@ function validateCandidate(candidate: unknown, input: unknown, field?: string): 
   const facts = stringsIn(parsed.value.fbrFacts);
   const external = stringsIn(parsed.value.referenceData);
   if (external.has(value) && !facts.has(value)) return { ok: false, error: 'AI_EXTERNAL_CLAIM_NOT_ALLOWED' };
-  if (!facts.has(value)) return { ok: false, error: field ? `AI_UNSUPPORTED_VALUE:${field}` : 'AI_UNSUPPORTED_VALUE' };
+  if (field && ['material', 'color', 'included'].includes(field) && value !== text(parsed.value.fbrFacts[field])) return { ok: false, error: `AI_UNSUPPORTED_VALUE:${field}` };
+  if (!facts.has(value)) {
+    if (!verifiedRewrite || !field || !['title', 'bullets', 'description', 'keywords'].includes(field)) return { ok: false, error: field ? `AI_UNSUPPORTED_VALUE:${field}` : 'AI_UNSUPPORTED_VALUE' };
+    const numbers = (v: string) => v.match(/\d+(?:[.,]\d+)?/g) || [];
+    const knownNumbers = new Set(numbers([...facts].join(' ')));
+    if (numbers(value).some(number => !knownNumbers.has(number))) return { ok: false, error: `AI_UNSUPPORTED_NUMBER:${field}` };
+  }
   return { ok: true, value };
 }
 
-export function validateAiListingResponse(candidate: unknown, input: unknown): Validation<Record<string, unknown>> {
+export function validateAiListingResponse(candidate: unknown, input: unknown, verifiedRewrite = false): Validation<Record<string, unknown>> {
   const parsed = validateAiInput(input);
   if (!parsed.ok) return parsed;
   if (!isRecord(candidate)) return { ok: false, error: 'AI_RESPONSE_SCHEMA_INVALID' };
@@ -61,7 +67,7 @@ export function validateAiListingResponse(candidate: unknown, input: unknown): V
   const value: Record<string, unknown> = {};
   for (const field of AI_LISTING_FIELDS) {
     if (candidate[field] !== undefined && typeof candidate[field] !== 'string') return { ok: false, error: 'AI_RESPONSE_TYPE_INVALID' };
-    const checked = validateCandidate(candidate[field] ?? '', parsed.value, field);
+    const checked = validateCandidate(candidate[field] ?? '', parsed.value, field, verifiedRewrite);
     if (!checked.ok) return checked;
     value[field] = checked.value;
   }

@@ -1,5 +1,11 @@
 # FBRSigns PreListing + Marketing Readiness
 
+A implementação de catálogo de outubro de 2026 está descrita em [IMPLEMENTATION-003.md](./IMPLEMENTATION-003.md). A página inicial agora abre a central de preparação: importação CSV/JSON ou leitura da loja, revisão por canal, requisitos oficiais, validação de mídia e processamento com checkpoints. O extrator anterior permanece em `/workspace`.
+
+**Atualização 05/10/2026:** migrations do catálogo aplicadas remotamente com autorização, RLS e grants verificados; registros antigos preservados. Faltam usuário real, ownership do legado e homologação Amazon (LWA `invalid_grant`). TikTok Shop permanece bloqueado e eBay/Walmart têm adaptadores de preparação, sem publicação por API. O novo plano tem [54 stories em S4–S12](./SPRINTS-004-operacao-completa.md); veja [acessos Amazon](./AMAZON-API-SETUP.md) e [verificação das migrations](./MIGRATION-004-verification.md).
+
+Comandos adicionais: `npm run catalog:check` verifica integrações sem escrever; `npm run catalog:source-check` verifica a fonte; `npm run catalog:worker` processa os lotes depois de ativar o banco. Veja o documento de implementação para instalação, operação e limites.
+
 Sistema monólito modular em **Next.js 15 / React 19** desenvolvido para centralizar, estruturar, enriquecer e validar a preparação de produtos da **FBRSigns** para marketplaces internacionais, com foco inicial na **Amazon US**, integrando o fluxo de catálogo ao planejamento e handoff operacional de marketing (**Marketing Readiness**).
 
 ---

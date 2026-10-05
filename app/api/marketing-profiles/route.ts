@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { calculateMargin } from '../../../lib/marketing/margin';
 import { buildReadinessGate, MARKETING_STATUSES, validateMarketingInput } from '../../../lib/marketing/validation';
 import { getSupabase } from '../../../lib/marketing/supabase';
-import { getAuthContext, unauthorized } from '../../../lib/auth';
+import { resolveAuthContext, unauthorized } from '../../../lib/auth';
 import { archivedListingResponse, getActiveListingSkus } from '../../../lib/catalog/active-listing';
 import { getMarketingProfileContext, validateLaunchReadyTransition } from '../../../lib/marketing/profile-guard';
 import { buildMarketingPackage, marketingPackageMarkdown } from '../../../lib/marketing/contracts';
@@ -12,7 +12,7 @@ const json = (body: unknown, status = 200) => NextResponse.json(body, { status }
 
 export async function GET(req: NextRequest) {
   try {
-    const auth = getAuthContext(req);
+    const auth = await resolveAuthContext(req);
     if (!auth) return json(unauthorized(), 401);
     const sku = req.nextUrl.searchParams.get('sku');
     const db = getSupabase();
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const auth = getAuthContext(req);
+    const auth = await resolveAuthContext(req);
     if (!auth) return json(unauthorized(), 401);
     const body = await req.json();
     const sku = String(body?.sku || '');
@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const auth = getAuthContext(req);
+    const auth = await resolveAuthContext(req);
     if (!auth) return json(unauthorized(), 401);
     const body = await req.json();
     const sku = String(body?.sku || '');

@@ -6,7 +6,9 @@ function ipv4Private(ip: string) {
   if (p.length !== 4 || p.some((n) => !Number.isInteger(n) || n < 0 || n > 255)) return false;
   return p[0] === 0 || p[0] === 10 || p[0] === 127 || p[0] === 169 && p[1] === 254 ||
     p[0] === 172 && p[1] >= 16 && p[1] <= 31 || p[0] === 192 && p[1] === 168 ||
-    p[0] === 100 && p[1] >= 64 && p[1] <= 127;
+    p[0] === 100 && p[1] >= 64 && p[1] <= 127 || p[0]>=224 ||
+    p[0]===198 && p[1]>=18 && p[1]<=19 || p[0]===192 && p[1]===0 && [0,2].includes(p[2]) ||
+    p[0]===198 && p[1]===51 && p[2]===100 || p[0]===203 && p[1]===0 && p[2]===113;
 }
 
 function ipv6Bytes(value: string): number[] | null {
@@ -30,13 +32,15 @@ function mappedIpv4(ip: string) {
 
 export function isPrivateIp(ip: string) {
   const normalized = ip.toLowerCase().replace(/^\[|\]$/g, '');
+  const dottedMapped=normalized.match(/^(?:::ffff:|(?:0:){5}ffff:)(\d+\.\d+\.\d+\.\d+)$/);
+  if(dottedMapped)return ipv4Private(dottedMapped[1]);
   const mapped = mappedIpv4(normalized);
   if (mapped) return ipv4Private(mapped);
   if (isIP(normalized) === 4) return ipv4Private(normalized);
   const bytes = ipv6Bytes(normalized);
   if (!bytes) return false;
   if (bytes.every((byte) => byte === 0) || (bytes.slice(0, 15).every((byte) => byte === 0) && bytes[15] === 1)) return true;
-  return (bytes[0] & 0xfe) === 0xfc || (bytes[0] & 0xfe) === 0xfe || bytes[0] === 0xff;
+  return (bytes[0]&0xe0)!==0x20 || bytes[0]===0x20 && bytes[1]===0x01 && bytes[2]===0x0d && bytes[3]===0xb8;
 }
 
 export function isSafeRemoteUrlSync(value: string) {
@@ -66,7 +70,7 @@ export async function readResponseWithLimit(response: Response, limit: number, s
   try {
     signal?.throwIfAborted();
     while (true) { const { done, value } = await reader.read(); signal?.throwIfAborted(); if (done) break; total += value.byteLength; if (total > limit) throw new Error('A resposta excede o limite de bytes.'); chunks.push(value); }
-  } finally { signal?.removeEventListener('abort', abort); reader.releaseLock(); }
+  } catch(error) { await reader.cancel().catch(()=>{});throw error; } finally { signal?.removeEventListener('abort', abort); reader.releaseLock(); }
   const all = new Uint8Array(total); let offset = 0; for (const chunk of chunks) { all.set(chunk, offset); offset += chunk.byteLength; }
   return new TextDecoder().decode(all);
 }

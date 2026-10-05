@@ -1,5 +1,7 @@
 # SPRINTS — Fechamento FBR PreListing
 
+**Programa atual (05/10/2026):** [Sprints S4–S12 de operação completa](./SPRINTS-004-operacao-completa.md), com 54 novas stories. S0–S3 abaixo são o histórico do fechamento anterior. As migrations do catálogo foram autorizadas e aplicadas; veja [verificação do banco](./MIGRATION-004-verification.md) e [acessos Amazon](./AMAZON-API-SETUP.md). Os gates históricos não são evidência de homologação de marketplace.
+
 **Fonte:** `PRD-002-fechamento-fbr-prelisting.md`  
 **Regra:** cada Story só passa a `concluido` com evidência objetiva. `S0-02` é bloqueador do uso com dados reais. A política de isolamento implementada localmente é owner-only dentro da organização.
 

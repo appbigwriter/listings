@@ -1,5 +1,18 @@
 # STATUS — FBRSigns PreListing + Marketing Readiness
 
+## Atualização operacional — 05/10/2026
+
+**Estado atual:** `BANCO_CATALOGO_ATIVADO / HOMOLOGACAO_OPERACIONAL_PENDENTE`.
+
+- Aplicadas remotamente as duas migrations do catálogo autorizadas por Sergio e um complemento de grants para efetivar o acesso mínimo previsto; RLS e privilégios verificados. `prelistings`: 2 registros preservados, mesmo digest de conteúdo; 0 jobs e 0 submissions. [Evidências](./MIGRATION-004-verification.md).
+- O catálogo e a fila são acessíveis pela Data API do app. Ainda há 0 usuários em Supabase Auth e 2 registros legados sem owner/org; nenhum backfill inventado.
+- Amazon: empresa aprovada conforme Sergio; diagnóstico LWA HTTP 400 `invalid_grant`. Precisamos da autorização/token da aplicação correta, não presumir rejeição da empresa. [Guia de APIs e acessos](./AMAZON-API-SETUP.md).
+- Pendências de marketing: tabelas antigas sem owner/org; advisor aponta RLS sem políticas e função SECURITY DEFINER anterior executável por anon/authenticated. Planejadas em S4-05/S4-06.
+- Novo backlog: [S4–S12, 54 stories](./SPRINTS-004-operacao-completa.md). Catálogo/importação/revisão/worker já implementados; homologação real, produção e fechamento por canal continuam pendentes.
+- Nenhum produto publicado, preço/estoque externo alterado, usuário criado, anúncio lançado ou deploy executado nesta rodada. Publicação continua desligada.
+
+As seções abaixo são o histórico da auditoria de setembro; afirmações antigas de migrations não aplicadas ou auth somente por gateway foram substituídas por esta atualização.
+
 ## Estado atual
 
 `QA_APROVADO_COM_BLOQUEIOS_EXTERNOS` | `Product Preparation + Seller Handoff`

@@ -34,7 +34,7 @@ describe('AI UI/API payload contract', () => {
   });
 
   it('does not expose generation controls for fields outside the factual allowlist', () => {
-    const page = readFileSync('app/page.tsx', 'utf8');
+    const page = readFileSync('app/workspace/page.tsx', 'utf8');
     for (const field of ['sku', 'manufacturer', 'product_type', 'category', 'pkg_length', 'pkg_width', 'pkg_height', 'pkg_weight', 'price', 'compliance']) {
       expect(page).not.toMatch(new RegExp(`generateFieldWithAI\\('${field}'\\)`));
     }

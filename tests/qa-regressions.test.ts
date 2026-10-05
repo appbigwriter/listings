@@ -39,7 +39,7 @@ describe('QA security regressions', () => {
     const routeResponse = await extractPost(new (require('next/server').NextRequest)('http://localhost/api/extract', { method: 'POST', body: JSON.stringify({ url: 'https://example.com' }) }));
     expect(routeResponse.status).toBe(401);
     expect(readFileSync('middleware.ts', 'utf8')).not.toMatch(/publicApi[\s\S]*\/api\/extract/);
-    expect(readFileSync('app/page.tsx', 'utf8')).toMatch(/fetch\('\/api\/extract',[\s\S]*credentials:\s*['"]include['"]/);
+    expect(readFileSync('app/workspace/page.tsx', 'utf8')).toMatch(/fetch\('\/api\/extract',[\s\S]*credentials:\s*['"]include['"]/);
     process.env = previous;
   });
 
@@ -66,7 +66,7 @@ describe('QA security regressions', () => {
     expect(kanban).toMatch(/select\(['"]id,decision,created_at['"]\)/);
     expect(kanban).not.toMatch(/eq\(['"]decision['"],['"]approved['"]\)/);
     expect(kanban).toMatch(/approval_required|APPROVAL_NOT_CURRENT/);
-    for (const file of ['app/api/generate/route.ts', 'app/api/generate-field/route.ts']) expect(readFileSync(file, 'utf8')).toMatch(/getAuthContext|AUTH_REQUIRED/);
+    for (const file of ['app/api/generate/route.ts', 'app/api/generate-field/route.ts']) expect(readFileSync(file, 'utf8')).toMatch(/resolveAuthContext|AUTH_REQUIRED/);
   });
   it('invalidates an old approval when a newer rejection exists and keeps the newest of multiple approvals', () => {
     expect(getLatestApprovalDecision([
@@ -126,7 +126,7 @@ describe('QA security regressions', () => {
   });
 
   it('scopes every listing operation by authenticated owner and organization', () => {
-    const source = readFileSync('app/api/listings/route.ts', 'utf8');
+    const source = readFileSync('app/api/listings/route.ts', 'utf8') + readFileSync('lib/catalog/repository.ts', 'utf8') + readFileSync('lib/catalog/active-listing.ts', 'utf8');
     expect((source.match(/owner_id/g) || []).length).toBeGreaterThanOrEqual(4);
     expect(source.includes(".eq('organization_id',auth.organizationId).eq('owner_id',auth.userId)")).toBe(true);
   });
