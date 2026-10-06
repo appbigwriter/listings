@@ -2,7 +2,7 @@ import { readJsonBody, RequestBodyError } from '../../../../lib/http';
 import { NextRequest, NextResponse } from 'next/server';
 import { resolveAuthContext, unauthorized } from '../../../../lib/auth';
 import { getSupabase } from '../../../../lib/marketing/supabase';
-import { cancelJob, enqueueJob, JOB_KINDS, processJob, type JobKind } from '../../../../lib/catalog/jobs';
+import { cancelJob, enqueueJob, JOB_KINDS, processJob,retryJob, type JobKind } from '../../../../lib/catalog/jobs';
 import { CatalogError, loadProduct, scopeQuery } from '../../../../lib/catalog/repository';
 import { isChannel } from '../../../../lib/catalog/model';
 
@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await readJsonBody(req);
     if (body.action === 'cancel') return NextResponse.json({ job: await cancelJob(db,auth,String(body.id)) });
+    if (body.action === 'retry') return NextResponse.json({job:await retryJob(db,auth,body)});
     if (body.action === 'process') return NextResponse.json({ job: await processJob(db, auth, String(body.id)) });
     if (!JOB_KINDS.includes(body.kind) || body.kind === 'import' || !Array.isArray(body.skus) || body.skus.length > 5000 || !isChannel(body.channel)) throw new CatalogError('Processamento inválido.');
     const skus: string[] = [...new Set<string>(body.skus.map((value: unknown) => String(value)))];

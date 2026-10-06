@@ -22,3 +22,12 @@ services:
       NODE_ENV: production
     command: ["./node_modules/.bin/tsx", "scripts/catalog-worker.ts"]
     stop_grace_period: 60s
+  notifications:
+    build: .
+    profiles: ["amazon-events"]
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+    command: ["./node_modules/.bin/tsx", "scripts/amazon-notifications-worker.ts"]
+    stop_grace_period: 60s

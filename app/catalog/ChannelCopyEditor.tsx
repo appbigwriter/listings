@@ -1,0 +1,6 @@
+'use client';
+type Copy={locale:'en_US';title:string;bullets:string;description:string;keywords:string};
+type Props={value:Copy;onChange:(value:Copy)=>void;busy:boolean;channel:string;hasSavedCopy:boolean};
+export default function ChannelCopyEditor({value,onChange,busy,channel,hasSavedCopy}:Props) {
+ return <section className="card mt-5"><h2 className="text-lg font-bold">Conteúdo específico · {channel} · inglês US</h2><p className="text-sm text-slate-500 mt-2">{hasSavedCopy?'Este canal tem seu próprio texto.':'Este canal usa o conteúdo base até você salvar ou gerar uma versão específica.'} Alterações aqui exigem nova revisão neste canal. Os fatos técnicos permanecem compartilhados.</p><div className="grid gap-3 mt-4">{([['title','Título'],['bullets','Bullet points (um por linha)'],['description','Descrição'],['keywords','Termos de pesquisa']] as const).map(([field,label])=><label key={field} className="field">{label}{field==='title'?<input disabled={busy} maxLength={channel==='eBay US'?80:200} value={value[field]} onChange={event=>onChange({...value,[field]:event.target.value})}/>:<textarea disabled={busy} className="border rounded p-3 min-h-24" value={value[field]} onChange={event=>onChange({...value,[field]:event.target.value})}/>}</label>)}</div></section>;
+}

@@ -1,5 +1,5 @@
 import type { ProductInput, SchemaSnapshot } from '../catalog/model';
-import { hash } from '../catalog/model';
+import { hash,channelProduct } from '../catalog/model';
 import { publicFetch } from '../net/public-fetch';
 import { readResponseWithLimit } from '../extract-security';
 
@@ -68,6 +68,7 @@ export async function amazonSchema(productType: string, category: string, parent
   return { channel: 'amazon-us', category, product_type: productType, version: result.productTypeVersion?.version || 'LATEST', fetched_at: new Date().toISOString(), checksum: hash(schema), schema };
 }
 export function amazonAttributes(input: ProductInput): Record<string, unknown> {
+  input=channelProduct(input,'amazon-us');
   const marketplace_id = amazonConfig().marketplaceId;
   const value = (v: unknown, language = false) => [{ value: v, marketplace_id, ...(language ? { language_tag: 'en_US' } : {}) }];
   const attributes: Record<string, unknown> = {};
@@ -97,7 +98,7 @@ export function amazonPayload(input: ProductInput) { return { productType: input
 export async function amazonRestrictions(asin: string) { return amazonRequest('/listings/2021-08-01/restrictions', { asin, sellerId: amazonConfig().sellerId, marketplaceIds: amazonConfig().marketplaceId, conditionType: 'new_new', reasonLocale: 'en_US' }); }
 export async function amazonPreview(input: ProductInput) { const config = amazonConfig(); return amazonRequest(`/listings/2021-08-01/items/${encodeURIComponent(config.sellerId)}/${encodeURIComponent(String(input.sku))}`, { marketplaceIds: config.marketplaceId, mode: 'VALIDATION_PREVIEW', issueLocale: 'en_US' }, 'PUT', amazonPayload(input)); }
 export async function amazonSubmit(input: ProductInput) { const config = amazonConfig(); return amazonRequest(`/listings/2021-08-01/items/${encodeURIComponent(config.sellerId)}/${encodeURIComponent(String(input.sku))}`, { marketplaceIds: config.marketplaceId, issueLocale: 'en_US' }, 'PUT', amazonPayload(input)); }
-export async function amazonReadback(sku: string) { const config = amazonConfig(); return amazonRequest(`/listings/2021-08-01/items/${encodeURIComponent(config.sellerId)}/${encodeURIComponent(sku)}`, { marketplaceIds: config.marketplaceId, includedData: 'summaries,issues,offers,fulfillmentAvailability', issueLocale: 'en_US' }); }
+export async function amazonReadback(sku: string) { const config = amazonConfig(); return amazonRequest(`/listings/2021-08-01/items/${encodeURIComponent(config.sellerId)}/${encodeURIComponent(sku)}`, { marketplaceIds: config.marketplaceId, includedData: 'summaries,issues,offers,fulfillmentAvailability,attributes', issueLocale: 'en_US' }); }
 export async function amazonDiscover(input: ProductInput) {
   const config=amazonConfig();
   const includedData='summaries,identifiers,productTypes,classifications,relationships';

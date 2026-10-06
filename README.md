@@ -1,8 +1,10 @@
 # FBRSigns PreListing + Marketing Readiness
 
+**Execução autônoma iniciada em 05/10/2026:** segurança de marketing/papéis/sessões, histórico de versões, orçamento de IA, cancelamento de fila, discovery/fees/feed preparado e reconciliação de submissões. Veja [estado das 54 stories](./EXECUTION-005.md) e [operação/acessos](./OPERATIONS-005.md). A prévia da fonte validou 203 rascunhos (22 pais/107 filhos); credenciais Amazon ainda retornam `invalid_grant`. Código implementado não significa todas as sprints homologadas.
+
 A implementação de catálogo de outubro de 2026 está descrita em [IMPLEMENTATION-003.md](./IMPLEMENTATION-003.md). A página inicial agora abre a central de preparação: importação CSV/JSON ou leitura da loja, revisão por canal, requisitos oficiais, validação de mídia e processamento com checkpoints. O extrator anterior permanece em `/workspace`.
 
-**Atualização 05/10/2026:** migrations do catálogo aplicadas remotamente com autorização, RLS e grants verificados; registros antigos preservados. Faltam usuário real, ownership do legado e homologação Amazon (LWA `invalid_grant`). TikTok Shop permanece bloqueado e eBay/Walmart têm adaptadores de preparação, sem publicação por API. O novo plano tem [54 stories em S4–S12](./SPRINTS-004-operacao-completa.md); veja [acessos Amazon](./AMAZON-API-SETUP.md) e [verificação das migrations](./MIGRATION-004-verification.md).
+**Atualização 05/10/2026:** migrations do catálogo aplicadas remotamente com autorização, RLS e grants verificados; registros antigos preservados. Faltam usuário real, ownership do legado e homologação Amazon (LWA `invalid_grant`). TikTok Shop permanece bloqueado e eBay tem executor inicial standalone de publicação/readback, desligado e aguardando homologação; Walmart tem preparação sem publicação completa. O novo plano tem [54 stories em S4–S12](./SPRINTS-004-operacao-completa.md); veja [acessos Amazon](./AMAZON-API-SETUP.md) e [verificação das migrations](./MIGRATION-004-verification.md).
 
 Comandos adicionais: `npm run catalog:check` verifica integrações sem escrever; `npm run catalog:source-check` verifica a fonte; `npm run catalog:worker` processa os lotes depois de ativar o banco. Veja o documento de implementação para instalação, operação e limites.
 
@@ -97,7 +99,7 @@ PreListing/
 │   └── page.tsx                         # Landing/Workspace de criação de listings
 ├── lib/
 │   ├── ai/                              # Contratos de IA, prompts e sanitização
-│   ├── auth.ts                          # Adaptador de autenticação (trusted-gateway / local-only)
+│   ├── auth.ts                          # Sessão Supabase e adaptadores de autenticação
 │   ├── catalog/                         # Regras de catálogo e persistência
 │   ├── e2e/                             # Fixtures e mocks para testes E2E
 │   ├── extract-security.ts              # Validação de DNS, anti-SSRF e streaming seguro
@@ -160,7 +162,8 @@ erDiagram
 ## 🔒 Segurança e Compliance
 
 1. **Modos de Autenticação (`lib/auth.ts`):**
-   - `trusted-gateway` *(Padrão em produção/staging)*: Validação de assinatura HMAC nos cabeçalhos HTTP recebidos de um gateway autenticado.
+   - `supabase-session` *(produção/staging)*: sessão verificada em cada request, papel/organização de app_metadata e revogação consultada no servidor.
+   - `trusted-gateway` *(compatibilidade)*: assinatura HMAC de um gateway autenticado; grants de operador, sem aprovação/publicação.
    - `local-only` *(Apenas desenvolvimento)*: Identidade mock fixa para testes locais sem credenciais externas expostas.
 2. **Proteção Anti-SSRF (`lib/extract-security.ts`):**
    - Resolução de DNS prévia com bloqueio de endereços IPv4 e IPv6 privados/locais (Loopback, Link-Local, RFC 1918, Carrier-Grade NAT, IPv4-mapped IPv6).
@@ -226,11 +229,9 @@ erDiagram
 
    Edite o arquivo `.env` com as configurações do seu ambiente:
    ```env
-   # Modo de autenticação para desenvolvimento local
-   PRELISTING_AUTH_MODE=local-only
-   PRELISTING_ALLOW_LOCAL_ONLY=true
-   PRELISTING_LOCAL_USER_ID=e2e-user
-   PRELISTING_LOCAL_ORG_ID=e2e-org
+   # Sessão Supabase com usuários reais provisionados
+   PRELISTING_AUTH_MODE=supabase-session
+   PRELISTING_ALLOW_LOCAL_ONLY=false
 
    # Supabase (necessário para persistência remota)
    NEXT_PUBLIC_SUPABASE_URL=https://SEU_PROJETO.supabase.co

@@ -10,11 +10,13 @@
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "catalog:worker": "tsx --env-file=.env scripts/catalog-worker.ts",
+    "amazon:notifications": "tsx --env-file=.env scripts/amazon-notifications-worker.ts",
     "catalog:check": "tsx --env-file=.env scripts/integration-check.ts",
     "catalog:source-check": "tsx --env-file=.env scripts/source-check.ts",
     "auth:provision": "tsx --env-file=.env scripts/provision-user.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "3.1146.0",
     "@supabase/supabase-js": "2.112.4",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
@@ -24,7 +26,8 @@
     "openai": "^7.9.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "sharp": "0.35.5"
+    "sharp": "0.35.5",
+    "tsx": "4.23.15"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",
@@ -33,7 +36,6 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "tailwindcss": "^4.1.12",
-    "tsx": "4.23.15",
     "typescript": "^5.7.2",
     "vitest": "^5.0.0"
   },

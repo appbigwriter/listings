@@ -2,7 +2,9 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { AuthContext } from '../auth';
 import { hash, type ProductInput } from './model';
 import { executeAction } from './executor';
-import { CatalogError, loadProduct, mergeDraft, persistProduct, scopeQuery } from './repository';
+import { CatalogError, loadProduct, persistProduct, scopeQuery } from './repository';
+import {stageSourceUpdate} from './source-diff';
+import {retryEntries} from './job-retry';
 import { AmazonError } from '../marketplaces/amazon';
 
 export type JobKind = 'import' | 'classify' | 'generate' | 'validate' | 'media' | 'monitor';
@@ -19,7 +21,7 @@ export async function enqueueJob(db: SupabaseClient, auth: AuthContext, kind: Jo
   if (!JOB_KINDS.includes(kind)) throw new CatalogError('Tipo de processamento inválido.');
   const count = kind === 'import' ? (payload.products as unknown[]).length : (payload.skus as unknown[]).length;
   if (!count || count > 5000) throw new CatalogError('Selecione entre um e 5.000 itens.');
-  const identity = kind === 'import' ? { source: payload.source, products: (payload.products as ProductInput[]).map(product => ({ sku: product.sku, hash: product._catalog?.source?.hash })) } : payload;
+  const identity = payload.retry_of?{retry_of:payload.retry_of,retry_scope:payload.retry_scope}:kind === 'import' ? { source: payload.source,retry_of:payload.retry_of,retry_scope:payload.retry_scope, products: (payload.products as ProductInput[]).map(product => ({ sku: product.sku, hash: product._catalog?.source?.hash })) } : payload;
   const idempotency_key = hash({ kind, payload: identity, owner: auth.userId, organization: auth.organizationId });
   const old = await scopeQuery(db.from('catalog_jobs').select('*'), auth).eq('idempotency_key', idempotency_key).maybeSingle();
   if (old.error) throw new CatalogError('Fila indisponível. Aplique a migration de catálogo.', 503);
@@ -27,6 +29,21 @@ export async function enqueueJob(db: SupabaseClient, auth: AuthContext, kind: Jo
   const result = await db.from('catalog_jobs').insert({ kind, payload, total: count, owner_id: auth.userId, organization_id: auth.organizationId, idempotency_key }).select('*').single();
   if (result.error) { if (result.error.code === '23505') { const existing = await scopeQuery(db.from('catalog_jobs').select('*'), auth).eq('idempotency_key', idempotency_key).single(); if (!existing.error) return existing.data; } throw new CatalogError('Não foi possível criar o processamento.', 503); }
   return result.data;
+}
+export async function retryJob(db:SupabaseClient,auth:AuthContext,body:Record<string,unknown>){
+ if(body.confirm!==true)throw new CatalogError('Confirme a criação de uma nova tentativa.');
+ const result=await scopeQuery(db.from('catalog_jobs').select('*'),auth).eq('id',String(body.id||'')).maybeSingle();
+ if(result.error)throw new CatalogError('Não foi possível conferir o lote.',503);if(!result.data)throw new CatalogError('Lote não encontrado.',404);
+ const job=result.data;if(body.expected_version!==job.updated_at)throw new CatalogError('O checkpoint mudou. Recarregue antes de retomar.',409);
+ if(!JOB_KINDS.includes(job.kind))throw new CatalogError('Este tipo de lote não admite retomada.');
+ const retry=retryEntries(job,body.scope);
+ const payload={...job.payload,retry_of:job.id,retry_scope:body.scope,retry_indices:retry.indices};
+ if(job.kind==='import')payload.products=retry.entries;
+ else{
+  payload.skus=retry.entries;payload.versions={};
+  for(let offset=0;offset<retry.entries.length;offset+=5)await Promise.all(retry.entries.slice(offset,offset+5).map(async sku=>{const current=await loadProduct(db,auth,String(sku));payload.versions[String(sku)]=current.row.updated_at;}));
+ }
+ return enqueueJob(db,auth,job.kind,payload);
 }
 export async function processJob(db: SupabaseClient, auth: AuthContext, id: string) {
   const found = await scopeQuery(db.from('catalog_jobs').select('*'), auth).eq('id', id).maybeSingle();
@@ -49,7 +66,7 @@ export async function processJob(db: SupabaseClient, auth: AuthContext, id: stri
       if (existing?.product._catalog?.source?.hash === incoming._catalog?.source?.hash) outcome = { index, sku: incoming.sku, status: 'unchanged' };
       else if (existing) {
         // Preserve reviewed catalog; changed source becomes a pending reconciliation task.
-        const next = mergeDraft(existing.product, { source_update: incoming._catalog?.source });
+        const next = stageSourceUpdate(existing.product,incoming._catalog?.source);
         await persistProduct(db, auth, next, existing.row); outcome = { index, sku: incoming.sku, status: 'source_changed_review_required' };
       } else { await persistProduct(db, auth, incoming); outcome = { index, sku: incoming.sku, status: 'imported' }; }
     } else {

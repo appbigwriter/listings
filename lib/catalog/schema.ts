@@ -6,6 +6,14 @@ import { stableStringify } from './model';
 export function validateSchema(schema: Record<string, unknown>, attributes: Record<string, unknown>): Issue[] {
   const ajv = new Ajv2019({ allErrors: true, strict: false, strictSchema: true, validateSchema: false, ownProperties: true });
   addFormats(ajv);
+  ajv.addFormat('ebay-int32',{type:'string',validate:(value:string)=>/^[+-]?\d+$/.test(value)&&Number.isInteger(Number(value))&&Number(value)>=-2147483648&&Number(value)<=2147483647});
+  ajv.addFormat('ebay-double',{type:'string',validate:(value:string)=>/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(value)&&Number.isFinite(Number(value))});
+  ajv.addFormat('ebay-unsupported',{type:'string',validate:()=>false});
+  for(const format of ['YYYY','YYYYMM','YYYYMMDD'])ajv.addFormat(`ebay-date-${format}`,{type:'string',validate:(value:string)=>{
+    if(!new RegExp(`^\\d{${format.length}}$`).test(value))return false;
+    const iso=value.slice(0,4)+'-'+(format.length>=6?value.slice(4,6):'01')+'-'+(format.length===8?value.slice(6,8):'01');
+    const parsed=Date.parse(iso);return Number.isFinite(parsed)&&new Date(parsed).toISOString().slice(0,10)===iso;
+  }});
   for (const keyword of ['editable', 'enumNames', 'hidden', '$lifecycle', 'replacedBy', 'replaces', 'enumDeprecated']) ajv.addKeyword(keyword);
   for (const keyword of ['minUtf8ByteLength', 'maxUtf8ByteLength']) ajv.addKeyword({ keyword, type: 'string', schemaType: 'number', validate: (limit: number, data: string) => keyword.startsWith('min') ? Buffer.byteLength(data, 'utf8') >= limit : Buffer.byteLength(data, 'utf8') <= limit });
   for (const keyword of ['minUniqueItems', 'maxUniqueItems']) ajv.addKeyword({ keyword, type: 'array', schemaType: 'number', validate: (limit: number, data: unknown[], parent?: AnySchemaObject) => {

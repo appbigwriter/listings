@@ -4,6 +4,7 @@ node_modules
 .env.local
 
 .next
+.next-dev
 .env
 .env.local
 .DS_Store

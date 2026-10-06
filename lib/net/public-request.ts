@@ -11,7 +11,7 @@ export async function publicAddresses(host:string,resolver=lookup) {
   if (!addresses.length || addresses.some(item=>isPrivateIp(item.address))) throw new Error('Destino remoto bloqueado.');
   return addresses;
 }
-export async function publicRequest(value:string|URL,options:{signal:AbortSignal;headers?:Record<string,string>}) {
+export async function publicRequest(value:string|URL,options:{signal:AbortSignal;headers?:Record<string,string>;method?:'GET'|'PUT';body?:string}) {
   const url=new URL(value);if(!isSafeRemoteUrlSync(url.href))throw new Error('Destino remoto bloqueado.');
   const addresses=await publicAddresses(url.hostname.replace(/^\[|\]$/g,''));options.signal.throwIfAborted();
   // Resolve once, then pin the socket lookup. TLS still verifies the original hostname.
@@ -21,7 +21,7 @@ export async function publicRequest(value:string|URL,options:{signal:AbortSignal
   };
   return new Promise<Response>((resolve,reject)=>{
     const transport=url.protocol==='https:'?httpsRequest:httpRequest;
-    const request=transport(url,{method:'GET',headers:options.headers,signal:options.signal,lookup:pinnedLookup,agent:false},incoming=>{
+    const request=transport(url,{method:options.method || 'GET',headers:options.headers,signal:options.signal,lookup:pinnedLookup,agent:false},incoming=>{
       const headers=new Headers();for(const [key,value] of Object.entries(incoming.headers))if(value!==undefined)headers.set(key,Array.isArray(value)?value.join(', '):value);
       const encoding=headers.get('content-encoding');let body:Readable=incoming;
       if(encoding && encoding!=='identity') {
@@ -30,8 +30,9 @@ export async function publicRequest(value:string|URL,options:{signal:AbortSignal
         incoming.on('error',error=>decoder.destroy(error));decoder.on('close',()=>incoming.destroy());body=incoming.pipe(decoder);headers.delete('content-encoding');headers.delete('content-length');
       }
       const status=incoming.statusCode || 502;
-      resolve(new Response([204,205,304].includes(status)?null:Readable.toWeb(body) as ReadableStream,{status,headers}));
+      try{resolve(new Response([204,205,304].includes(status)?null:Readable.toWeb(body) as ReadableStream,{status,headers}));}
+      catch(error){body.destroy();incoming.destroy();reject(error);}
     });
-    request.on('error',reject);request.end();
+    request.on('error',reject);request.end(options.body);
   });
 }

@@ -4,6 +4,10 @@ import { getActiveListing } from './active-listing';
 import { createCatalog, draftIssues, hash, type ProductInput } from './model';
 
 export class CatalogError extends Error { constructor(message: string, public status = 400) { super(message); } }
+const SERVER_PRODUCT_FIELDS=new Set(['_catalog','human_reviewed','review_hash','source_snapshot','source_update','source_resolution','archive_transition','amazon_preview','amazon_fees','amazon_discovery','amazon_restrictions','ai_grounding','submission','archived_at','owner_id','organization_id','id','status','created_at','updated_at']);
+export function editableProductPatch(body:Record<string,unknown>):Record<string,unknown>{
+ return Object.fromEntries(Object.entries(body).filter(([field])=>!SERVER_PRODUCT_FIELDS.has(field)));
+}
 export function scopeQuery(query: any, auth: AuthContext): any { return query.eq('organization_id',auth.organizationId).eq('owner_id',auth.userId); }
 export function productFromRow(row: Record<string, any>): ProductInput {
   const input = { ...row.payload, sku: row.sku, title: row.title, brand: row.brand, human_reviewed: row.human_reviewed };
@@ -34,7 +38,7 @@ export async function persistProduct(db: SupabaseClient, auth: AuthContext, inpu
 }
 export function mergeDraft(current: ProductInput, body: Record<string, unknown>): ProductInput {
   // Server-owned schemas, approvals, source snapshots and media checks never come from client patches.
-  const { _catalog, human_reviewed, review_hash, source_snapshot, ...patch } = body;
+  const patch=editableProductPatch(body);
   const next: ProductInput = { ...current, ...patch, sku: current.sku, _catalog: structuredClone(current._catalog || createCatalog(current)) };
   const catalog = next._catalog!;
   for (const [field, fact] of Object.entries(catalog.facts)) if (hash(fact.value) !== hash(next[field])) catalog.facts[field] = { ...fact, value: next[field], status: 'pending' };

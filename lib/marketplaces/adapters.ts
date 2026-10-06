@@ -2,12 +2,13 @@ import { hash, type Channel, type SchemaSnapshot } from '../catalog/model';
 import { amazonCategories, amazonSchema } from './amazon';
 import { marketplaceToken } from './oauth';
 import { readResponseWithLimit } from '../extract-security';
+import {ebayRequest} from './ebay';
+import {ebayAspectSchema} from './ebay-schema';
 
-async function ebay(path: string) {
-  const response = await fetch(`https://api.ebay.com${path}`, { redirect:'error', signal: AbortSignal.timeout(15000), headers: { authorization: `Bearer ${await marketplaceToken('ebay')}`, 'accept-language': 'en-US' } });
-  if (!response.ok) throw new Error(`eBay respondeu HTTP ${response.status}.`);
-  return JSON.parse(await readResponseWithLimit(response,5_000_000));
+export async function ebayRead(path: string) {
+  return ebayRequest(path);
 }
+const ebay=ebayRead;
 async function walmart(path: string, method = 'GET', body?: unknown) {
   const response = await fetch(`https://marketplace.walmartapis.com${path}`, { method, redirect:'error', signal: AbortSignal.timeout(15000), headers: { 'WM_SEC.ACCESS_TOKEN': await marketplaceToken('walmart'), ...(process.env.WALMART_CONSUMER_CHANNEL_TYPE ? { 'WM_CONSUMER.CHANNEL.TYPE': process.env.WALMART_CONSUMER_CHANNEL_TYPE } : {}), 'WM_QOS.CORRELATION_ID': crypto.randomUUID(), 'WM_SVC.NAME': 'Walmart Marketplace', accept: 'application/json', 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
   if (!response.ok) throw new Error(`Walmart respondeu HTTP ${response.status}.`);
@@ -35,14 +36,7 @@ export async function channelSchema(channel: Channel, productType: string, categ
   if (channel === 'ebay-us') {
     const tree = await ebay('/commerce/taxonomy/v1/get_default_category_tree_id?marketplace_id=EBAY_US');
     const result = await ebay(`/commerce/taxonomy/v1/category_tree/${tree.categoryTreeId}/get_item_aspects_for_category?category_id=${encodeURIComponent(category)}`);
-    const required: string[] = []; const properties: Record<string, unknown> = {};
-    for (const aspect of result.aspects || []) {
-      const constraint = aspect.aspectConstraint || {}; const name = aspect.localizedAspectName;
-      if (constraint.aspectRequired) required.push(name);
-      const values = (aspect.aspectValues || []).map((v: { localizedValue: string }) => v.localizedValue);
-      properties[name] = { type: 'array', minItems: 1, ...(constraint.itemToAspectCardinality === 'SINGLE' ? { maxItems: 1 } : {}), items: { type: 'string', ...(constraint.aspectMode === 'SELECTION_ONLY' && values.length ? { enum: values } : {}), ...(constraint.aspectMaxLength ? { maxLength: constraint.aspectMaxLength } : {}) } };
-    }
-    const schema = { type: 'object', properties, required, additionalProperties: false };
+    const schema=ebayAspectSchema(result);
     return { channel, category, product_type: productType, version: String(tree.categoryTreeVersion || hash(result)), fetched_at: new Date().toISOString(), checksum: hash(schema), schema };
   }
   if (channel === 'walmart-us') {

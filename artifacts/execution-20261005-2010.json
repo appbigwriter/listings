@@ -1,0 +1,48 @@
+{
+  "started_at": "2026-10-05T20:10:03-03:00",
+  "validated_at": "2026-10-05T21:01:40-03:00",
+  "migrations_applied": 19,
+  "tests": {
+    "passed": 177,
+    "files": 34
+  },
+  "typecheck": "passed",
+  "build": {
+    "status": "passed",
+    "routes": 39
+  },
+  "dependency_audit": {
+    "vulnerabilities": 0
+  },
+  "source_read_only": {
+    "products": 203,
+    "valid": 203,
+    "invalid": 0,
+    "parents": 22,
+    "children": 107,
+    "standalone": 74
+  },
+  "remote_read_only": {
+    "products": 2,
+    "unowned": 2,
+    "users": 0,
+    "submissions": 0,
+    "feeds": 0,
+    "assets": 0,
+    "marketing_approvals": 0
+  },
+  "live_publication": "disabled",
+  "live_validation": "pending",
+  "security_advisor_exception": "intentional own-session boolean RPC SECURITY DEFINER",
+  "ui_evidence": "artifacts/catalog-archive-preview.png",
+  "docker": "desktop_start_attempted_engine_unresponsive_no_containers",
+  "marketing_rest_join": "verified_read_only_zero_rows",
+  "offer_identity_guard": "sku_marketplace_asin_verified_before_patch",
+  "local_server": {
+    "bind": "127.0.0.1:3100",
+    "auth": "supabase-session",
+    "local_only": false,
+    "browser_verified": "/login",
+    "evidence": "artifacts/catalog-auth-session-preview.png"
+  }
+}

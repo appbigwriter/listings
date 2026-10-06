@@ -22,11 +22,15 @@ export async function getActiveListing(db: any, auth: AuthContext, sku: string):
 
 /** Return active SKU keys before querying any dependent resource. */
 export async function getActiveListingSkus(db: any, auth: AuthContext): Promise<{ skus: string[]; error: unknown }> {
-  const result = await db.from('prelistings').select('sku')
-    .eq('organization_id', auth.organizationId)
-    .eq('owner_id', auth.userId)
-    .neq('status', 'archived');
-  return { skus: (result.data ?? []).map((row: { sku?: string }) => row.sku).filter((sku: unknown): sku is string => Boolean(sku)), error: result.error };
+  const skus:string[]=[];
+  for(let offset=0;offset<=5000;offset+=500) {
+    const result = await db.from('prelistings').select('sku').eq('organization_id', auth.organizationId).eq('owner_id', auth.userId).neq('status', 'archived').order('sku').range(offset,offset===5000?offset:offset+499);
+    if(result.error)return {skus:[],error:result.error};
+    if(offset===5000&&(result.data||[]).length)return {skus:[],error:new Error('Catálogo acima de 5.000 SKUs. Refine o escopo.')};
+    skus.push(...(result.data??[]).map((row:{sku?:string})=>row.sku).filter((sku:unknown):sku is string=>Boolean(sku)));
+    if((result.data||[]).length<500)return {skus,error:null};
+  }
+  return {skus,error:null};
 }
 
 export function archivedListingResponse() {

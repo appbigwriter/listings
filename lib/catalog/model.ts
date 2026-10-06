@@ -9,11 +9,12 @@ export type SchemaSnapshot = { channel: Channel; category: string; product_type:
 export type MediaCheck = { url: string; checked_at: string; width: number; height: number; format: string; sha256: string };
 export type ChannelListing = {
   product_type: string; category: string; attributes: Record<string, unknown>;
+  copy?: {locale:'en_US';title:string;bullets:string;description:string;keywords:string;source:'human'|'ai';grounding?:unknown};
   schema?: SchemaSnapshot; suggestions?: { id: string; name: string }[];
   recommendation?: { id: string; confidence: number; reason: string };
   approval?: { hash: string; actor: string; approved_at: string; signature?: string };
   report?: { ready: boolean; issues: Issue[]; checked_at: string };
-  submission?: { status: string; request_hash: string; submitted_at: string; response?: unknown; issues?: unknown; publication_status: string };
+  submission?: { status: string; request_hash: string; submitted_at: string; response?: unknown; issues?: unknown; publication_status: string;verified_content_hash?:string;verified_at?:string };
 };
 export type CatalogDocument = {
   version: 1; product_id: string; kind: ProductKind; eligibility_confirmed: boolean;
@@ -22,7 +23,13 @@ export type CatalogDocument = {
   source?: { id: string; hash: string; imported_at: string; snapshot: Record<string, unknown> };
 };
 export type ProductInput = Record<string, unknown> & { sku?: string; title?: string; _catalog?: CatalogDocument };
-export const TECHNICAL_FIELDS = ['brand', 'manufacturer', 'origin', 'material', 'color', 'included', 'pkg_length', 'pkg_width', 'pkg_height', 'pkg_weight', 'gtin', 'compliance'] as const;
+export const COPY_FIELDS=['title','bullets','description','keywords'] as const;
+/** Legacy drafts fall back to shared text until a channel copy is explicitly saved/generated. */
+export function channelProduct(input:ProductInput,channel:Channel):ProductInput {
+ const copy=input._catalog?.channels[channel]?.copy;
+ return copy?{...input,...Object.fromEntries(COPY_FIELDS.map(field=>[field,copy[field]]))}:input;
+}
+export const TECHNICAL_FIELDS = ['brand', 'manufacturer', 'origin', 'material', 'color', 'included', 'pkg_length', 'pkg_width', 'pkg_height', 'pkg_weight', 'gtin', 'mpn', 'compliance'] as const;
 export function stableStringify(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
   if (value && typeof value === 'object') return `{${Object.entries(value).filter(([, v]) => v !== undefined).sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => `${JSON.stringify(k)}:${stableStringify(v)}`).join(',')}}`;
@@ -30,10 +37,10 @@ export function stableStringify(value: unknown): string {
 }
 export const hash = (value: unknown) => createHash('sha256').update(stableStringify(value)).digest('hex');
 export function contentHash(input: ProductInput, channel: Channel = 'amazon-us') {
-  const { _catalog, human_reviewed, review_hash, ...fields } = input;
+  const { _catalog, human_reviewed, review_hash,amazon_fees,amazon_discovery,amazon_restrictions,ai_grounding, ...fields } = channelProduct(input,channel);
   const listing = _catalog?.channels[channel];
   return hash({ fields, kind: _catalog?.kind, eligibility_confirmed: _catalog?.eligibility_confirmed, facts: _catalog?.facts, variants: _catalog?.variants,
-    listing: listing && { product_type: listing.product_type, category: listing.category, attributes: listing.attributes, schema_checksum: listing.schema?.checksum }, media: _catalog?.media });
+    listing: listing && { product_type: listing.product_type, category: listing.category, attributes: listing.attributes, schema_checksum: listing.schema?.checksum,...(listing.copy?{locale:listing.copy.locale}:{}) }, media: _catalog?.media });
 }
 export function channelFrom(value: unknown): Channel {
   if (CHANNELS.includes(value as Channel)) return value as Channel;

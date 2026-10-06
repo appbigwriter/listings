@@ -5,7 +5,7 @@ import { assertFamily } from '../lib/catalog/family';
 import { readFileSync } from 'node:fs';
 import { parseCatalog, previewImport } from '../lib/catalog/import';
 import { contentHash, createCatalog, hash, type ProductInput } from '../lib/catalog/model';
-import { mergeDraft } from '../lib/catalog/repository';
+import { mergeDraft,editableProductPatch } from '../lib/catalog/repository';
 import { evaluateReadiness } from '../lib/catalog/readiness';
 import { validateSchema } from '../lib/catalog/schema';
 import { validateAiListingResponse } from '../lib/ai/contracts';
@@ -17,13 +17,25 @@ const auth = { userId: 'reviewer', organizationId: 'org', mode: 'local-only' } a
 function readyProduct(): ProductInput {
   const input: ProductInput = { sku: 'FBR-TEST', title: 'Aluminum Sign', brand: 'FBRSigns', origin: 'United States', material: 'Aluminum', product_type: 'SIGN', category: 'signs', gtin: '123456789012', id_type: 'UPC', pkg_length: '10', pkg_width: '8', pkg_height: '2', pkg_weight: '3', qty: '0', price: '20', images: 'https://example.com/main.jpg', fulfillment: 'FBM', assets_reviewed: true, policy_reviewed: true, human_reviewed: false, template_key: 'fbrsigns_sign', template_version: '2026-01' };
   const catalog = createCatalog(input); catalog.kind = 'physical'; catalog.eligibility_confirmed = true;
-  for (const field of ['brand', 'origin', 'material', 'pkg_length', 'pkg_width', 'pkg_height', 'pkg_weight']) catalog.facts[field] = { value: input[field], source: 'fixture measurement', status: 'confirmed', observed_at: new Date().toISOString() };
+  for (const field of ['brand', 'origin', 'material', 'pkg_length', 'pkg_width', 'pkg_height', 'pkg_weight','gtin']) catalog.facts[field] = { value: input[field], source: 'fixture measurement', status: 'confirmed', observed_at: new Date().toISOString() };
   const schema = { type: 'object', required: ['item_name'], properties: { item_name: { type: 'array', minItems: 1 } } };
   catalog.channels['amazon-us'] = { product_type: 'SIGN', category: 'signs', attributes: {}, schema: { channel: 'amazon-us', product_type: 'SIGN', category: 'signs', version: 'fixture-v1', fetched_at: new Date().toISOString(), checksum: hash(schema), schema } };
   catalog.media = [{ url: 'https://example.com/main.jpg', width: 1500, height: 1500, format: 'jpeg', sha256: 'fixture', checked_at: new Date().toISOString() }]; input._catalog = catalog;
   return input;
 }
 describe('catalog preparation pipeline', () => {
+  it('prevents client patches from erasing pending source decisions or forging provider observations',()=>{
+    const product={...readyProduct(),source_update:{hash:'pending'},amazon_preview:{issues:[{severity:'ERROR'}]},amazon_fees:{amount:5}};
+    const forged={source_update:null,source_resolution:{decision:'keep'},amazon_preview:{issues:[]},amazon_fees:{amount:0},archive_transition:{archived:false},organization_id:'other',title:'Changed title'};
+    const updated=mergeDraft(product,forged);expect(updated.source_update).toEqual(product.source_update);expect(updated.amazon_preview).toEqual(product.amazon_preview);expect(updated.amazon_fees).toEqual(product.amazon_fees);expect(updated.title).toBe('Changed title');expect(updated.source_resolution).toBeUndefined();expect(editableProductPatch(forged)).toEqual({title:'Changed title'});
+  });
+  it('requires evidence for supplied identifiers and invalidates changed identifier facts',()=>{
+    const product=readyProduct();delete product._catalog!.facts.gtin;
+    expect(evaluateReadiness(product,'amazon-us',false).issues).toContainEqual(expect.objectContaining({code:'fact_unconfirmed',field:'gtin'}));
+    product._catalog!.facts.gtin={value:product.gtin,source:'manufacturer identifier sheet',status:'confirmed',observed_at:new Date().toISOString()};
+    expect(evaluateReadiness(product,'amazon-us',false).ready).toBe(true);
+    const changed=mergeDraft(product,{gtin:'098765432109'});expect(changed._catalog!.facts.gtin.status).toBe('pending');
+  });
   it('parses quoted CSV, BOM, multiline descriptions and detects duplicate SKUs', () => {
     const rows = parseCatalog('\ufeffsku,title,description\r\nA,"Sign, blue","Line 1\nLine 2"\r\nA,Other,Text', 'csv');
     expect(rows[0].description).toBe('Line 1\nLine 2');

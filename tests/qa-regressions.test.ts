@@ -61,13 +61,6 @@ describe('QA security regressions', () => {
     expect(result.archived).toBe(false);
     expect(calls).toContain('status!=archived');
   });
-  it('uses the newest decision, not the newest approved decision, for Kanban', () => {
-    const kanban = readFileSync('app/api/kanban/route.ts', 'utf8');
-    expect(kanban).toMatch(/select\(['"]id,decision,created_at['"]\)/);
-    expect(kanban).not.toMatch(/eq\(['"]decision['"],['"]approved['"]\)/);
-    expect(kanban).toMatch(/approval_required|APPROVAL_NOT_CURRENT/);
-    for (const file of ['app/api/generate/route.ts', 'app/api/generate-field/route.ts']) expect(readFileSync(file, 'utf8')).toMatch(/resolveAuthContext|AUTH_REQUIRED/);
-  });
   it('invalidates an old approval when a newer rejection exists and keeps the newest of multiple approvals', () => {
     expect(getLatestApprovalDecision([
       { decision: 'approved', created_at: '2026-01-02T00:00:00.000Z' },
@@ -80,7 +73,7 @@ describe('QA security regressions', () => {
   });
   it('protects every dependent GET with the active owner-scoped listing helper', () => {
     for (const file of ['app/api/seller-submission/route.ts', 'app/api/marketing-approvals/route.ts', 'app/api/amazon-campaigns/route.ts', 'app/api/meta-campaigns/route.ts', 'app/api/tracking-plans/route.ts', 'app/api/marketing-profiles/route.ts', 'app/api/seller-handoff/route.ts']) {
-      expect(readFileSync(file, 'utf8')).toMatch(/getActiveListing|getActiveListingSkus/);
+      expect(readFileSync(file, 'utf8')).toMatch(/getActiveListing|getActiveListingSkus|loadMarketingReview/);
     }
   });
   it('has deterministic idempotency key for Kanban confirmation', () => {

@@ -1,0 +1,11 @@
+'use client';
+import {useState} from 'react';
+import {api} from '../../lib/catalog/client';
+export default function JobRecovery({job,busy,run,refresh}:{job:{id:string;status:string;cursor:number;total:number;updated_at:string;results:any[]};busy:boolean;run:(task:()=>Promise<void>)=>Promise<void>;refresh:()=>Promise<void>}){
+ const [scope,setScope]=useState('failed'),[confirmed,setConfirmed]=useState(false);
+ if(!['completed','cancelled','failed'].includes(job.status))return null;
+ const latest=new Map<number,any>();for(const result of job.results||[])latest.set(result.index,result);
+ const failures=[...latest.values()].filter(result=>result.status==='failed');const remaining=job.total-job.cursor;
+ const count=scope==='failed'?failures.length:remaining;if(!failures.length&&!remaining)return null;
+ return <details className="mt-3 text-sm"><summary>Preparar nova tentativa · {failures.length} falhas · {remaining} não processados</summary><p className="mt-2">O histórico deste lote será preservado. A nova tentativa consulta as versões atuais dos produtos e mantém os gates de revisão.</p><label className="block mt-3">Itens a retomar <select className="border rounded p-2 ml-2" disabled={busy} value={scope} onChange={event=>{setScope(event.target.value);setConfirmed(false);}}><option value="failed">Somente falhas finais ({failures.length})</option><option value="unfinished">Ainda não processados ({remaining})</option></select></label>{scope==='failed'&&failures.slice(0,20).map(result=><p key={result.index} className="mt-2">Item {result.index+1} · {result.sku||'SKU não registrado no erro legado'} · {result.error}</p>)}{scope==='failed'&&failures.length>20&&<p>Exibindo os primeiros 20 de {failures.length} itens com falha.</p>}<label className="block mt-3"><input disabled={busy||!count} type="checkbox" checked={confirmed} onChange={event=>setConfirmed(event.target.checked)}/> Conferi o lote e confirmo uma tentativa para {count} itens.</label><button className="btn mt-3" disabled={busy||!confirmed||!count} onClick={()=>run(async()=>{await api('/api/catalog/jobs',{action:'retry',id:job.id,expected_version:job.updated_at,scope,confirm:true});setConfirmed(false);await refresh();})}>Criar nova tentativa</button></details>;
+}

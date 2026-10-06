@@ -1,3 +1,9 @@
+## Atualização da retomada — 05/10/2026, após 20:10
+
+19 migrations aplicadas/reconciliadas. 177 testes locais em 34 arquivos passaram; typecheck passou. Antimalware privado com receipt e bloqueio em produção sem scanner, condicionais simples eBay e revisão de marketing vinculada à versão foram implementados. Tela de custos/fonte/data e exports coerentes adicionados. Arquivamento/restauração e retomada explícita de lotes implementados; PUT/PATCH Amazon reservam a versão transacionalmente. Readback comprova atributos atuais antes de liberar marketing. Build final passou com 39 rotas. Tipos do schema remoto gerados.
+
+Usuários reais continuam ausentes; Amazon LWA invalid_grant permanece o último diagnóstico de acesso. Nenhum listing/campanha enviado nem infraestrutura criada. Scanner, sessão real, pilotos, deploy, restore e conectores completos continuam pendentes. Estado por story: [EXECUTION-005.md](./EXECUTION-005.md).
+
 # STATUS — FBRSigns PreListing + Marketing Readiness
 
 ## Atualização operacional — 05/10/2026
@@ -112,3 +118,17 @@ S0 Fundação e segurança
 5. **S3-05:** Gate final de Sergio não executado; projeto não está fechado.
 
 *`concluído localmente` significa implementado e validado por testes/build; não significa migration aplicada, integração remota, QA independente ou produção.*
+
+## Execução autônoma S4–S12 — 05/10/2026
+
+Sergio autorizou o início autônomo de todas as sprints. Estado atual e trabalho restante: `EXECUTION-005.md`; acesso/manual: `OPERATIONS-005.md`. Onze migrations adicionais aplicadas, total 14 no histórico remoto, incluindo eventos, recuperação transacional de feeds e reserva eBay. Os dois legados permanecem preservados e sem owner até identificação real. A antiga função RLS não é mais executável por clientes; a nova RPC de sessão retorna somente booleano da própria sessão, com exceção do advisor justificada.
+
+Papéis, logout/refresh/CSRF, limite de JSON, convites/senha, cancelamento, snapshots transacionais, quota/usage IA, DNS fixado, discovery/fees Amazon, pipeline de feed/relatório/monitor, revisão em lote, PATCH de ofertas, diff de fonte e painel operacional foram adicionados. eBay/Walmart têm renovação OAuth e matriz de capacidades; publicação completa desses canais/TikTok continua pendente. Docker/CI preparados, mas daemon Linux parado e nenhum deploy realizado.
+
+Fonte real validada em CLI e navegador: 203 rascunhos válidos, 22 pais, 107 filhos, 74 standalone. Não representa confirmação comercial/física. Não houve importação produtiva com usuário fictício nem envio Amazon. Diagnóstico real permanece `invalid_grant`. Testes locais e build não encerram o piloto/aceite; histórias que precisam de usuários, credenciais, medidas/documentos e destino de infraestrutura estão identificadas no relatório.
+
+Incremento: Storage privado de evidências com versões/hash/recuperação, preparação Inventory/Offer eBay e consultas policies/condições, paginação até 5.000 e benchmark local foram implementados. Nenhum arquivo/listing real enviado; homologações e dependências seguem no relatório.
+
+Incremento seguinte: consumidor de avisos EventBridge→SQS com registro/deduplicação/readback/ack duráveis, template AWS/DLQs e nova tentativa explícita de feed anterior a createFeed foram implementados. Resultado de feed por SKU passa a gravar ledger e projeção na mesma transação. 125 testes locais passam; ativação AWS e homologação real continuam pendentes. Agendamento 20:10 é contingência de retomada, sem interromper nem duplicar implementação em andamento.
+
+Conteúdo en_US específico por canal e executor eBay standalone (conta/policies/Inventory/Offer/publish/readback) adicionados. Famílias eBay, atualização de listings existentes e recuperação sem offerId não estão liberados. Nenhuma publicação real eBay; habilitação depende de acessos/piloto/homologação.

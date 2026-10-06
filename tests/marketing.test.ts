@@ -11,6 +11,10 @@ const product = {
 const costs = { product_cost: 62, printing_cost: 18, packaging_cost: 7, shipping_cost: 24, amazon_referral_fee: 37.35, fulfillment_fee: 0, other_costs: 5, currency: 'USD' as const };
 
 describe('marketing domain', () => {
+  it('keeps a configured Attribution tag unverified and rejects malformed tags',()=>{
+    expect(buildTrackingPlan(product,{destination_url:'https://www.amazon.com/dp/B012345678',attribution_tag:'reviewed-config'})).toMatchObject({attribution_tag:'reviewed-config',attribution_status:'configured_unverified'});
+    expect(()=>buildTrackingPlan(product,{destination_url:'https://www.amazon.com/dp/B012345678',attribution_tag:'bad\nvalue'})).toThrow('attribution_tag_invalid');
+  });
   it('calculates the approved margin formula without rounding inputs', () => {
     expect(calculateMargin(249, costs)).toMatchObject({ revenue: 249, total_cost: 153.35, profit: 95.65, percentage: 38.41, currency: 'USD' });
   });

@@ -11,6 +11,10 @@ import { evaluateReadiness } from './readiness';
 import { CatalogError } from './repository';
 import { approveVersion } from './approval';
 import type { AiRuntime } from '../ai/usage';
+import {buildEbayPackage,ebayAccountPreparation} from '../marketplaces/ebay-package';
+import {validateChannelCopy} from './copy';
+import {COPY_FIELDS} from './model';
+import {submissionMatches} from './reconciliation';
 
 export async function applyAction(input: ProductInput, auth: AuthContext, action: string, options: Record<string, unknown> = {}, aiRuntime:AiRuntime={}) {
   const product = structuredClone(input); product._catalog = createCatalog(product, product._catalog);
@@ -20,7 +24,12 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
   const listing = catalog.channels[channel] ||= { product_type: '', category: '', attributes: {} };
   let output: unknown;
   switch (action) {
+    case 'account-preparation': {
+      if(channel!=='ebay-us'||!listing.category)throw new CatalogError('Selecione a categoria eBay antes de consultar policies e condições.');
+      output=await ebayAccountPreparation(listing.category);break;
+    }
     case 'configure': {
+      if(options.copy!==undefined)listing.copy=validateChannelCopy(options.copy,channel);
       if (options.kind !== undefined) {
         if (!['physical', 'custom', 'service', 'unknown'].includes(String(options.kind))) throw new CatalogError('Tipo de produto inválido.');
         catalog.kind = options.kind as typeof catalog.kind; catalog.eligibility_confirmed = options.kind !== 'unknown';
@@ -34,7 +43,7 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
         const derived = channel === 'amazon-us' ? amazonAttributes({ ...product, _catalog: { ...catalog, channels: { ...catalog.channels, [channel]: { ...listing, attributes: {} } } } }) : {};
         listing.attributes = Object.fromEntries(Object.entries(supplied).filter(([key, value]) => JSON.stringify(value) !== JSON.stringify(derived[key])));
       }
-      if (channel === 'amazon-us') { product.product_type = listing.product_type; product.category = listing.category; }
+      if (channel === 'amazon-us') { if(options.product_type!==undefined)product.product_type=listing.product_type;if(options.category!==undefined)product.category=listing.category; }
       break;
     }
     case 'confirm-facts': {
@@ -61,9 +70,8 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
       output = listing.schema; break;
     }
     case 'generate': {
-      const result = await generateListing(buildAiGenerationPayload(product),aiRuntime);
-      for (const field of ['title', 'bullets', 'description', 'keywords']) if (result[field]) product[field] = result[field];
-      product.ai_grounding = result.grounding;
+      const result = await generateListing(buildAiGenerationPayload(product),aiRuntime,{channel,locale:'en_US'});
+      listing.copy={...validateChannelCopy({locale:'en_US',...Object.fromEntries(COPY_FIELDS.map(field=>[field,String(result[field]||'')]))},channel),source:'ai',grounding:result.grounding};
       output = result; break;
     }
     case 'media': {
@@ -121,10 +129,11 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
     case 'monitor': {
       if (channel !== 'amazon-us') throw new CatalogError('Monitoramento por API habilitado somente para Amazon.');
       output = await amazonReadback(String(product.sku));
-      const result = output as { summaries?: { status?: string[] }[]; issues?: { severity?: string }[] };
+      const result = output as { attributes?:Record<string,unknown>;summaries?: { status?: string[] }[]; issues?: { severity?: string }[] };
       const published = result.summaries?.some(summary => summary.status?.includes('BUYABLE')) === true;
       const blocked = result.issues?.some(issue => issue.severity === 'ERROR') === true;
-      listing.submission = { status: blocked ? 'rejected' : published ? 'published' : 'processing', request_hash: listing.submission?.request_hash || '', submitted_at: listing.submission?.submitted_at || new Date().toISOString(), response: result, issues: result.issues, publication_status: published ? 'buyable' : 'not_buyable' }; break;
+      const matched=submissionMatches(amazonPayload(product),result);
+      listing.submission = { status: blocked ? 'rejected' : !matched?'unknown':published ? 'published' : 'processing', request_hash: listing.submission?.request_hash || '', submitted_at: listing.submission?.submitted_at || new Date().toISOString(), response: result, issues: result.issues, publication_status: matched&&published&&!blocked ? 'buyable' : 'not_buyable',...(matched?{verified_content_hash:contentHash(product,channel),verified_at:new Date().toISOString()}: {}) }; break;
     }
     default: throw new CatalogError('Ação inválida.');
   }
@@ -138,7 +147,7 @@ export function buildChannelPackage(product: ProductInput, channel: Channel) {
   if (!report.ready) throw new CatalogError(`Exportação bloqueada: ${report.issues.map(issue => issue.code).join(', ')}.`, 422);
   const listing = product._catalog!.channels[channel]!;
   return { format: 'fbr-channel-package-v1', channel, sku: product.sku, content_hash: contentHash(product, channel), generated_at: new Date().toISOString(), approval: listing.approval, schema: { version: listing.schema!.version, checksum: listing.schema!.checksum },
-    payload: channel === 'amazon-us' ? amazonPayload(product) : listing.attributes,
+    payload: channel === 'amazon-us' ? amazonPayload(product) : channel==='ebay-us'?buildEbayPackage(product):listing.attributes,
     product: { product_id: product._catalog!.product_id, variants: product._catalog!.variants, facts: product._catalog!.facts },
     publication: 'Prepared; publication requires a separate authorized action.' };
 }

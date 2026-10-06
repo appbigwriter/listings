@@ -7,15 +7,17 @@ export async function fetchSourceCatalog(): Promise<Record<string, unknown>[]> {
     if (url.protocol !== 'https:' || !url.hostname.endsWith('.supabase.co')) throw new Error('Fonte Supabase inválida.');
     const client = createClient(url.href, process.env.FBR_SOURCE_SUPABASE_ANON_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
     const rows: Record<string, unknown>[] = [];
-    for (let offset = 0; offset < 5000; offset += 500) {
+    for (let offset = 0; offset <= 5000; offset += 500) {
       const { data, error } = await client.from('products').select('*,product_variants(*)').order('id').range(offset, offset + 499);
       if (error) throw new Error('Não foi possível ler o catálogo público da FBRSigns. Confira a fonte e as permissões.');
+      if(offset===5000&&(data||[]).length)throw new Error('Catálogo acima do limite de importação; configure paginação da fonte.');
       for (const product of data || []) {
         const images = [product.image_url, ...(product.additional_images || [])].filter(Boolean);
         const variants = (product.product_variants || []).map((variant: Record<string, unknown>) => ({ ...variant, sku: variant.sku || `FBR-${variant.id}` }));
         const parent = { ...product, sku: product.sku || `FBR-${product.id}`, relationship: variants.length ? 'Parent' : 'Standalone', description: product.detailed_description || product.description || '', images, variants };
         rows.push(parent);
         for (const variant of variants) rows.push({ ...parent, ...variant, relationship:'Child', id: variant.id, parent_sku: parent.sku, name: product.name, price: Number(product.price) + Number(variant.additional_price || 0), images: variant.image_url ? [variant.image_url, ...images] : images, variants: [] });
+        if(rows.length>5000)throw new Error('Catálogo com variantes acima de 5.000 SKUs; divida a importação.');
       }
       if ((data || []).length < 500) return rows;
     }

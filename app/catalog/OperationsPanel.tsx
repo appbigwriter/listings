@@ -1,0 +1,8 @@
+'use client';
+import {useState} from 'react';
+import {api,download} from '../../lib/catalog/client';
+type Props={busy:boolean;run:(task:()=>Promise<void>)=>Promise<void>};
+export default function OperationsPanel({busy,run}:Props) {
+  const [report,setReport]=useState<any>(null);
+  return <section className="card mt-5"><h2 className="font-bold text-lg">Saúde operacional</h2><button className="btn mt-3" disabled={busy} onClick={()=>run(async()=>setReport(await api('/api/catalog/operations')))}>Consultar filas e pendências</button>{report&&<div className="mt-3"><p>{report.queued_jobs} lotes na fila · {report.expired_worker_leases} reservas expiradas · {report.ai_operations_today_for_owner} operações IA deste usuário hoje (UTC)</p>{report.ai_costs&&<p className="text-sm mt-2">IA deste usuário: USD {report.ai_costs.reserved_usd.toFixed(4)} reservados · USD {report.ai_costs.estimated_known_usd.toFixed(4)} estimados com usage conhecido · {report.ai_costs.unknown_usage_operations} operações sem custo informado{!report.ai_costs.complete?' · amostra parcial de até 1.000 operações':''}. Valores estimados não substituem a fatura.</p>}{report.alerts.map((alert:string)=><p role="alert" key={alert} className="bg-amber-50 text-amber-800 p-3 mt-2">{alert}</p>)}<details className="mt-3"><summary>IDs para investigação</summary><pre className="text-xs whitespace-pre-wrap max-h-80 overflow-auto">{JSON.stringify(report,null,2)}</pre></details><button className="btn mt-3" onClick={()=>download(report,'prelisting-operations.json')}>Baixar diagnóstico</button></div>}</section>;
+}

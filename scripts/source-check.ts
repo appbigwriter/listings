@@ -1,5 +1,6 @@
 import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { fetchSourceCatalog } from '../lib/catalog/source';
+import { previewImport } from '../lib/catalog/import';
 
 async function main() {
   const root = process.env.FBR_SOURCE_PROJECT_PATH;
@@ -15,7 +16,8 @@ async function main() {
     process.env.FBR_SOURCE_SUPABASE_URL = url; process.env.FBR_SOURCE_SUPABASE_ANON_KEY = key;
   }
   const products = await fetchSourceCatalog();
-  console.log(JSON.stringify({ mode: 'read_only', products_and_variants: products.length, source_configured: true }));
+  const preview=previewImport(products,'configured');
+  console.log(JSON.stringify({ mode: 'read_only', products_and_variants: products.length, source_configured: true,valid:preview.filter(item=>item.product).length,invalid:preview.filter(item=>item.error).length,parents:preview.filter(item=>item.product?.relationship==='Parent').length,children:preview.filter(item=>item.product?.relationship==='Child').length }));
   if (process.argv.includes('--snapshot')) {
     const sample: Record<string, unknown>[] = [];
     const patterns = [/roll.?up/i, /shirt/i, /neon/i, /light.?box/i, /vinyl/i, /bottle/i, /design fee/i, /vehicle wrap/i, /parking/i, /folder/i, /apron/i, /cap/i, /magnet/i, /poster/i, /canopy/i, /letter/i, /foam/i, /flyer/i, /business card/i, /prototype/i];

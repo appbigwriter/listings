@@ -8,7 +8,7 @@ export function oauthConfigured(provider:Provider) {
 export async function marketplaceToken(provider:Provider) {
   const prefix=provider.toUpperCase();const id=process.env[`${prefix}_CLIENT_ID`],secret=process.env[`${prefix}_CLIENT_SECRET`],refresh=process.env[`${prefix}_REFRESH_TOKEN`];
   if(!id || !secret || provider==='ebay' && !refresh) {const token=process.env[`${prefix}_ACCESS_TOKEN`];if(!token)throw new Error(`Credenciais ${provider} não configuradas.`);return token;}
-  const key=hash({provider,id,secret,refresh});const old=cache.get(key);if(old && old.expires>Date.now())return old.value;
+  const key=hash({provider,id,secret,refresh,scopes:provider==='ebay'?process.env.EBAY_OAUTH_SCOPES:undefined});const old=cache.get(key);if(old && old.expires>Date.now())return old.value;
   const flight=flights.get(key);if(flight)return flight;
   const promise=mint();flights.set(key,promise);try{return await promise;}finally{flights.delete(key);}
   async function mint() {

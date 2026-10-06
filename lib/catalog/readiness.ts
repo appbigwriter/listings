@@ -1,13 +1,16 @@
 import { validateListing } from './contracts';
-import { channelFrom, contentHash, hash, TECHNICAL_FIELDS, type Channel, type Issue, type ProductInput } from './model';
+import { channelFrom, channelProduct, contentHash, hash, TECHNICAL_FIELDS, type Channel, type Issue, type ProductInput } from './model';
 import { validateSchema } from './schema';
 import { amazonAttributes } from '../marketplaces/amazon';
 import { approvalValid } from './approval';
+import {buildEbayPackage} from '../marketplaces/ebay-package';
 
 export function evaluateReadiness(input: ProductInput, channel: Channel = channelFrom(input.channel), requireApproval = true) {
+  input=channelProduct(input,channel);
   const issues: Issue[] = [];
   const add = (code: string, field: string, message: string, action: string, severity: Issue['severity'] = 'error') => issues.push({ code, field, message, action, severity });
   const catalog = input._catalog; const listing = catalog?.channels[channel];
+  if(channel==='ebay-us')try{buildEbayPackage(input);}catch(error){add('ebay_preparation_required','ebay',error instanceof Error?error.message:'Pacote eBay inválido.','Complete a preparação específica do eBay.');}
   if (channel === 'amazon-us' && catalog && listing) {
     const derived = amazonAttributes({ ...input, _catalog: { ...catalog, channels: { ...catalog.channels, [channel]: { ...listing, attributes: {} } } } });
     for (const [key, value] of Object.entries(listing.attributes)) {
@@ -16,11 +19,11 @@ export function evaluateReadiness(input: ProductInput, channel: Channel = channe
   }
   if (channel === 'amazon-us' && !['FBM', 'FBA'].includes(String(input.fulfillment))) add('fulfillment_required', 'fulfillment', 'Modalidade de envio não definida.', 'Selecione FBM ou FBA.');
   if (input.source_update) add('source_reconciliation_required', 'source', 'A fonte mudou e ainda não foi reconciliada.', 'Compare e aplique a atualização ou registre uma decisão de manter os dados atuais.');
-  for (const code of validateListing({ ...input, product_type: listing?.product_type, category: listing?.category, human_reviewed: true }).errors.filter(code => !code.startsWith('template_'))) add(code, code.replace(/_required$/, ''), code.replaceAll('_', ' '), 'Complete os dados do produto.');
+  for (const code of validateListing({ ...input, product_type: listing?.product_type, category: listing?.category, human_reviewed: true }).errors.filter(code => !code.startsWith('template_')&&!(channel==='ebay-us'&&['identity_required','asin_invalid'].includes(code)))) add(code, code.replace(/_required$/, ''), code.replaceAll('_', ' '), 'Complete os dados do produto.');
   if (!catalog?.eligibility_confirmed || !['physical', 'custom'].includes(catalog.kind)) add('eligibility_required', 'kind', 'Elegibilidade do produto ainda não confirmada.', 'Defina se é produto físico, personalizado ou serviço.');
   if (catalog?.kind === 'service') add('service_excluded', 'kind', 'Serviço fora do fluxo padrão de produtos físicos.', 'Separe o serviço e configure uma oferta física quando aplicável.');
   if (catalog?.kind === 'custom' && input.fulfillment !== 'FBM' && channel === 'amazon-us') add('custom_fbm_required', 'fulfillment', 'Personalizados Amazon Custom exigem envio pelo vendedor.', 'Selecione FBM e confirme sua habilitação no Amazon Custom.');
-  for (const field of TECHNICAL_FIELDS.filter(field => !['gtin', 'compliance', 'color', 'included', 'manufacturer'].includes(field) && !(input.relationship === 'Parent' && field.startsWith('pkg_')))) {
+  for (const field of TECHNICAL_FIELDS.filter(field => (!['gtin', 'mpn', 'compliance', 'color', 'included', 'manufacturer'].includes(field)||['gtin','mpn'].includes(field)&&Boolean(input[field])) && !(input.relationship === 'Parent' && field.startsWith('pkg_')))) {
     const fact = catalog?.facts[field];
     if (!fact || fact.status !== 'confirmed' || hash(fact.value) !== hash(input[field])) add('fact_unconfirmed', field, `Dado técnico não confirmado: ${field}.`, 'Confirme o valor com uma ficha técnica ou medição real.');
   }

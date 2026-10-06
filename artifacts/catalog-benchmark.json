@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-10-05T18:43:49.011Z",
+  "mode": "local_cpu_only_no_database_no_network",
+  "items": 5000,
+  "blocked_without_facts": 5000,
+  "unchanged": 5000,
+  "normalization_ms": 171,
+  "hash_and_readiness_ms": 231,
+  "total_ms": 406,
+  "heap_growth_mb": 7,
+  "rss_mb": 124,
+  "limitations": "Synthetic unapproved drafts; does not measure database, API, valid official schemas, feed processing, browser or production latency."
+}

@@ -21,7 +21,7 @@ Produção exige sessão real, escopo da organização, fatos com evidência, sc
 
 ## Regras de execução
 
-Estados: `pendente`, `em_execucao`, `bloqueada`, `implementada_localmente`, `homologada`, `concluida`. Salvo indicação explícita, todas as stories abaixo estão **pendentes**. Código existente é reaproveitado, não refeito automaticamente; a story fecha o que falta e exige evidência real.
+Estados: `pendente`, `em_execucao`, `bloqueada`, `implementada_localmente`, `homologada`, `concluida`. **A execução autônoma foi autorizada e iniciada em 05/10/2026. O estado atual de cada uma das 54 stories está em [EXECUTION-005.md](./EXECUTION-005.md)**; as tabelas abaixo preservam o contrato de entrega/aceite. Código existente é reaproveitado, não refeito automaticamente; a story fecha o que falta e exige evidência real.
 
 Responsáveis são papéis: **Conta = Sergio/administrador autorizado**, **Backend**, **Frontend**, **IA/Catálogo**, **Infra**, **QA**, **Operação FBR**. Nenhum prazo/calendário de equipe foi assumido. A duração será definida por capacidade e pelo tempo de liberação de acessos; tratar como incrementos com gate de saída, não como datas prometidas.
 
@@ -162,4 +162,4 @@ S6 pode iniciar após S4 enquanto os acessos de S5 são obtidos. S11 infraestrut
 3. **Backend/QA:** S4-04 e S5-03 — homologar sessão e leituras Amazon sem publicar.
 4. **Operação:** S6-03/S8-01 — levantar fichas reais dos 20 casos piloto enquanto os acessos são liberados.
 
-São tarefas planejadas e dependências concretas; não implicam autorização para criar usuários, expor deploy, contratar infraestrutura, alterar ofertas ou publicar todo o catálogo automaticamente.
+Sergio autorizou a implementação autônoma das sprints em 05/10/2026, cobrindo código e migrations necessárias. As ações que exigem identidade/destino/versão específica aguardam esses dados: usuários reais, vínculo do legado, destino de deploy e SKUs/versões do piloto. Contratar infraestrutura, anúncios e gastos não foi solicitado. Não apresentar implementação como homologação ou publicação de todo o catálogo.

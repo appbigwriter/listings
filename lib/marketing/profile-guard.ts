@@ -38,9 +38,11 @@ export async function getMarketingProfileContext(db: any, auth: AuthContext, sku
 export function validateLaunchReadyTransition(
   gate: { ready: boolean; blockers?: string[] },
   latestApproval: LatestApproval | null,
+  versionVerified=false,
 ): { ok: true } | { ok: false; code: 'LAUNCH_GATE_BLOCKED' | 'APPROVAL_REQUIRED' | 'APPROVAL_NOT_CURRENT'; blockers?: string[] } {
   if (!gate.ready) return { ok: false, code: 'LAUNCH_GATE_BLOCKED', blockers: gate.blockers || [] };
   if (!latestApproval) return { ok: false, code: 'APPROVAL_REQUIRED' };
   if (latestApproval.decision !== 'approved') return { ok: false, code: 'APPROVAL_NOT_CURRENT' };
+  if(!versionVerified)return {ok:false,code:'APPROVAL_NOT_CURRENT'};
   return { ok: true };
 }

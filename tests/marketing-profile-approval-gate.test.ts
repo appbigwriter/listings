@@ -36,7 +36,8 @@ describe('marketing profile launch approval guard', () => {
       ok: false,
       code: 'LAUNCH_GATE_BLOCKED',
     });
-    expect(validateLaunchReadyTransition(readyGate, { decision: 'approved' })).toEqual({ ok: true });
+    expect(validateLaunchReadyTransition(readyGate, { decision: 'approved' })).toEqual({ok:false,code:'APPROVAL_NOT_CURRENT'});
+    expect(validateLaunchReadyTransition(readyGate, { decision: 'approved' },true)).toEqual({ ok: true });
   });
 
   it('centralizes active listing and newest owner/org-scoped approval lookup', async () => {

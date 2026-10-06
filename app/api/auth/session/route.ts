@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
   } catch (error) { return NextResponse.json({ error: error instanceof RequestBodyError ? error.message : 'Não foi possível autenticar.' }, { status: error instanceof RequestBodyError ? error.status : 503 }); }
 }
 export async function DELETE(req: NextRequest) {
+  try {
   let token = req.cookies.get('fbr_access_token')?.value;
   const refresh=req.cookies.get('fbr_refresh_token')?.value;
   if(refresh) {
@@ -47,4 +48,5 @@ export async function DELETE(req: NextRequest) {
   }
   const response = NextResponse.json({ authenticated: false });
   response.cookies.delete('fbr_access_token'); response.cookies.delete('fbr_refresh_token'); return response;
+  } catch {return NextResponse.json({error:'Não foi possível revogar a sessão. Tente novamente.'},{status:503});}
 }

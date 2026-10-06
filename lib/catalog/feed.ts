@@ -2,6 +2,7 @@ import type { ProductInput } from './model';
 import { amazonConfig, amazonPayload } from '../marketplaces/amazon';
 import { evaluateReadiness } from './readiness';
 import { CatalogError } from './repository';
+import { validateFeedDocument } from '../marketplaces/feed-schema';
 
 export function buildAmazonFeed(products: ProductInput[]) {
   if (!products.length || products.length>5000) throw new CatalogError('Selecione entre 1 e 5.000 produtos.');
@@ -15,5 +16,5 @@ export function buildAmazonFeed(products: ProductInput[]) {
   const sellerId=amazonConfig().sellerId; if (!sellerId) throw new CatalogError('Conta Amazon não configurada.',503);
   // Parents precede their children. UPDATE replaces attributes: this file requires version review.
   const ordered=[...products].sort((a,b)=>Number(b.relationship==='Parent')-Number(a.relationship==='Parent'));
-  return {header:{sellerId,version:'2.0',issueLocale:'en_US'},messages:ordered.map((product,index)=>({messageId:index+1,sku:product.sku,operationType:'UPDATE',...amazonPayload(product)}))};
+  const feed={header:{sellerId,version:'2.0',issueLocale:'en_US'},messages:ordered.map((product,index)=>({messageId:index+1,sku:product.sku,operationType:'UPDATE',...amazonPayload(product)}))};validateFeedDocument(feed);return feed;
 }
