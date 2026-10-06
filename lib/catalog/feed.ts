@@ -12,6 +12,7 @@ export function buildAmazonFeed(products: ProductInput[]) {
     if (seen.has(sku)) throw new CatalogError('SKU duplicado no feed.'); seen.add(sku);
     const report=evaluateReadiness(product,'amazon-us');
     if (!report.ready) throw new CatalogError(`Feed bloqueado para ${sku}: ${report.issues.map(issue=>issue.code).join(', ')}.`,422);
+    if(product.relationship==='Child'&&!products.some(parent=>parent.sku===product.parent_sku&&parent.relationship==='Parent'))throw new CatalogError(`Inclua o pai ${String(product.parent_sku)} no feed de ${sku}. A família será reservada na mesma transação.`,422);
   }
   const sellerId=amazonConfig().sellerId; if (!sellerId) throw new CatalogError('Conta Amazon não configurada.',503);
   // Parents precede their children. UPDATE replaces attributes: this file requires version review.

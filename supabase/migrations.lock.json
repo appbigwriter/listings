@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "project_id": "yigqsjevwvqxrxvqhvtd",
+  "attested_at": "2026-10-06T04:23:50Z",
+  "remote_history": [
+    {
+      "version": "20261005165617",
+      "name": "catalog_foundation"
+    },
+    {
+      "version": "20261005165628",
+      "name": "catalog_pipeline"
+    },
+    {
+      "version": "20261005165800",
+      "name": "catalog_explicit_grants"
+    },
+    {
+      "version": "20261005172255",
+      "name": "operational_security"
+    },
+    {
+      "version": "20261005173315",
+      "name": "catalog_history"
+    },
+    {
+      "version": "20261005173317",
+      "name": "ai_operation_budget"
+    },
+    {
+      "version": "20261005174912",
+      "name": "submission_reconciliation"
+    },
+    {
+      "version": "20261005182921",
+      "name": "amazon_feed_pipeline"
+    },
+    {
+      "version": "20261005185007",
+      "name": "catalog_assets"
+    },
+    {
+      "version": "20261005190025",
+      "name": "ai_cost_reservations"
+    },
+    {
+      "version": "20261005191420",
+      "name": "catalog_notification_events"
+    },
+    {
+      "version": "20261005191851",
+      "name": "feed_preflight_retry"
+    },
+    {
+      "version": "20261005192122",
+      "name": "atomic_feed_outcomes"
+    },
+    {
+      "version": "20261005193506",
+      "name": "channel_submission_claim"
+    },
+    {
+      "version": "20261005194420",
+      "name": "evidence_scan_receipts"
+    },
+    {
+      "version": "20261005231501",
+      "name": "marketing_approval_versions"
+    },
+    {
+      "version": "20261005232616",
+      "name": "amazon_submission_version_claim"
+    },
+    {
+      "version": "20261005233146",
+      "name": "catalog_archive_lifecycle"
+    },
+    {
+      "version": "20261005235250",
+      "name": "tracking_attribution_configuration"
+    },
+    {
+      "version": "20261006024604",
+      "name": "amazon_family_version_claim"
+    }
+  ],
+  "files": [
+    {
+      "path": "20261005165617_catalog_foundation.sql",
+      "sha256": "29614ade4d1a6e2e7a8561ccb87fcf4418ccdf67fceaf5a0465c6336fb6b4558"
+    },
+    {
+      "path": "20261005165628_catalog_pipeline.sql",
+      "sha256": "01799fba63e23d19d70413120b9c3a2bb16365e81f0a970f11fe232672eab0d2"
+    },
+    {
+      "path": "20261005165800_catalog_explicit_grants.sql",
+      "sha256": "fd1151de9368f230e3d78b905e28c43cec618e55b4d35625ba23c7255e33e675"
+    },
+    {
+      "path": "20261005172255_operational_security.sql",
+      "sha256": "aeb49f7ee47d21bddea6973bd317d6f5d90094d6a6fae5d0d103d677c930bf66"
+    },
+    {
+      "path": "20261005173315_catalog_history.sql",
+      "sha256": "a080dc48193bc4b143189a982ea22895da76ea9432414371f6548df69e9e866e"
+    },
+    {
+      "path": "20261005173317_ai_operation_budget.sql",
+      "sha256": "7e77a1d1d1bcc9b5c2209c575e52df75da62db5a528bae86f1db433959b48e0c"
+    },
+    {
+      "path": "20261005174912_submission_reconciliation.sql",
+      "sha256": "83ff4d6579b41d1d5082b9ff855d78dfa0c5651f626b4d53bf2318c76308489e"
+    },
+    {
+      "path": "20261005182921_amazon_feed_pipeline.sql",
+      "sha256": "b14cc99cff6f87c3f72c3c4da9c1ff54b0e9ce1bd5e8f2fcfe95dfdf257ceafe"
+    },
+    {
+      "path": "20261005185007_catalog_assets.sql",
+      "sha256": "f825f5544a68cc01b84dc7907fea704f11c90269f8740ac7309fe0b418b4e4c4"
+    },
+    {
+      "path": "20261005190025_ai_cost_reservations.sql",
+      "sha256": "4c69166e40f2fc32733f111c15c6d0fdbd0f8967cd8846c7452201e45edeb19e"
+    },
+    {
+      "path": "20261005191420_catalog_notification_events.sql",
+      "sha256": "e26b37c0f748e8fca1d09c413fe143d868e9439355d01730dc699df10f577275"
+    },
+    {
+      "path": "20261005191851_feed_preflight_retry.sql",
+      "sha256": "274bd0c3bbd88fbd3ad0d9c19120ecedfdb57c9bb6adbcaff0fb2c87b7026951"
+    },
+    {
+      "path": "20261005192122_atomic_feed_outcomes.sql",
+      "sha256": "db1a31152e4ffb321164391124ffc9660867ce134e69d2a9730b262ffd6ab814"
+    },
+    {
+      "path": "20261005193506_channel_submission_claim.sql",
+      "sha256": "070441f32300850f9ad99f67bba4232e4e42120d9d819932cf62a87dea8f53c0"
+    },
+    {
+      "path": "20261005194420_evidence_scan_receipts.sql",
+      "sha256": "6a37b2a23fd4ff1ba8aea6e4d19f59275ee95ecb5b8c2e71624031ac622df42f"
+    },
+    {
+      "path": "20261005231501_marketing_approval_versions.sql",
+      "sha256": "36d241c8fc8d69f9a9bd4232c4f43d715e7d5b8608ba87e75551054d54cf46db"
+    },
+    {
+      "path": "20261005232616_amazon_submission_version_claim.sql",
+      "sha256": "1411507faeb0daf3103f2f66cd8080c8d5e99ec0920cf176f8df0f0f892c02d1"
+    },
+    {
+      "path": "20261005233146_catalog_archive_lifecycle.sql",
+      "sha256": "72867606d9624b910dafd60038986e8d933a3360fb23c3676ef8e1592a44544f"
+    },
+    {
+      "path": "20261005235250_tracking_attribution_configuration.sql",
+      "sha256": "2132ddbf91f87393ac9238bc65e1183312a7f9f24422f2f7963db13ec7b76955"
+    },
+    {
+      "path": "20261006024604_amazon_family_version_claim.sql",
+      "sha256": "3dbcb3802fd863eeadecab2562ad3630f0399081ddb9fd84db8a93a6a0131377"
+    }
+  ],
+  "types_sha256": "f1b0f75cc8980f6fefe7dff1cb24d445786b90cbd4e732a389753e685b7967f0"
+}

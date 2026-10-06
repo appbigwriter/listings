@@ -57,7 +57,7 @@ describe('guarded eBay standalone publication',()=>{
  it('resolves a publish timeout only through matching current inventory/offer and a published listing ID',async()=>{
   const p=product(),pack=buildEbayPackage(p),{db,writes}=database({id:'claim',status:'unknown',created_at:new Date(Date.now()-300000).toISOString(),target:{account_id:'ACCOUNT',marketplace_id:'EBAY_US'},request_hash:contentHash(p,'ebay-us'),request_payload:{inventory:pack.inventory,offer:pack.offer},response:{offer_id:'123'}});
   mocks.request.mockImplementation(async(path:string)=>path.includes('/inventory_item/')?{...pack.inventory,sku:'SKU'}:{...pack.offer,status:'PUBLISHED',listing:{listingId:'456'}});
-  expect((await monitorEbay(db,publisher,'SKU')).output).toMatchObject({matched:true,status:'published'});expect(writes[0].status).toBe('published');expect(mocks.persist).toHaveBeenCalled();
+  expect((await monitorEbay(db,publisher,'SKU')).output).toMatchObject({matched:true,status:'published'});expect(writes[0].status).toBe('published');expect(mocks.persist).toHaveBeenCalledWith(db,publisher,expect.objectContaining({_catalog:expect.objectContaining({channels:expect.objectContaining({'ebay-us':expect.objectContaining({submission:expect.objectContaining({verified_content_hash:contentHash(p,'ebay-us'),verified_at:expect.any(String)})})})})}),expect.anything());
  });
  it('never infers publication from an ID or title alone',()=>{
   expect(expectedFieldsMatch({price:{value:'12.50'}},{price:{value:'12.50'},extra:true})).toBe(true);

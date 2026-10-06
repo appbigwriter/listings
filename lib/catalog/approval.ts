@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import type { Channel, ChannelListing, ProductInput } from './model';
-import { contentHash } from './model';
+import { contentHash,stableStringify } from './model';
 
 function secret() {
   const value = process.env.PRELISTING_REVIEW_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.AUTH_GATEWAY_SECRET;
@@ -19,4 +19,9 @@ export function approvalValid(product: ProductInput, channel: Channel) {
   const approval = product._catalog?.channels[channel]?.approval;
   if (!approval || approval.hash !== contentHash(product, channel) || !/^[a-f0-9]{64}$/.test(approval.signature || '')) return false;
   try { return timingSafeEqual(Buffer.from(approval.signature!, 'hex'), Buffer.from(signature(product, channel, approval), 'hex')); } catch { return false; }
+}
+export function signReviewRecord(domain:string,value:unknown){return createHmac('sha256',secret()).update(stableStringify([domain,value])).digest('hex');}
+export function reviewRecordValid(domain:string,value:unknown,signature:unknown){
+ if(typeof signature!=='string'||!/^[a-f0-9]{64}$/.test(signature))return false;
+ try{return timingSafeEqual(Buffer.from(signature,'hex'),Buffer.from(signReviewRecord(domain,value),'hex'));}catch{return false;}
 }

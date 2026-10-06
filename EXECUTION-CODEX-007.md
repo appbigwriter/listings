@@ -37,3 +37,10 @@ O checkout atual contém trabalho não commitado/não versionado. Ao despachar u
 Arquivos de package/lockfile, CI, configuração compartilhada e migrations têm um único integrador. Propostas de schema seguem CLI/migration, teste local, aplicação sob autorização existente, verificação remota e alinhamento de timestamps/tipos. Não reaplicar as 19 migrations existentes.
 
 Cada entrega registra código implementado, testes locais, homologação real, limitações e requisitos ainda pendentes. A coordenação é técnica; não cria novas exigências de confirmação para trabalho já autorizado. Publicações e ações que dependem de identidade/destino/versão continuam vinculadas aos dados e autorizações específicos.
+
+
+## Checkpoint de implementação 008 — 06/10/2026
+
+CX-04: Fees ligado à economia com recibo, projeção e UI. CX-02/03: provenance/reconciliação, autoridade assinada/pausa/validade e reserva pai/filho implementadas. CX-06: cobertura privada por canal. CX-05/S11-02: heartbeat/posse do worker e prova de versão eBay integrados. 231 testes/48 arquivos, typecheck/build de 41 rotas e audit zero; 20 migrations reconciliadas. Detalhes e limites em EXECUTION-008-autonomia.md. AG-01 é integração parcial de regressões, não jornada real.
+
+Nova baseline 009 substitui 007/008 somente para tarefas ainda não iniciadas. Baselines originais permanecem arquivadas. Código protegido continua com o coordenador; nenhum pacote foi despachado automaticamente. Próximo avanço: integrações/evals/ensaios independentes conforme entregas; liberação de contas/piloto/infra depende dos dados reais pendentes, já solicitados. Não declarar sprints completas nem iniciar publicação sem os gates originais.

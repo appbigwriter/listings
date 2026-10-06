@@ -1,10 +1,14 @@
+## Checkpoint autônomo atual — 05/10/2026, noite
+
+231 testes/48 arquivos passaram; 20 migrations aplicadas e tipos alinhados; typecheck/build de 41 rotas e audit sem vulnerabilidades aprovados. Product Fees ligado à economia, provenance/reconciliação, autoridade persistente de ofertas, reserva de versão do pai e cobertura por canal implementados. AG-01 integrado parcialmente como regressões de contrato; jornadas reais pendentes. Detalhes/evidências: EXECUTION-008-autonomia.md. As 54 stories continuam sujeitas aos gates originais.
+
 # Execução S4–S12 — incremento de 05/10/2026
 
-Sergio autorizou iniciar todas as sprints autonomamente. Foram realizadas alterações de código, dezesseis migrations adicionais no Supabase, testes e verificações reais somente de leitura. Os gates do backlog não foram dispensados. Este incremento inicia as frentes por dependência; **as 54 stories não estão concluídas**.
+Sergio autorizou iniciar todas as sprints autonomamente. Foram realizadas alterações de código, dezessete migrations adicionais no Supabase, testes e verificações reais somente de leitura. Os gates do backlog não foram dispensados. Este incremento inicia as frentes por dependência; **as 54 stories não estão concluídas**.
 
 ## Evidência deste incremento
 
-- Supabase PreListing `yigqsjevwvqxrxvqhvtd`: segurança operacional, histórico, orçamento IA, reconciliação, feeds, evidências privadas, eventos e reserva eBay aplicados; 19 migrations no histórico incluindo as 3 anteriores. Os 2 prelistings legados permanecem sem proprietário atribuído. Zero usuários Auth; nenhuma publicação.
+- Supabase PreListing `yigqsjevwvqxrxvqhvtd`: segurança operacional, histórico, orçamento IA, reconciliação, feeds, evidências privadas, eventos e reserva eBay aplicados; 20 migrations no histórico incluindo as 3 anteriores. Os 2 prelistings legados permanecem sem proprietário atribuído. Zero usuários Auth; nenhuma publicação.
 - Marketing: RLS nas 6 tabelas, anon sem SELECT, authenticated sem INSERT/TRUNCATE, vínculos compostos impedem filho de outro owner/org. Testes em PostgreSQL local preservam legado e provam isolamento.
 - Sessões: papéis confiáveis, revogação efetiva consultada em cada request, CSRF/origem, leitura de JSON com teto de bytes, refresh do cliente e convite/definição de senha. Sem usuários reais para homologar login/SMTP.
 - Histórico: snapshots de produto gravados pelo trigger na transação, sem reescrita de versões pelo service_role. Budget: reservas diárias atômicas por organização, usage/tokens e limites de entrada/saída. Cancelamento: checkpoint não ressuscita lote cancelado.
@@ -37,8 +41,8 @@ Sergio autorizou iniciar todas as sprints autonomamente. Foram realizadas altera
 | S6-01 | em_execucao | Toda fonte normalizada em CLI/navegador; importação produtiva aguarda owner real. |
 | S6-02 | em_execucao | Envelope atual preservado, histórico relacional transacional aplicado; falta testar versões em operação real. |
 | S6-03 | bloqueada | Formulário/provenance existentes; faltam fichas/medidas/certificados reais. |
-| S6-04 | em_execucao | Importação promove pais e preserva SKU dos filhos; temas oficiais/famílias reais aguardam schema. |
-| S6-05 | em_execucao | Diff novo/alterado/inalterado e ausência em snapshot completo, reconciliação/invalidação/histórico; arquivamento/restauração com motivo, admin e guarda transacional de versão/envios implementados; autoridade contínua por campo permanece pendente. |
+| S6-04 | em_execucao | Importação preserva vínculos; coerência de marca/kind/categoria/product type/tema, readback do pai e reserva transacional da versão implementados; feeds exigem pai incluído. Temas/dimensões/famílias reais aguardam schemas/piloto. |
+| S6-05 | em_execucao | Diff novo/alterado/inalterado e ausência em snapshot completo, reconciliação/invalidação/histórico; arquivamento/restauração com motivo, admin e guarda transacional de versão/envios implementados; provenance por campo e reconciliação motivada com campos aplicados/preservados implementadas; sincronização contínua depende de autoridade e homologação. |
 | S6-06 | bloqueada | Leitura/vínculo da população Amazon existente depende de token e decisão de report/API. |
 | S7-01 | em_execucao | Geração factual/grounding existente, limites adicionados; faltam corpus anotado e eval ao vivo. |
 | S7-02 | em_execucao | Candidatos oficiais/recomendação existentes; baixo confidence exige revisão; falta homologação real. |
@@ -55,7 +59,7 @@ Sergio autorizou iniciar todas as sprints autonomamente. Foram realizadas altera
 | S9-01 | bloqueada | Executor individual com reserva atômica da versão; não há piloto autorizado por SKU/versão. |
 | S9-02 | em_execucao | Ledger captura payload/target, índice bloqueia versões incertas, readback conservador; falta simular crash e homologar live. |
 | S9-03 | em_execucao | Feed/monitor/relatório, resultado por SKU transacional e nova tentativa explícita para falha comprovada antes de createFeed, preservando histórico; falta homologação real/crash de processos externos. |
-| S9-04 | em_execucao | PATCH merge preço/estoque FBM, reserva atômica da versão, manifesto/hash/ledger e confirmação explícita de autoridade; falta homologação, autoridade por campo persistente e compensação. |
+| S9-04 | em_execucao | PATCH merge preço/estoque FBM, reserva atômica da versão, manifesto/hash/ledger e confirmação explícita de autoridade; autoridade persistente assinada por conta/SKU/campos/versão/valores, com validade e pausa implementada; faltam homologação e compensação operacional. |
 | S9-05 | em_execucao | Consumidor EventBridge→SQS, contratos oficiais, origem/assinatura/conta, dedup/leases, readback atual e ack após término durável; template com DLQs preparado. Ativação/homologação dependem da conta AWS/destino/permissões. |
 | S9-06 | bloqueada | Monitoramento individual existe; aceite depende de catálogo publicado e histórias anteriores. |
 | S10-01 | em_execucao | Taxonomy/OAuth/copy/pacote, conta imutável comprovada, policies/NEW/localização, reserva atômica e executor Inventory/Offer/publish/readback standalone; aspectos requeridos/cardinalidade/enums/datas e condicionais de um controlador validados; condicionais avançados bloqueados. Faltam famílias/revisões/recuperação sem offerId e homologação. |
@@ -70,11 +74,11 @@ Sergio autorizou iniciar todas as sprints autonomamente. Foram realizadas altera
 | S11-04 | bloqueada | Backup/PITR, staging de restauração e RPO/RTO precisam de escolha/ambiente; história não concluída. |
 | S11-05 | em_execucao | DNS/bytes/JSON/cookies/roles/audit e paginação 5.000; benchmark local 5.000 rascunhos: 406 ms, +7 MB heap, RSS124 MB. Falta carga real DB/API/worker/browser e metas. |
 | S11-06 | em_execucao | CI e regressões SQL, timestamps remotos reconciliados; tipos remotos gerados e RPC de aprovação tipada; todas as migrations executadas automaticamente nos testes PostgreSQL. Faltam CI real/drift remoto/staging/release. |
-| S12-01 | em_execucao | Product Fees consultável com preço/fulfillment/data; falta alimentar custos reais e conectar economics/margem por canal. |
+| S12-01 | em_execucao | Product Fees normalizado por conta/identidade/preço/frete/fulfillment/data, projeção USD consultiva e API/UI ligadas à economia; custos ausentes não viram zero e total estimado não duplica componentes. Faltam leitura real, custos reais e homologação por canal. |
 | S12-02 | em_execucao | Revisão com snapshot/hash/HMAC, decisão/status transacionais, custos pela tela com fonte/data e CAS, aprovação invalidada por preço/custos/planos/tracking. Homologação real de reload/papéis permanece. |
 | S12-03 | em_execucao | Handoff/UTMs/Kanban existentes; falta homologar no destino real; anúncios/gastos não executados. |
 | S12-04 | em_execucao | Manual de fluxo/credenciais/recuperação preparado; falta treino de equipe real e validação de responsabilidades. |
-| S12-05 | bloqueada | 203 registros contabilizados na prévia; rollout aguarda piloto, fatos, restore e liberação por canal. |
+| S12-05 | bloqueada | 203 registros contabilizados na prévia; relatório privado de cobertura/versões/status/ações por canal implementado, sem alegar população produtiva reconciliada. Rollout aguarda piloto, fatos, restore e liberação por canal. |
 | S12-06 | bloqueada | Aceite final depende dos gates; não há declaração de funcionamento 100%. |
 
 ## Próximo avanço

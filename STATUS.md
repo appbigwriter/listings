@@ -1,3 +1,7 @@
+## Checkpoint autônomo — 05/10/2026, noite
+
+20 migrations aplicadas; 231 testes/48 arquivos passaram; tipos alinhados. Economia com Fees, reconciliação/provenance, autoridade persistente de oferta, reserva pai/filho e cobertura por canal implementados. Jornadas reais e conclusão das sprints permanecem pendentes. Últimos dados remotos: 2 prelistings preservados, 0 usuários Auth, 0 envios/feeds. Ver EXECUTION-008-autonomia.md; as seções seguintes preservam checkpoints anteriores.
+
 ## Atualização da retomada — 05/10/2026, após 20:10
 
 19 migrations aplicadas/reconciliadas. 177 testes locais em 34 arquivos passaram; typecheck passou. Antimalware privado com receipt e bloqueio em produção sem scanner, condicionais simples eBay e revisão de marketing vinculada à versão foram implementados. Tela de custos/fonte/data e exports coerentes adicionados. Arquivamento/restauração e retomada explícita de lotes implementados; PUT/PATCH Amazon reservam a versão transacionalmente. Readback comprova atributos atuais antes de liberar marketing. Build final passou com 39 rotas. Tipos do schema remoto gerados.

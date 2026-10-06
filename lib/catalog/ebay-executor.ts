@@ -56,7 +56,7 @@ export async function submitEbay(db:SupabaseClient,auth:AuthContext,body:Record<
   await scopeQuery(db.from('catalog_submissions').update({status:'unknown',response:{stage,offer_id:offerId||null,listing_id:listingId||null,error:'external_write_unconfirmed'},updated_at:new Date().toISOString()}),auth).eq('id',id).eq('status','submitting');throw error;
  }
 }
-export async function monitorEbay(db:SupabaseClient,auth:AuthContext,sku:string) {
+export async function monitorEbay(db:SupabaseClient,auth:AuthContext,sku:string,beforePersist?:()=>Promise<void>) {
  const loaded=await loadProduct(db,auth,sku),claim=await scopeQuery(db.from('catalog_submissions').select('*'),auth).eq('sku',sku).eq('channel','ebay-us').order('created_at',{ascending:false}).limit(1).maybeSingle();
  if(claim.error||!claim.data)throw new CatalogError('Não há envio eBay registrado para este SKU.',404);
  const record=claim.data,config=ebayConfig();
@@ -67,11 +67,13 @@ export async function monitorEbay(db:SupabaseClient,auth:AuthContext,sku:string)
  const [inventory,offer]=await Promise.all([ebayRequest(`/sell/inventory/v1/inventory_item/${encodeURIComponent(sku)}`),ebayRequest(`/sell/inventory/v1/offer/${encodeURIComponent(record.response.offer_id)}`)]);
  const matched=expectedFieldsMatch(record.request_payload?.inventory,inventory)&&expectedFieldsMatch(record.request_payload?.offer,offer)&&offer.sku===sku&&offer.marketplaceId==='EBAY_US'&&offer.status==='PUBLISHED'&&typeof offer.listing?.listingId==='string'&&/^\d{1,64}$/.test(offer.listing.listingId);
  if(!matched)return {data:loaded.row,output:{matched:false,message:'Readback não comprova integralmente esta versão publicada. Investigue sem reenviar.'},report:evaluateReadiness(loaded.product,'ebay-us'),content_hash:contentHash(loaded.product,'ebay-us')};
+ await beforePersist?.();
  const saved=await scopeQuery(db.from('catalog_submissions').update({status:'published',response:{...record.response,reconciled_at:new Date().toISOString(),listing_id:offer.listing.listingId},updated_at:new Date().toISOString()}),auth).eq('id',record.id).eq('status',record.status).select('id').maybeSingle();
  if(saved.error||!saved.data)throw new CatalogError('O ledger eBay mudou durante a consulta.',409);
  let data=loaded.row;
  if(contentHash(loaded.product,'ebay-us')===record.request_hash) {
-  loaded.product._catalog!.channels['ebay-us']!.submission={status:'published',request_hash:record.request_hash,submitted_at:record.created_at,response:{offer_id:record.response.offer_id,listing_id:offer.listing.listingId},publication_status:'published_verified'};
+  loaded.product._catalog!.channels['ebay-us']!.submission={status:'published',request_hash:record.request_hash,submitted_at:record.created_at,response:{offer_id:record.response.offer_id,listing_id:offer.listing.listingId},publication_status:'published_verified',verified_content_hash:contentHash(loaded.product,'ebay-us'),verified_at:new Date().toISOString()};
+  await beforePersist?.();
   data=await persistProduct(db,auth,loaded.product,loaded.row);
  }
  return {data,output:{matched:true,status:'published',listing_id:offer.listing.listingId},report:evaluateReadiness(loaded.product,'ebay-us'),content_hash:contentHash(loaded.product,'ebay-us')};

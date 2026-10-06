@@ -22,8 +22,8 @@ export function marketingApprovalCurrent(record:any,versionHash:string,auth:Auth
 }
 export function marketingSnapshot(listing:any,profile:any,amazon:any,meta:any,tracking:any) {
  const product=channelProduct(productFromRow(listing),'amazon-us');
- const fields=['sku','title','description','bullets','keywords','brand','material','price','qty','asin','amazon_url','images','fulfillment','pkg_length','pkg_width','pkg_height','pkg_weight'];
- return {version:'marketing-review-v1',product:{...Object.fromEntries(fields.filter(field=>product[field]!==undefined).map(field=>[field,product[field]])),content_hash:contentHash(product,'amazon-us'),facts:product._catalog?.facts},profile:withoutOperationalFields(profile),amazon_plan:amazon?.plan||null,meta_plan:meta?.plan||null,tracking:withoutOperationalFields(tracking)};
+ const fields=['sku','title','description','bullets','keywords','brand','material','price','shipping_charge','qty','asin','amazon_url','images','fulfillment','pkg_length','pkg_width','pkg_height','pkg_weight'];
+ return {version:'marketing-review-v1',product:{...Object.fromEntries(fields.filter(field=>product[field]!==undefined).map(field=>[field,product[field]])),sku:String(product.sku),content_hash:contentHash(product,'amazon-us'),facts:product._catalog?.facts},profile:withoutOperationalFields(profile),amazon_plan:amazon?.plan||null,meta_plan:meta?.plan||null,tracking:withoutOperationalFields(tracking)};
 }
 export async function loadMarketingReview(db:any,auth:AuthContext,sku:string,context?:Awaited<ReturnType<typeof getMarketingProfileContext>>) {
  const current=context||await getMarketingProfileContext(db,auth,sku);

@@ -1,18 +1,19 @@
 {
   "version": 1,
-  "client_date": "2026-10-05",
+  "client_date": "2026-10-06",
   "timezone": "America/Sao_Paulo",
   "source_workspace": "F:/Projetos/_FBR/PreListing",
-  "git_head": "f2c4d39c5fcfc8a4b15549b104b7b119c9fae629",
+  "git_head": "f5d51550704ac4e11036eb1a72ad53872d481407",
   "git_branch": "main",
   "has_uncommitted_work": true,
-  "baseline_id": "0fe72167ada1ccf233a4a76cdc3a952bb919297adce250e287e22f4737db728e",
+  "baseline_id": "4625e4568bbb43e2fc1edb65eb086bbd270c50d4bcc80c861544952a1ce8275b",
   "validation_reference": {
-    "tests": 177,
-    "test_files": 34,
+    "tests": 231,
+    "test_files": 48,
     "typecheck": "passed",
-    "build_routes": 39,
-    "supabase_migrations": 19
+    "build_routes": 41,
+    "supabase_migrations": 20,
+    "migration_integrity": "passed"
   },
   "excluded": [
     ".env and environment secrets",
@@ -39,7 +40,7 @@
     },
     {
       "path": ".github/workflows/verify.yml",
-      "sha256": "52fe54a65bbbbcc2ff684c3be8f578590210e185fb08ffa5e9175e826e10c3cd"
+      "sha256": "6b2ef780fb045f80df3cd7967d9fd7614116dab6f13753950edd11d97624ab30"
     },
     {
       "path": ".gitignore",
@@ -47,7 +48,7 @@
     },
     {
       "path": "AMAZON-API-SETUP.md",
-      "sha256": "0b56be6f38981583b4882e10505c25496243df72d7230ebf206634086dd92ead"
+      "sha256": "6dfedbe189ca988957320cb338875781c41ef32afd59de1302c931c424f796f0"
     },
     {
       "path": "ANTIGRAVITY-006-handoff.md",
@@ -78,6 +79,10 @@
       "sha256": "0d79bcf6acad009f8f7dbf57a35195c5a01ce49e0963f296fbb6f214197e6b20"
     },
     {
+      "path": "app/api/catalog/coverage/route.ts",
+      "sha256": "6f165d23a3637134c72427bddc4a61eb0be567bf3d65d976c3eedebfaf5526fc"
+    },
+    {
       "path": "app/api/catalog/ebay/route.ts",
       "sha256": "5756e06aa97080ec2f07ffa00a80375e8b75adcffd8880dca01e45154c741088"
     },
@@ -99,7 +104,7 @@
     },
     {
       "path": "app/api/catalog/item/route.ts",
-      "sha256": "aec148ba87fa85931bc5f5868f5d9268466c2a8e1d9769b5054b3b209b1bcf78"
+      "sha256": "a2008b95110e01c9e1a4fef03e923d3e954b7cd358c0056e07520f741790f874"
     },
     {
       "path": "app/api/catalog/jobs/route.ts",
@@ -107,7 +112,7 @@
     },
     {
       "path": "app/api/catalog/offers/route.ts",
-      "sha256": "8f252d4db82e6872b070801529143fdb23f5ff93be2fdb2874c8b651eb3b339f"
+      "sha256": "2124c3f382143af8718a7b744223ba9333f274f4eac06b47442da65d85e2b335"
     },
     {
       "path": "app/api/catalog/operations/route.ts",
@@ -147,11 +152,15 @@
     },
     {
       "path": "app/api/listings/route.ts",
-      "sha256": "06e7b68d6f197916ad789dc59254690fa9ea153aea8f07f0d59b2c19bb09e26d"
+      "sha256": "6331fc1d30189a095b22d985c6e9bb04c3b056374b9afe215115f85f62784213"
     },
     {
       "path": "app/api/marketing-approvals/route.ts",
       "sha256": "fae4bfbbed176abb6f0c40438aa66880672625ed0e0a76785ed898fda5238cac"
+    },
+    {
+      "path": "app/api/marketing-economics/route.ts",
+      "sha256": "591d23ae83fefc605239473a89e82c9c31479ee12fc9cf1b603c2f34f61de105"
     },
     {
       "path": "app/api/marketing-profiles/route.ts",
@@ -179,7 +188,7 @@
     },
     {
       "path": "app/catalog/[sku]/Editor.tsx",
-      "sha256": "db7f6ccfcb74762e7f1f2724d4a0b70f7b34170e6be0e2711f168362cba1a895"
+      "sha256": "4198c774339c44fd066cb1db61d1fed253b30d954cd8238557fbbd22c008999a"
     },
     {
       "path": "app/catalog/[sku]/page.tsx",
@@ -206,6 +215,10 @@
       "sha256": "90f1894e2cbdc70a10cdfddb0ecfc4d49d0a6f3f8c0ddd3981d6f97163bffd9c"
     },
     {
+      "path": "app/catalog/CoveragePanel.tsx",
+      "sha256": "f7e63ba57a02f2e40c1a30143d5d9349368d2d97cd35921ba424739529aed6f8"
+    },
+    {
       "path": "app/catalog/EbayOperations.tsx",
       "sha256": "7086ab2b70eb8cb8ea7c6bb87f9a40a60f4772328c5c0034a13f3b999c2669b9"
     },
@@ -223,7 +236,7 @@
     },
     {
       "path": "app/catalog/OfferOperations.tsx",
-      "sha256": "86343485f258bf79e2c080ba05b783a71aa556011e368e83875be76bac7b0611"
+      "sha256": "477a604f1cf4b319e65caf0304051dc70e020accd67b1778c2eaffa085638cde"
     },
     {
       "path": "app/catalog/OperationsPanel.tsx",
@@ -231,7 +244,7 @@
     },
     {
       "path": "app/catalog/page.tsx",
-      "sha256": "b24392d7f637deccda703667c060fbae081a9ac6a21b96c25720d0bc0a981833"
+      "sha256": "e50929d840fadc19376081f5e2cb6af70847d77fb3c7d35aea52ef5d2b1255e0"
     },
     {
       "path": "app/catalog/SchemaEditor.tsx",
@@ -255,11 +268,15 @@
     },
     {
       "path": "app/marketing/[sku]/MarketingSkuClient.tsx",
-      "sha256": "9126d6893e1de41c5bf0f6ada41f821711f41c26decd555906bf128b0ca7ee7a"
+      "sha256": "89ba9d4b7824c0a41a903f4568746a30c84f8ca21a4de4cbdeb953c94eaf6c27"
     },
     {
       "path": "app/marketing/[sku]/page.tsx",
       "sha256": "4482ac023f48e021b10317bc6e1aa01907498eb2b548d18981ac7ae46270f665"
+    },
+    {
+      "path": "app/marketing/AmazonFeeEconomics.tsx",
+      "sha256": "f16684e82c5b106a158ea8466eab8306a4f4da803fdd69b0e19de303d4040c3a"
     },
     {
       "path": "app/marketing/MarketingEconomicsEditor.tsx",
@@ -278,6 +295,18 @@
       "sha256": "eb91f87bc931acb4d061d5b491cee9ae86cd8b73c228222075f8eef95a7ba0bd"
     },
     {
+      "path": "artifacts/antigravity/AG-01/coverage-matrix.md",
+      "sha256": "ea82d7958fe0ee6a5e0eda2716478fddc45c1075bb3383f4e4111684d7dd90f5"
+    },
+    {
+      "path": "artifacts/antigravity/AG-01/test-summary.json",
+      "sha256": "01449306235fadfae900ea5437afaaf332d74579cdd2c960ff2134b266ad8e25"
+    },
+    {
+      "path": "artifacts/antigravity/AG-01/vitest-results.json",
+      "sha256": "1dbe7f26044c10e33d61e80720848d8e8f94331abc199e490aa489a28f7bfbf6"
+    },
+    {
       "path": "compose.yaml",
       "sha256": "492826e765f7ae9d6892a3be147238710fc38f068b146943b4be0524f78cb6ce"
     },
@@ -286,8 +315,16 @@
       "sha256": "c8c680a6393172c4410f8274267ddc55b45a89d800f49b395efb94d2a9009b32"
     },
     {
+      "path": "coordination/antigravity/BASELINE-007.json",
+      "sha256": "a47c25b32767c890f4f3562b8d757b552027f7878307f578a772b67617477b7a"
+    },
+    {
+      "path": "coordination/antigravity/BASELINE-008.json",
+      "sha256": "ab580ef03986b69f63ea9005f69693953b3b758912d34d0b0ba0c7c8d21f9242"
+    },
+    {
       "path": "coordination/antigravity/BOARD.md",
-      "sha256": "2cca2c9ef9df1a1b4b3aa7b56b58141b5d326050b27882f4a159572727ffe967"
+      "sha256": "9695930c075056c350672c24429c6dfd3d0ef97f90be1d9babba6e8517a1b4db"
     },
     {
       "path": "coordination/antigravity/check-baseline.mjs",
@@ -302,8 +339,12 @@
       "sha256": "c0095b72378bafd6738a79e268f2a0301f5bea97aa598bc53b486f7da9539e2d"
     },
     {
+      "path": "coordination/antigravity/reports/AG-01-integration.md",
+      "sha256": "9a812aab48c4fb608b0019967d42f6cf555164c8ba514e35b0dad3d916099f01"
+    },
+    {
       "path": "coordination/antigravity/TASKS.json",
-      "sha256": "7acf8dfa0e43f4f95ac821e75ce936d01405fd6d0801870bea61ac471d13cf94"
+      "sha256": "d2b6ac23522320d2da6f5a6598f51cced6168ced352d72991aabeebafdcc2884"
     },
     {
       "path": "coordination/antigravity/tasks/AG-01.md",
@@ -343,11 +384,15 @@
     },
     {
       "path": "EXECUTION-005.md",
-      "sha256": "1ddfa96afd3f249b9a9c900ba92729f572af2b8dec9c175d4c5da27f8bee8336"
+      "sha256": "81a30a642da5a664965d35bcbe9e63194f1af65538d50af4002fa3406eabf05a"
+    },
+    {
+      "path": "EXECUTION-008-autonomia.md",
+      "sha256": "00529b81d92704d71ee9071e6e027688fe56d9f89aff4bad04b78dc532e7e556"
     },
     {
       "path": "EXECUTION-CODEX-007.md",
-      "sha256": "3bad7730ff78a5f01dbffa143e74ff3c01b142e557c09957bb75ce0eef283801"
+      "sha256": "c89c2126203f117c48c43ffef567a8781275f273f196ae501c19add1dffc37b8"
     },
     {
       "path": "implementation_plan.md",
@@ -387,7 +432,7 @@
     },
     {
       "path": "lib/catalog/actions.ts",
-      "sha256": "4ee03408595d284f27277d4e09e4b8e0f7571ce63fedb9971d0e933483a465d5"
+      "sha256": "ae97e93f7b6f673e992ca50a4876abc7d05e1f1de5f5e3adde80d84e606fb9da"
     },
     {
       "path": "lib/catalog/active-listing.ts",
@@ -399,7 +444,7 @@
     },
     {
       "path": "lib/catalog/approval.ts",
-      "sha256": "3bab47685222bdbfefa36842f3459f1e23a17dcdfaec7ccd449e36387afda4da"
+      "sha256": "d9861a8b1ff303a3faa0e3e6a7d9007fd785ef60a3f12ae342cbc95cd756e725"
     },
     {
       "path": "lib/catalog/archive.ts",
@@ -423,15 +468,19 @@
     },
     {
       "path": "lib/catalog/contracts.ts",
-      "sha256": "cef4e5b50e8462dae4fa7ab8e73195e2629f230d1f03d3e991bef0f42886e336"
+      "sha256": "1474d45082aa55b9603b505a01b4377a7f5d5294ad36dfcf922437741e05a42b"
     },
     {
       "path": "lib/catalog/copy.ts",
       "sha256": "3dfa342b17c571feb71e7c45232d47109832e1876342016b70f2d6a2b6bd29c3"
     },
     {
+      "path": "lib/catalog/coverage.ts",
+      "sha256": "1e99ca79f014af0aae3a081fb6ec652bc0c2c1dafabe215dba849af6bf6d005a"
+    },
+    {
       "path": "lib/catalog/ebay-executor.ts",
-      "sha256": "f7f2d990d71b435c0cc52dd189186d3a993d5004c03197ff362d55fb444f67fb"
+      "sha256": "d7ea458d4f29f62befc13cb46ea5a54bb34c74c65397ac3c4e23d986e837834a"
     },
     {
       "path": "lib/catalog/events.ts",
@@ -439,11 +488,11 @@
     },
     {
       "path": "lib/catalog/executor.ts",
-      "sha256": "bdd8e617e61bd96c14682c15ce5595e66978f69eaba47c3d38243d67d6c55ae7"
+      "sha256": "b3d2841bc9d3eb648508b0f5c463abd2b1e5b6756b41ee33a165f57373695147"
     },
     {
       "path": "lib/catalog/family.ts",
-      "sha256": "61754b66810c9c074275b29cf26e0b1add5225d72d38d596c0744c732f2f2ec0"
+      "sha256": "4a5fe24e2d8c0fc0cff766014088d3b7f075d17babb5941b92e9abeee6b01410"
     },
     {
       "path": "lib/catalog/feed-executor.ts",
@@ -455,11 +504,23 @@
     },
     {
       "path": "lib/catalog/feed.ts",
-      "sha256": "fc08883a4934f1c7acf0d3ffb627c8d4d96d0b6728d46676df804aee0dadcdcf"
+      "sha256": "ff7a54faef81784b9deba6dd5868596ebbad86a1f6336d0ac2f4139af4af17df"
+    },
+    {
+      "path": "lib/catalog/field-provenance.ts",
+      "sha256": "36ece87b9d131cac80e00846484e75ba89935857dbccfc97b7bb064442d47856"
     },
     {
       "path": "lib/catalog/import.ts",
-      "sha256": "8ab4790440e63d3952eb32ef6a8b8855add2a1b4f63b62924ebfd202c0b6a227"
+      "sha256": "7b3af24cc9d313ad1c6d83309ab90ea4cd7c1558ea2b9763f8496a8d5da0e560"
+    },
+    {
+      "path": "lib/catalog/job-checkpoint.ts",
+      "sha256": "975983ea81b7b762fe1c4f82734c066e9d52bb242208db40864ca39ce8f182a9"
+    },
+    {
+      "path": "lib/catalog/job-lease.ts",
+      "sha256": "a3d231bcb0a912d3580454f9338e0822a3ec33012fcde02d134d2a5e0658c450"
     },
     {
       "path": "lib/catalog/job-retry.ts",
@@ -467,7 +528,7 @@
     },
     {
       "path": "lib/catalog/jobs.ts",
-      "sha256": "5e00eb8c45f9e521fbfda28542a250ef170bd075740ae3a6c6a206a8d504156e"
+      "sha256": "2e42ad0ca25fe7a764b1abce4538888f984644216ad28be043b3b3f981e12f44"
     },
     {
       "path": "lib/catalog/media.ts",
@@ -475,11 +536,19 @@
     },
     {
       "path": "lib/catalog/model.ts",
-      "sha256": "391a13a9be5dfaba3cc0606fc4dcb56beddfe521e64ef6cecb9f818f55a010f6"
+      "sha256": "88b3123b54ed42ef779edbafa328a194aede21719ec8cfcd21dbbeadcec76e7b"
+    },
+    {
+      "path": "lib/catalog/numeric-input.ts",
+      "sha256": "363adaea76ac30b3ba37c85ea0975f10888721798caa86ad114913536121f37c"
+    },
+    {
+      "path": "lib/catalog/offer-authority.ts",
+      "sha256": "3362d3d7e9324b52c334714a3bfe6e969d9f64d1928c9c5d4bb286ab0923cf89"
     },
     {
       "path": "lib/catalog/offers.ts",
-      "sha256": "4dd3b498c3b73d6d399e3d72896dc6e9fd80f5c59c82b56cb26f9eb944239ce6"
+      "sha256": "8fd2df2f977c8767597f5b5f5741307835b403efe564c893597a51243a4a798e"
     },
     {
       "path": "lib/catalog/readiness.ts",
@@ -491,7 +560,7 @@
     },
     {
       "path": "lib/catalog/repository.ts",
-      "sha256": "286304adefe2f54bd2dde4c02018b76a4567eaacaf37278a9c737789415fb832"
+      "sha256": "cd3af9c17a5988bd9f809ff1594328baeac51baf8cd1772aa42738b38e25007a"
     },
     {
       "path": "lib/catalog/schema.ts",
@@ -500,6 +569,10 @@
     {
       "path": "lib/catalog/source-diff.ts",
       "sha256": "e72c5acc742f5f55031d73f6ec59ca66d5b65cfea3ae5513a3357064eac8373b"
+    },
+    {
+      "path": "lib/catalog/source-reconciliation.ts",
+      "sha256": "e24d60988cd8cbc3f4f695ad33aa7d2f1f46e93a989c6cb4b798013f804fd1b1"
     },
     {
       "path": "lib/catalog/source.ts",
@@ -530,8 +603,12 @@
       "sha256": "b6213862f04be3f204b1217f2ac0776cf49ed511ab59295850fcb7eb243e6c94"
     },
     {
+      "path": "lib/marketing/fee-economics.ts",
+      "sha256": "fe3945146b74277de9fc4a26e69f54bf39b9bdc6d4396934fbb58111f3a97a65"
+    },
+    {
       "path": "lib/marketing/margin.ts",
-      "sha256": "330e0e0de5046aeaa7c4c003d59678d6f13083c95071598ad93a419210654903"
+      "sha256": "2afb7e347a118de19945d1e80a9d64e369ca912e42d414c374368d495bd73395"
     },
     {
       "path": "lib/marketing/plans.ts",
@@ -543,7 +620,7 @@
     },
     {
       "path": "lib/marketing/review.ts",
-      "sha256": "496ab9864b3aefe8c2e33829917cee7d08b53dd7ef3e6a0077a1998d220dde96"
+      "sha256": "aa8302ef17c843054058f49b6ce833c0e5b65e019f85ea5d03946ddf2e559646"
     },
     {
       "path": "lib/marketing/supabase.ts",
@@ -558,6 +635,10 @@
       "sha256": "e2393166f1663bde5c807b793d8ac9dbc7461fa391b1c856e11d4b30a3f1b25e"
     },
     {
+      "path": "lib/marketplaces/amazon-fee-estimates.ts",
+      "sha256": "62aaf7ad58a1e99ea9f1e1bc3b750daa1b8bcbfa6d83c6c291b6c57c668e784a"
+    },
+    {
       "path": "lib/marketplaces/amazon-feeds.ts",
       "sha256": "b83138a2c218014b74b0d48996962ef53b4747c36cdf3de39f52f65c8cce4ec4"
     },
@@ -567,7 +648,7 @@
     },
     {
       "path": "lib/marketplaces/amazon.ts",
-      "sha256": "5889252b78f006eaf4f8910c44c0b1337385c916b0568722e93b2ca70123ac20"
+      "sha256": "3d9603232ffae1cec21eb8e2a03ce24f9ca197f132b18b791276b718c44d5509"
     },
     {
       "path": "lib/marketplaces/capabilities.ts",
@@ -622,8 +703,12 @@
       "sha256": "e0b71213e2b442706eb173fc8672b0d353ba924171571952a60eb29871c108d3"
     },
     {
+      "path": "lib/operations/migration-manifest.ts",
+      "sha256": "2c34d675368b499893699a7cae8dcb76f190a6d18b02ee1bcd6b846d0fc14d5f"
+    },
+    {
       "path": "lib/supabase/database.types.ts",
-      "sha256": "673395eef5b6884cd466f1c5b35025269a7a03328529568bd2c1424161e4092e"
+      "sha256": "f1b0f75cc8980f6fefe7dff1cb24d445786b90cbd4e732a389753e685b7967f0"
     },
     {
       "path": "middleware.ts",
@@ -647,7 +732,7 @@
     },
     {
       "path": "OPERATIONS-005.md",
-      "sha256": "1f0175479e91dda713a542d54e155ee98d0b7bcbb442fc93470fc6c40847d646"
+      "sha256": "f166bf450f13f075b69300ae508e6fcd61b29c5daebdb57b9484f073f25a677b"
     },
     {
       "path": "package-lock.json",
@@ -655,7 +740,11 @@
     },
     {
       "path": "package.json",
-      "sha256": "57f1cc818be9560788caf7463f9dead17c249296631c479b1de06c16119778d2"
+      "sha256": "4959196562a882fcfa47bb34885a0938160a206f6567f9cec074af0a59802d80"
+    },
+    {
+      "path": "playwright.antigravity.config.ts",
+      "sha256": "0715eb01d279b4769e4ca64a4628e4358f95ac12b4ea5507e99c7e9e13c12bc8"
     },
     {
       "path": "postcss.config.mjs",
@@ -678,6 +767,14 @@
       "sha256": "a386b4418cc4ac6c8c6618075068bf78abedc3cd6fac6a31e9cd1f91082b341e"
     },
     {
+      "path": "scripts/antigravity/e2e/run-e2e-harness.ts",
+      "sha256": "aee8ba114929599f6b0bc0d7139e69e45ce1d9f2d2422f13c36493a6059f9ad1"
+    },
+    {
+      "path": "scripts/antigravity/e2e/vitest.config.mts",
+      "sha256": "9af28845f9ac46fc64492d2c630412cad48dc3b7a97bec3b696b6ffc82b94584"
+    },
+    {
       "path": "scripts/catalog-benchmark.ts",
       "sha256": "70dc2f505207d1390c6ab6ad4f4010587723a0467c2078c4ab3a3a81831ee5fe"
     },
@@ -698,6 +795,10 @@
       "sha256": "72ce9cfa5db1d9c2789a81364c4248464c069db2d51c36c0febd1ecadeb19182"
     },
     {
+      "path": "scripts/verify-migrations.ts",
+      "sha256": "722e6bb8e143a681b1220d55f0b440c59dd299f35bcd6c30dbabea21dd4ed5e8"
+    },
+    {
       "path": "SPRINTS-004-operacao-completa.md",
       "sha256": "f51754954564f676c1327ac6eafacaef9261795d155b6635fca4684797b69531"
     },
@@ -707,7 +808,11 @@
     },
     {
       "path": "STATUS.md",
-      "sha256": "0a075bc33f0796629b4f43030d0572135d292d4901b02e9002763c1844bbad31"
+      "sha256": "c50f5a7143a2fa6884542d7e9db0404dbe8464ca6c57a1848c6178b79d86c5e7"
+    },
+    {
+      "path": "supabase/migrations.lock.json",
+      "sha256": "a70d6d5cbf18a140ea569e70eb1d3c44c044b2d9138e61622b8c01e3a22c4410"
     },
     {
       "path": "supabase/migrations/20261005165617_catalog_foundation.sql",
@@ -786,6 +891,10 @@
       "sha256": "2132ddbf91f87393ac9238bc65e1183312a7f9f24422f2f7963db13ec7b76955"
     },
     {
+      "path": "supabase/migrations/20261006024604_amazon_family_version_claim.sql",
+      "sha256": "0b6fdd43865e5cd42ad27d8fd5e2d31c816cb307fce46233c39d5dae33612cdf"
+    },
+    {
       "path": "tests/ai-cost.test.ts",
       "sha256": "815d76209da36ed596103c38de737b8653700e075ea99fccc913158fb2236cf0"
     },
@@ -794,12 +903,16 @@
       "sha256": "93d717b5aad4505faec627e4e65c27d84330d6cbb44ccd62ece566e777cd2f18"
     },
     {
+      "path": "tests/amazon-fee-economics.test.ts",
+      "sha256": "1e4d54eadef2fa152f4925b2144dd2638786565f67b730fef273c44916ed532c"
+    },
+    {
       "path": "tests/amazon-notifications.test.ts",
       "sha256": "7e025feb954346306db00a0c21b2880ff4133c1c98cdeecb2b8f5e2d11afca64"
     },
     {
       "path": "tests/amazon-operations.test.ts",
-      "sha256": "95f0f33667cb0c1cbbf4a05a852eef45f42aff9844b1dd12a89c7bfe119ef59d"
+      "sha256": "727dace2ac12cd7784510f450c633d0f346be270102931ce67414e5082b0623d"
     },
     {
       "path": "tests/amazon-readback-proof.test.ts",
@@ -807,7 +920,51 @@
     },
     {
       "path": "tests/amazon-submission.test.ts",
-      "sha256": "c4ee2f7bff801d4b78981b3ad81157ba861d57fe934dbd870049a0a2afe1d68d"
+      "sha256": "12cdf2cb2cbb791c5fe7f51c7e4da71d1056da60e4e8e871849d11c29ed648b4"
+    },
+    {
+      "path": "tests/antigravity/e2e/auth-journey.e2e.test.ts",
+      "sha256": "5c02a59d4ba872802fe39b4fa9a72f59cfc725e4a8938e5b7728b751432db483"
+    },
+    {
+      "path": "tests/antigravity/e2e/catalog-jobs-and-cancellation.e2e.test.ts",
+      "sha256": "61113acdf2562a8dfcb34ca1a019c8969ee87fc2c99e88104df004428a5164cd"
+    },
+    {
+      "path": "tests/antigravity/e2e/external-calls-safety.e2e.test.ts",
+      "sha256": "e61f628ace7a52bc7368e81a45fde0a0f64765e164e4e83174158560f88fe4d4"
+    },
+    {
+      "path": "tests/antigravity/e2e/marketing-review-and-invalidation.e2e.test.ts",
+      "sha256": "a2165b70b7c97fdf8303d2842b62f413cc4b54a9405b21350e327aacbfa04fa1"
+    },
+    {
+      "path": "tests/antigravity/e2e/multi-tenant-isolation.e2e.test.ts",
+      "sha256": "96e1830e1db30fb19e1d7c28a66a632194e6dfd2798ffc05dfad36903a264230"
+    },
+    {
+      "path": "tests/antigravity/fixtures/auth-fixtures.ts",
+      "sha256": "09df207dd35147c2d5ca9349976358f25a230a3ca26bb7fcc798c657c04eacd9"
+    },
+    {
+      "path": "tests/antigravity/fixtures/catalog-fixtures.ts",
+      "sha256": "19fe872dfd8c43e7e438587f6f2248db1984f8669c7e78faeb750cd1ca2439f5"
+    },
+    {
+      "path": "tests/antigravity/fixtures/marketing-fixtures.ts",
+      "sha256": "59fae03e08f27ba48b4f2198f03928f662679494e087427230e65715e07593de"
+    },
+    {
+      "path": "tests/antigravity/fixtures/mock-db-helper.ts",
+      "sha256": "43f43bcdcfae57ce8724ef9d5754f4b017936d666a9fc04bf7c384baf9e9ef89"
+    },
+    {
+      "path": "tests/antigravity/fixtures/mock-marketplaces.ts",
+      "sha256": "41446c7b96d56ac58883c192893be9b23d8128bc534e296c73814fc8f97f0066"
+    },
+    {
+      "path": "tests/antigravity/fixtures/no-network.ts",
+      "sha256": "08287f0ab46eb017807f9c5e7657126dc63b4fe5bb6c5b66f80ac799c8aab57b"
     },
     {
       "path": "tests/antimalware.test.ts",
@@ -826,8 +983,16 @@
       "sha256": "2238436d26b855f3a1be35b0003ee51714db9b05389e7f524433f5f0613de506"
     },
     {
+      "path": "tests/catalog-coverage.test.ts",
+      "sha256": "354d8d42723fdc1ab9ff5688349fdbc434ef7270984ca62d9e297d236f830c5a"
+    },
+    {
+      "path": "tests/catalog-family.test.ts",
+      "sha256": "2bfbd08f6baf92f580c759da5ada277942d804d009107009bda432dbad5d1881"
+    },
+    {
       "path": "tests/catalog-migration.test.ts",
-      "sha256": "fdc0e7262f64851cdc9ee4080d47339beb0f407ce552a833b42a5eacfce77c62"
+      "sha256": "bb191189791fb7850a0ef65f2ac00d9b4329832d69c22ec0207cb22fb3db7f36"
     },
     {
       "path": "tests/catalog-pagination.test.ts",
@@ -835,7 +1000,7 @@
     },
     {
       "path": "tests/catalog-pipeline.test.ts",
-      "sha256": "13f7c8fc98b806c5201ea76c46cb0749bec3056d7988d9b0255cc5b06f806371"
+      "sha256": "b493075045f3ce2b6a255ad5bc37cab2a1a637c5af8bdbe2bba99f9d47b01b3c"
     },
     {
       "path": "tests/channel-copy.test.ts",
@@ -847,7 +1012,7 @@
     },
     {
       "path": "tests/ebay-executor.test.ts",
-      "sha256": "aa30d0132155456b77a7342c0a517b90dd704ccce32f0c29d4e8fedc2fdac759"
+      "sha256": "071fc1b3111fe4fb946ef42a40729d8533f3421fbb0177c9281b51c0a2d7cb80"
     },
     {
       "path": "tests/ebay-package.test.ts",
@@ -878,12 +1043,24 @@
       "sha256": "5f73a86cc4ae4e62d093f00fd80778713704f3f9508f9d687347db2254f8b488"
     },
     {
+      "path": "tests/job-checkpoint.test.ts",
+      "sha256": "544ac4c8b56a5af651c6353c143e917ac5976680475c74cf1f68fea8bcb55d3a"
+    },
+    {
+      "path": "tests/job-lease.test.ts",
+      "sha256": "53b1b6db3945fe41fc30ca047c90449e458e08ab3237c7d03ed64c90026b9fe7"
+    },
+    {
       "path": "tests/job-retry.test.ts",
       "sha256": "85a6e0846cbbff5531938baa11a791a6f70cdadbc9e40ca253f8bc97c388232b"
     },
     {
       "path": "tests/marketing-api.test.ts",
       "sha256": "8bcfb491a1a768884621543deec31a8b24cab9c512d0f4aa65abddf6aeca7a8c"
+    },
+    {
+      "path": "tests/marketing-economics-api.test.ts",
+      "sha256": "41eb8037bce8428159cd23bb20c946ebb6033bf8894b3f66daab230d7e745eb3"
     },
     {
       "path": "tests/marketing-profile-approval-gate.test.ts",
@@ -902,8 +1079,16 @@
       "sha256": "5ba99b80d53fdbaae55287a9e03fb3eea5e41e82604fab73a81dfc31c17e6c04"
     },
     {
+      "path": "tests/migration-manifest.test.ts",
+      "sha256": "28877d280a6e063740a46d12d4de60dbdc0b27045aebbd805e30f297157cd8da"
+    },
+    {
+      "path": "tests/offer-authority.test.ts",
+      "sha256": "35b4a40d82002c0fd3c5fc56f8faee3b7308d9f1c985fbf92fa39e1d40c83b69"
+    },
+    {
       "path": "tests/offers.test.ts",
-      "sha256": "295aac441ba9368398104ff0b59c6d13b979f4947a1ba323f60477aeea886507"
+      "sha256": "b0e8842c0eff1f85d9431f0c59ca7f0ffabbb2296a719493524a4a042a01df31"
     },
     {
       "path": "tests/operational-security.test.ts",
@@ -926,6 +1111,10 @@
       "sha256": "68ce443f06add90d1aafdf056a44bca8f5b68ed7fafe3565dc83dcc61a45a003"
     },
     {
+      "path": "tests/source-reconciliation.test.ts",
+      "sha256": "630e1bcefae93e2d11b720b163db5eb28db44f7825963d966a5987ca2d343cb8"
+    },
+    {
       "path": "tests/submission-reconciliation.test.ts",
       "sha256": "04fa265531c548eeebe2909ad8eba4ba554631483957ac88b970b7be11921078"
     },
@@ -938,6 +1127,7 @@
       "sha256": "871b6cfeb2dbbe3cfb25322aa36e53c78bfc844b73fadea6933572502f470661"
     }
   ],
-  "revision": "007",
-  "previous_baseline_id": "54b58ce23a4059bbe35c43db6be4dcae59706e8d56efb0a1221a35cbd1c795bb"
+  "revision": "009",
+  "previous_baseline_id": "56397a5145175466b32594a14be0f559667a84ee82da6b497009b7dd4f35111e",
+  "generated_at": "2026-10-06T04:30:28.042Z"
 }

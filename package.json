@@ -8,6 +8,7 @@
     "start": "next start",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
+    "migrations:verify": "tsx scripts/verify-migrations.ts",
     "lint": "next lint",
     "catalog:worker": "tsx --env-file=.env scripts/catalog-worker.ts",
     "amazon:notifications": "tsx --env-file=.env scripts/amazon-notifications-worker.ts",

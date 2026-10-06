@@ -2,6 +2,8 @@ import type { ProductInput, SchemaSnapshot } from '../catalog/model';
 import { hash,channelProduct } from '../catalog/model';
 import { publicFetch } from '../net/public-fetch';
 import { readResponseWithLimit } from '../extract-security';
+import {amazonFeeTarget} from './amazon-fee-estimates';
+import {isNumericInput} from '../catalog/numeric-input';
 
 export class AmazonError extends Error { constructor(public status: number, public retryAfter: number, public stage = 'SP-API', public code?: string, public requestId?: string) { super(`Amazon ${stage} respondeu HTTP ${status}${code ? ` (${code})` : ''}.`); } }
 const safeIdentifier = (value: unknown) => typeof value === 'string' && /^[A-Za-z0-9_.:-]{1,100}$/.test(value) ? value : undefined;
@@ -83,14 +85,14 @@ export function amazonAttributes(input: ProductInput): Record<string, unknown> {
     attributes.child_parent_sku_relationship = [{ marketplace_id, child_relationship_type: 'variation', ...(input.relationship === 'Child' ? { parent_sku: input.parent_sku } : {}) }];
     if (input.variation) attributes.variation_theme = [{ marketplace_id, name: input.variation }];
   }
-  if ([input.pkg_length, input.pkg_width, input.pkg_height].every(v => Number(v) > 0)) attributes.item_package_dimensions = [{ marketplace_id, length: { value: Number(input.pkg_length), unit: 'inches' }, width: { value: Number(input.pkg_width), unit: 'inches' }, height: { value: Number(input.pkg_height), unit: 'inches' } }];
-  if (Number(input.pkg_weight) > 0) attributes.item_package_weight = [{ value: Number(input.pkg_weight), unit: 'pounds', marketplace_id }];
+  if ([input.pkg_length, input.pkg_width, input.pkg_height].every(v => isNumericInput(v)&&Number(v) > 0)) attributes.item_package_dimensions = [{ marketplace_id, length: { value: Number(input.pkg_length), unit: 'inches' }, width: { value: Number(input.pkg_width), unit: 'inches' }, height: { value: Number(input.pkg_height), unit: 'inches' } }];
+  if (isNumericInput(input.pkg_weight)&&Number(input.pkg_weight) > 0) attributes.item_package_weight = [{ value: Number(input.pkg_weight), unit: 'pounds', marketplace_id }];
   const images = Array.isArray(input.images) ? input.images.map(String) : String(input.images || '').split(/\n+/).filter(Boolean);
   if (images[0]) attributes.main_product_image_locator = [{ media_location: images[0], marketplace_id }];
   images.slice(1, 9).forEach((url, index) => { attributes[`other_product_image_locator_${index + 1}`] = [{ media_location: url, marketplace_id }]; });
   if (input.relationship !== 'Parent') {
-    if (Number(input.price) > 0) attributes.purchasable_offer = [{ marketplace_id, currency: 'USD', our_price: [{ schedule: [{ value_with_tax: Number(input.price) }] }] }];
-    if (input.fulfillment === 'FBM') attributes.fulfillment_availability = [{ fulfillment_channel_code: 'DEFAULT', quantity: Number(input.qty) || 0, ...(input.handling !== undefined && String(input.handling).trim() !== '' ? { lead_time_to_ship_max_days: Number(input.handling) } : {}) }];
+    if (isNumericInput(input.price)&&Number(input.price) > 0) attributes.purchasable_offer = [{ marketplace_id, currency: 'USD', our_price: [{ schedule: [{ value_with_tax: Number(input.price) }] }] }];
+    if (input.fulfillment === 'FBM'&&isNumericInput(input.qty)&&Number.isSafeInteger(Number(input.qty))&&Number(input.qty)>=0) attributes.fulfillment_availability = [{ fulfillment_channel_code: 'DEFAULT', quantity: Number(input.qty), ...(isNumericInput(input.handling)&&Number.isSafeInteger(Number(input.handling))&&Number(input.handling)>=0 ? { lead_time_to_ship_max_days: Number(input.handling) } : {}) }];
   }
   return { ...attributes, ...input._catalog?.channels['amazon-us']?.attributes };
 }
@@ -114,7 +116,6 @@ export async function amazonDiscover(input: ProductInput) {
   return {...result,identity_basis:type,automatic_link:false};
 }
 export async function amazonFees(input: ProductInput) {
-  if (input.relationship==='Parent' || !(Number(input.price)>0) || !['FBM','FBA'].includes(String(input.fulfillment))) throw new Error('Tarifas exigem uma oferta com preço e fulfillment definidos.');
-  const id=String(input.asin || input.sku); const type=input.asin ? 'ASIN' : 'SKU';
-  return amazonRequest(`/products/fees/v0/${type==='ASIN'?'items':'listings'}/${encodeURIComponent(id)}/feesEstimate`,{},'POST',{FeesEstimateRequest:{MarketplaceId:amazonConfig().marketplaceId,IsAmazonFulfilled:input.fulfillment==='FBA',Identifier:hash({sku:input.sku,price:input.price,fulfillment:input.fulfillment}).slice(0,32),PriceToEstimateFees:{ListingPrice:{CurrencyCode:'USD',Amount:Number(input.price)}}}});
+  const target=amazonFeeTarget(input,amazonConfig());
+  return amazonRequest(`/products/fees/v0/${target.id_type==='ASIN'?'items':'listings'}/${encodeURIComponent(target.id_value)}/feesEstimate`,{},'POST',{FeesEstimateRequest:{MarketplaceId:target.marketplace_id,IsAmazonFulfilled:target.fulfillment==='FBA',Identifier:target.request_identifier,PriceToEstimateFees:{ListingPrice:{CurrencyCode:'USD',Amount:target.price},Shipping:{CurrencyCode:'USD',Amount:target.shipping_charge}}}});
 }

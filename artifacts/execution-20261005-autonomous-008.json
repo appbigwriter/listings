@@ -1,0 +1,72 @@
+{
+  "validated_at": "2026-10-06T04:30:28.042Z",
+  "increment": "008",
+  "migrations_applied": 20,
+  "tests": {
+    "passed": 231,
+    "files": 48
+  },
+  "typecheck": "passed",
+  "build": {
+    "status": "passed",
+    "routes": 41
+  },
+  "dependency_audit": {
+    "vulnerabilities": 0
+  },
+  "remote_read_only": {
+    "checked_at": "2026-10-06T02:46:23Z",
+    "prelistings": 2,
+    "unowned": 2,
+    "auth_users": 0,
+    "submissions": 0,
+    "feeds": 0,
+    "assets": 0,
+    "marketing_approvals": 0
+  },
+  "migration_verification": {
+    "file": "supabase/migrations/20261006024604_amazon_family_version_claim.sql",
+    "sha256": "0b6fdd43865e5cd42ad27d8fd5e2d31c816cb307fce46233c39d5dae33612cdf",
+    "function_bodies_remote_equal_local_normalized": true,
+    "function_body_md5": {
+      "reserve_catalog_channel_submission": "2e3c63f08c59a9c6d46bf611f1f2110b",
+      "reserve_catalog_feed": "05a2bcdc0095563d1c634090dc31da13"
+    },
+    "security": "invoker; empty search_path; service_role execute only"
+  },
+  "ag01": {
+    "status": "partial_contract_integration",
+    "tests": 19,
+    "live_e2e": false,
+    "evidence": "artifacts/antigravity/AG-01/test-summary.json"
+  },
+  "live_publication": "disabled",
+  "live_validation": "pending",
+  "security_advisor_exception": "intentional own-session boolean RPC SECURITY DEFINER",
+  "docker": {
+    "checked_at": "2026-10-06T04:15:00Z",
+    "status": "linux_engine_unavailable_pipe_missing",
+    "containers_created": false,
+    "image_built": false
+  },
+  "contingency": {
+    "automation_id": "retomar-backlog-prelisting",
+    "scheduled_at": "2026-10-06T04:11:00Z",
+    "timezone": "America/Sao_Paulo",
+    "only_if": "session/credit limit interrupted execution before 2026-10-06T04:10:00Z and backlog pending",
+    "concurrent_execution_allowed": false
+  },
+  "work_preserved": true,
+  "migration_integrity_gate": {
+    "status": "passed",
+    "manifest": "supabase/migrations.lock.json",
+    "live_remote_drift_checked": false
+  },
+  "worker": {
+    "heartbeat_seconds": 45,
+    "lease_seconds": 180,
+    "ownership_checked_before_persistence": true,
+    "poison_checkpoints_terminal": true,
+    "live_process_restart_homologated": false
+  }
+}

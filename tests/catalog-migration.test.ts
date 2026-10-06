@@ -29,6 +29,22 @@ describe('catalog SQL migration on local PostgreSQL', () => {
     }
   }, 30000);
   afterAll(async () => { await db?.close(); });
+  it('binds child claims to the exact locked parent version and approval',async()=>{
+    await db.exec('begin');try{
+      const approved='a'.repeat(64),parentPayload={relationship:'Parent',_catalog:{channels:{'amazon-us':{approval:{hash:approved}}}}},childPayload={relationship:'Child',parent_sku:'CLAIM-PARENT'};
+      await db.query(`insert into prelistings(sku,title,owner_id,organization_id,payload) values('CLAIM-PARENT','Parent',$1,$1,$2),('CLAIM-CHILD','Child',$1,$1,$3)`,[userA,JSON.stringify(parentPayload),JSON.stringify(childPayload)]);
+      const versions=(await db.query<{sku:string;updated_at:Date}>(`select sku,updated_at from prelistings where sku in ('CLAIM-PARENT','CLAIM-CHILD')`)).rows;
+      const family={sku:'CLAIM-PARENT',updated_at:new Date(versions.find(row=>row.sku==='CLAIM-PARENT')!.updated_at).toISOString(),content_hash:approved};
+      const args=[userA,userA,'CLAIM-CHILD','amazon-us',new Date(versions.find(row=>row.sku==='CLAIM-CHILD')!.updated_at).toISOString(),'b'.repeat(64),JSON.stringify({productType:'SIGN',attributes:{}})];
+      const target={seller_id:'SELLER',marketplace_id:'US',operation:'listing_put',family};
+      await db.exec('set role service_role');await db.exec('savepoint no_parent');
+      await expect(db.query('select reserve_catalog_channel_submission($1,$2,$3,$4,$5,$6,$7,$8)',[...args,JSON.stringify({...target,family:undefined})])).rejects.toThrow('Parent version proof');await db.exec('rollback to savepoint no_parent');
+      await db.exec('savepoint valid');expect((await db.query<{id:string}>('select reserve_catalog_channel_submission($1,$2,$3,$4,$5,$6,$7,$8) id',[...args,JSON.stringify(target)])).rows[0].id).toBeTruthy();await db.exec('rollback to savepoint valid');
+      await db.exec(`update prelistings set updated_at=updated_at+interval '1 millisecond' where sku='CLAIM-PARENT'`);await db.exec('savepoint changed_parent');
+      await expect(db.query('select reserve_catalog_channel_submission($1,$2,$3,$4,$5,$6,$7,$8)',[...args,JSON.stringify(target)])).rejects.toThrow('Parent version or approval changed');await db.exec('rollback to savepoint changed_parent');
+      expect((await db.query(`select id from catalog_submissions where sku='CLAIM-CHILD'`)).rows).toHaveLength(0);
+    }finally{await db.exec('rollback');await db.exec('reset role');}
+  });
   it('persists attribution configuration without claiming eligibility or a verified conversion',async()=>{
     await db.exec('begin');
     try{

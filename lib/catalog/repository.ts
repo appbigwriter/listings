@@ -2,9 +2,10 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { AuthContext } from '../auth';
 import { getActiveListing } from './active-listing';
 import { createCatalog, draftIssues, hash, type ProductInput } from './model';
+import {recordFieldSource} from './field-provenance';
 
 export class CatalogError extends Error { constructor(message: string, public status = 400) { super(message); } }
-const SERVER_PRODUCT_FIELDS=new Set(['_catalog','human_reviewed','review_hash','source_snapshot','source_update','source_resolution','archive_transition','amazon_preview','amazon_fees','amazon_discovery','amazon_restrictions','ai_grounding','submission','archived_at','owner_id','organization_id','id','status','created_at','updated_at']);
+const SERVER_PRODUCT_FIELDS=new Set(['__proto__','constructor','prototype','_catalog','human_reviewed','review_hash','source_snapshot','source_update','source_resolution','archive_transition','amazon_preview','amazon_fees','amazon_discovery','amazon_restrictions','ai_grounding','submission','archived_at','owner_id','organization_id','id','status','created_at','updated_at']);
 export function editableProductPatch(body:Record<string,unknown>):Record<string,unknown>{
  return Object.fromEntries(Object.entries(body).filter(([field])=>!SERVER_PRODUCT_FIELDS.has(field)));
 }
@@ -36,11 +37,12 @@ export async function persistProduct(db: SupabaseClient, auth: AuthContext, inpu
   if (!result.data) throw new CatalogError('O SKU mudou durante a operação. Recarregue antes de tentar novamente.', 409);
   return result.data;
 }
-export function mergeDraft(current: ProductInput, body: Record<string, unknown>): ProductInput {
+export function mergeDraft(current: ProductInput, body: Record<string, unknown>,actor?:string): ProductInput {
   // Server-owned schemas, approvals, source snapshots and media checks never come from client patches.
   const patch=editableProductPatch(body);
   const next: ProductInput = { ...current, ...patch, sku: current.sku, _catalog: structuredClone(current._catalog || createCatalog(current)) };
   const catalog = next._catalog!;
+  for(const field of Object.keys(patch))if(field!=='sku'&&hash(current[field])!==hash(next[field]))recordFieldSource(next,field,{authority:'human',...(actor?{actor}:{})});
   for (const [field, fact] of Object.entries(catalog.facts)) if (hash(fact.value) !== hash(next[field])) catalog.facts[field] = { ...fact, value: next[field], status: 'pending' };
   if (hash(patch) !== hash({})) {
     next.human_reviewed = false;

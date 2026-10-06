@@ -7,16 +7,16 @@ import { evaluateReadiness } from './readiness';
 import { CatalogError, loadProduct, persistProduct, scopeQuery } from './repository';
 import { assertFamily } from './family';
 import { reserveAiOperation } from '../ai/usage';
-import { submissionMatches } from './reconciliation';
+import {amazonListingObservation} from './reconciliation';
 import {monitorEbay} from './ebay-executor';
 
-export async function executeAction(db: SupabaseClient, auth: AuthContext, sku: string, action: string, options: Record<string, unknown> = {}) {
+export async function executeAction(db: SupabaseClient, auth: AuthContext, sku: string, action: string, options: Record<string, unknown> = {},execution:{beforePersist?:()=>Promise<void>}={}) {
   if (options.channel !== undefined && !isChannel(options.channel)) throw new CatalogError('Canal inválido.');
   if (action === 'review' && !hasCapability(auth, 'review') || ['submit','reconcile'].includes(action) && !hasCapability(auth, 'publish')) throw new CatalogError('Seu papel não permite esta ação.', 403);
   const loaded = await loadProduct(db, auth, sku);
   if (options.updated_at && options.updated_at !== loaded.row.updated_at) throw new CatalogError('A versão mudou. Recarregue o produto.', 409);
   const channel = isChannel(options.channel) ? options.channel : 'amazon-us';
-  if(channel==='ebay-us'&&action==='monitor')return monitorEbay(db,auth,sku);
+  if(channel==='ebay-us'&&action==='monitor')return monitorEbay(db,auth,sku,execution.beforePersist);
   if (action==='reconcile') {
     if(channel!=='amazon-us')throw new CatalogError('Reconciliação disponível para Amazon.');
     const found=await scopeQuery(db.from('catalog_submissions').select('*'),auth).eq('sku',sku).eq('channel',channel).in('status',['submitting','unknown']).order('created_at',{ascending:false}).limit(1).maybeSingle();
@@ -29,23 +29,23 @@ export async function executeAction(db: SupabaseClient, auth: AuthContext, sku: 
     if(claim.status==='submitting' && Date.now()-Date.parse(claim.created_at)<180000)throw new CatalogError('A submissão ainda pode estar em andamento. Aguarde antes de reconciliar.',409);
     if(claim.target?.seller_id!==config.sellerId || claim.target?.marketplace_id!==config.marketplaceId)throw new CatalogError('A submissão pertence a outra configuração de conta/marketplace.',409);
     const remote=await amazonReadback(sku);
-    const matched=submissionMatches(claim.request_payload,remote);
-    if(!matched)return {data:loaded.row,output:{matched:false,message:'Readback não comprova esta versão. Reenvio permanece bloqueado.'},report:evaluateReadiness(loaded.product,channel),content_hash:contentHash(loaded.product,channel)};
-    const buyable=remote.summaries?.some((summary:{status?:string[]})=>summary.status?.includes('BUYABLE'))===true;
-    const status=buyable?'published':'accepted';
+    const proof=amazonListingObservation(claim.request_payload,sku,config.marketplaceId,remote);
+    if(!proof.matched)return {data:loaded.row,output:{matched:false,message:'Readback não comprova SKU, marketplace e atributos desta versão. Reenvio permanece bloqueado.'},report:evaluateReadiness(loaded.product,channel),content_hash:contentHash(loaded.product,channel)};
+    const status=proof.blocked?'rejected':proof.buyable?'published':'accepted';
     const updated=await scopeQuery(db.from('catalog_submissions').update({status,response:{reconciled_at:new Date().toISOString(),remote},updated_at:new Date().toISOString()}),auth).eq('id',claim.id).eq('status',claim.status).select('id').maybeSingle();
     if(updated.error || !updated.data)throw new CatalogError('A submissão mudou durante a reconciliação.',409);
     const listing=loaded.product._catalog!.channels[channel]!;
-    const currentMatched=submissionMatches(amazonPayload(loaded.product),remote);
-    listing.submission={status,request_hash:claim.request_hash,submitted_at:claim.created_at,response:remote,issues:remote.issues,publication_status:buyable&&currentMatched?'buyable':'not_buyable',...(currentMatched?{verified_content_hash:contentHash(loaded.product,channel),verified_at:new Date().toISOString()}: {})};
+    const current=amazonListingObservation(amazonPayload(loaded.product),sku,config.marketplaceId,remote);
+    listing.submission={status,request_hash:claim.request_hash,submitted_at:claim.created_at,response:remote,issues:remote.issues,publication_status:current.buyable?'buyable':'not_buyable',...(current.verified?{verified_content_hash:contentHash(loaded.product,channel),verified_at:new Date().toISOString()}: {})};
     const data=await persistProduct(db,auth,loaded.product,loaded.row);
     return {data,output:{matched:true,status},report:evaluateReadiness(loaded.product,channel),content_hash:contentHash(loaded.product,channel)};
   }
-  if (['review', 'submit'].includes(action)) await assertFamily(db, auth, loaded.product, channel);
+  if (action==='review') await assertFamily(db, auth, loaded.product, channel);
   if (action !== 'submit') {
     const usage=['generate','classify'].includes(action) ? await reserveAiOperation(db,auth,sku,action) : undefined;
     try {
       const result = await applyAction(loaded.product, auth, action, options, usage?.runtime);
+      await execution.beforePersist?.();
       const data = await persistProduct(db, auth, result.product, loaded.row);
       await usage?.finish('completed');
       return { data, output: result.output, report: result.report, content_hash: contentHash(result.product, channel) };
@@ -56,7 +56,8 @@ export async function executeAction(db: SupabaseClient, auth: AuthContext, sku: 
   const requestHash = contentHash(loaded.product, channel);
   // Claim persisted before any external write. Unique constraint prevents concurrent or uncertain retries.
   const config=amazonConfig();
-  const claimed = await db.rpc('reserve_catalog_channel_submission',{p_owner:auth.userId,p_organization:auth.organizationId,p_sku:sku,p_channel:channel,p_version:loaded.row.updated_at,p_hash:requestHash,p_payload:amazonPayload(loaded.product),p_target:{seller_id:config.sellerId,marketplace_id:config.marketplaceId,operation:'listing_put'}});
+  const family=await assertFamily(db,auth,loaded.product,channel,true);
+  const claimed = await db.rpc('reserve_catalog_channel_submission',{p_owner:auth.userId,p_organization:auth.organizationId,p_sku:sku,p_channel:channel,p_version:loaded.row.updated_at,p_hash:requestHash,p_payload:amazonPayload(loaded.product),p_target:{seller_id:config.sellerId,marketplace_id:config.marketplaceId,operation:'listing_put',...(family?{family}:{})}});
   if(claimed.error||!claimed.data)throw new CatalogError('Versão alterada, já reservada ou envio incerto. Recarregue e reconcilie antes de reenviar.',409);
   try {
     const response = await amazonSubmit(loaded.product);

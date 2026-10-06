@@ -1,5 +1,6 @@
 import { parse } from 'csv-parse/sync';
 import { createCatalog, draftIssues, hash, TECHNICAL_FIELDS, type ProductInput } from './model';
+import {recordFieldSource,SOURCE_FIELDS} from './field-provenance';
 
 export function parseCatalog(text: string, format: 'json' | 'csv'): Record<string, unknown>[] {
   if (Buffer.byteLength(text) > 5_000_000) throw new Error('Importação limitada a 5 MB.');
@@ -22,7 +23,10 @@ export function normalizeImportedProduct(row: Record<string, unknown>, sourceId:
   for (const field of TECHNICAL_FIELDS) if (input[field] !== undefined && input[field] !== '') catalog.facts[field] = { value: input[field], source: sourceId, status: 'pending', observed_at: now };
   catalog.kind = row.kind === 'service' || row.kind === 'physical' || row.kind === 'custom' ? row.kind : 'unknown';
   if (Array.isArray(row.variants)) catalog.variants = row.variants.map((v: Record<string, unknown>) => ({ sku: String(v.sku || v.id || ''), attributes: Object.fromEntries(Object.entries(v).filter(([key]) => key !== 'sku' && key !== 'id')) }));
+  if(row.shipping_charge!==undefined)input.shipping_charge=row.shipping_charge;
+  if(row.currency!==undefined)input.currency=row.currency;
   input._catalog = catalog;
+  for(const field of SOURCE_FIELDS)if(input[field]!==undefined&&input[field]!=='')recordFieldSource(input,field,{authority:'source',source_id:sourceId,source_hash:catalog.source.hash},now);
   if (draftIssues(input).length) throw new Error(`Produto ${sku || '(sem SKU)'} precisa de SKU e título.`);
   return input;
 }

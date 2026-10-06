@@ -6,6 +6,8 @@ import { CatalogError, loadProduct, persistProduct, scopeQuery } from './reposit
 import {stageSourceUpdate} from './source-diff';
 import {retryEntries} from './job-retry';
 import { AmazonError } from '../marketplaces/amazon';
+import {startJobLease} from './job-lease';
+import {invalidJobCheckpoint} from './job-checkpoint';
 
 export type JobKind = 'import' | 'classify' | 'generate' | 'validate' | 'media' | 'monitor';
 export const JOB_KINDS: JobKind[] = ['import', 'classify', 'generate', 'validate', 'media', 'monitor'];
@@ -55,10 +57,20 @@ export async function processJob(db: SupabaseClient, auth: AuthContext, id: stri
   const lease_until = new Date(Date.now() + 180000).toISOString();
   const claimed = await scopeQuery(db.from('catalog_jobs').update({ status: 'running', lease_token: leaseToken, lease_until, updated_at: new Date().toISOString() }), auth).eq('id', id).eq('updated_at', job.updated_at).or(`lease_until.is.null,lease_until.lt.${new Date().toISOString()}`).select('*').maybeSingle();
   if (claimed.error || !claimed.data) throw new CatalogError('Processamento já reservado por outro worker.', 409);
+  const invalid=invalidJobCheckpoint(job);
+  if(invalid){
+    const diagnostic={status:'failed',code:'invalid_job_checkpoint',field:invalid,error:'Checkpoint inválido; investigar a origem e preparar um lote válido.',...(Array.isArray(job.results)?{}:{original_results:job.results})};
+    const failed=await scopeQuery(db.from('catalog_jobs').update({status:'failed',results:[...(Array.isArray(job.results)?job.results:[]),diagnostic],lease_token:null,lease_until:null,updated_at:new Date().toISOString()}),auth).eq('id',id).eq('status','running').eq('lease_token',leaseToken).select('*').maybeSingle();
+    if(failed.error||!failed.data)throw new CatalogError('Checkpoint inválido sem confirmação persistida; investigue a fila.',503);
+    return failed.data;
+  }
+  const lease=startJobLease(db,auth,id,leaseToken);
+  try{
   const index = Number(job.cursor); const entries = job.kind === 'import' ? job.payload.products : job.payload.skus;
   let outcome: Record<string, unknown>; let attempts = Number(job.attempts); let cursor = index;
   let status = 'pending'; let next_attempt_at = new Date().toISOString();
   try {
+    await lease.assert();
     if (job.kind === 'import') {
       const incoming = entries[index] as ProductInput;
       let existing;
@@ -67,10 +79,10 @@ export async function processJob(db: SupabaseClient, auth: AuthContext, id: stri
       else if (existing) {
         // Preserve reviewed catalog; changed source becomes a pending reconciliation task.
         const next = stageSourceUpdate(existing.product,incoming._catalog?.source);
-        await persistProduct(db, auth, next, existing.row); outcome = { index, sku: incoming.sku, status: 'source_changed_review_required' };
-      } else { await persistProduct(db, auth, incoming); outcome = { index, sku: incoming.sku, status: 'imported' }; }
+        await lease.assert();await persistProduct(db, auth, next, existing.row); outcome = { index, sku: incoming.sku, status: 'source_changed_review_required' };
+      } else {await lease.assert(); await persistProduct(db, auth, incoming); outcome = { index, sku: incoming.sku, status: 'imported' }; }
     } else {
-      const sku = String(entries[index]); const result = await executeAction(db, auth, sku, job.kind, { channel: job.payload.channel, updated_at: job.payload.versions?.[sku] });
+      const sku = String(entries[index]); const result = await executeAction(db, auth, sku, job.kind, { channel: job.payload.channel, updated_at: job.payload.versions?.[sku] },{beforePersist:lease.assert});
       outcome = { index, sku, status: 'processed', blockers: result.report.issues.length };
     }
     cursor++; attempts = 0;
@@ -82,11 +94,12 @@ export async function processJob(db: SupabaseClient, auth: AuthContext, id: stri
   }
   const results = [...job.results, outcome];
   if (cursor >= job.total) status = 'completed';
-  const saved = await scopeQuery(db.from('catalog_jobs').update({ status, cursor, attempts, next_attempt_at, results, lease_token: null, lease_until: null, updated_at: new Date().toISOString() }), auth).eq('id', id).eq('status','running').eq('lease_token', leaseToken).select('*').maybeSingle();
+  const saved = await scopeQuery(db.from('catalog_jobs').update({ status, cursor, attempts, next_attempt_at, results, lease_token: null, lease_until: null, updated_at: new Date().toISOString() }), auth).eq('id', id).eq('status','running').eq('lease_token', leaseToken).gt('lease_until',new Date().toISOString()).select('*').maybeSingle();
   if (!saved.error && !saved.data) {
     const latest = await scopeQuery(db.from('catalog_jobs').select('*'),auth).eq('id',id).maybeSingle();
     if (latest.data?.status === 'cancelled') return latest.data;
   }
   if (saved.error || !saved.data) throw new CatalogError('Worker perdeu a reserva; consulte o estado antes de continuar.', 409);
   return saved.data;
+  }finally{await lease.close();}
 }

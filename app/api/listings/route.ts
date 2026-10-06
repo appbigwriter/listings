@@ -37,7 +37,7 @@ export async function PATCH(req: NextRequest) {
     const body = await readJsonBody(req); const loaded = await loadProduct(db, auth, String(body.sku || ''));
     if (body.updated_at && body.updated_at !== loaded.row.updated_at) throw new CatalogError('Versão desatualizada. Recarregue o produto.', 409);
     const patch = body.payload || Object.fromEntries(Object.entries(body).filter(([key]) => !['sku', 'updated_at'].includes(key)));
-    return NextResponse.json({ data: await persistProduct(db, auth, mergeDraft(loaded.product, patch), loaded.row) });
+    return NextResponse.json({ data: await persistProduct(db, auth, mergeDraft(loaded.product, patch,auth.userId), loaded.row) });
   } catch (error) { return errorResponse(error); }
 }
 export async function DELETE(req: NextRequest) {

@@ -5,6 +5,7 @@ import OfferOperations from './OfferOperations';
 import JobRecovery from './JobRecovery';
 import ArchivedCatalog from './ArchivedCatalog';
 import OperationsPanel from './OperationsPanel';
+import CoveragePanel from './CoveragePanel';
 import { useCallback, useEffect, useState } from 'react';
 import { api, download } from '../../lib/catalog/client';
 import { CHANNELS, CHANNEL_LABELS, type Channel } from '../../lib/catalog/channels';
@@ -38,6 +39,6 @@ export default function CatalogHome() {
     {channel==='amazon-us'&&<OfferOperations sku={selected.length===1?selected[0]:undefined} status={status} busy={busy} run={run} />}
     <BatchOperations selected={selected} channel={channel} status={status} busy={busy} run={run} refresh={refresh} />
     <section className="card mt-5"><h2 className="font-bold text-lg">Processamentos</h2><p className="text-sm text-slate-500">Cada passo processa um item. O worker retoma os lotes do último checkpoint. Cancelar interrompe os próximos itens; uma operação em andamento pode terminar.</p>{jobs.map(job => <div key={job.id} className="border-t mt-3 pt-3"><div className="flex justify-between gap-3"><span>{job.kind} · {job.cursor}/{job.total} · {job.status}</span><button className="btn" disabled={busy || ['completed', 'cancelled', 'failed'].includes(job.status)} onClick={() => run(async () => { await api('/api/catalog/jobs', { action: 'process', id: job.id }); await refresh(); })}>Executar próximo item</button><button className="btn" disabled={busy || ["completed", "cancelled", "failed"].includes(job.status)} onClick={() => run(async () => { await api("/api/catalog/jobs", { action: "cancel", id: job.id }); await refresh(); })}>Cancelar lote</button></div>{job.results.some(result => result.error) && <details className="text-sm text-red-600 mt-2"><summary>Erros e tentativas</summary>{job.results.filter(result => result.error).map((result, index) => <p key={index}>{result.error}</p>)}</details>}<JobRecovery job={job} busy={busy} run={run} refresh={refresh}/></div>)}</section>
-    <OperationsPanel busy={busy} run={run} /><ArchivedCatalog onRestored={refresh}/>
+    <CoveragePanel key={channel} channel={channel} busy={busy} run={run}/><OperationsPanel busy={busy} run={run} /><ArchivedCatalog onRestored={refresh}/>
   </main>;
 }

@@ -4,8 +4,9 @@ export const SELLER_TEMPLATES = {
   fbrsigns_sign: { key:'fbrsigns_sign', name:'FBRSigns Sign / Decor', marketplace:'Amazon US', version:'2026-01', fields:['sku','item_name','brand_name','product_type','country_of_origin','product_description','item_package_dimensions_length','item_package_dimensions_width','item_package_dimensions_height','item_package_weight','standard_price','quantity','main_image_url','external_product_id','external_product_id_type','fulfillment_channel'] },
 } as const;
 export type ListingInput = Record<string, unknown> & { sku?: string; title?: string };
+import {isNumericInput} from './numeric-input';
 const text=(v:unknown)=>String(v??'').trim();
-const positive=(v:unknown)=>Number.isFinite(Number(v))&&Number(v)>0;
+const positive=(v:unknown)=>isNumericInput(v)&&Number(v)>0;
 export function validateListing(input: ListingInput) {
   const errors:string[]=[];
   if(!text(input.sku)) errors.push('sku_required');
@@ -23,7 +24,8 @@ export function validateListing(input: ListingInput) {
   if(!text(input.product_type)||!text(input.category)||!text(input.origin)) errors.push('amazon_attributes_required');
   const images=Array.isArray(input.images)?input.images:String(input.images??'').split(/\n+/).filter(Boolean);
   if(!images.length || !/^https?:\/\//i.test(String(images[0]))) errors.push('primary_image_required');
-  if(input.relationship!=='Parent' && (!positive(input.price)||!Number.isInteger(Number(input.qty))||Number(input.qty)<0||String(input.qty??'').trim()==='')) errors.push('offer_required');
+  if(input.relationship!=='Parent' && (!positive(input.price)||!isNumericInput(input.qty)||!Number.isSafeInteger(Number(input.qty))||Number(input.qty)<0)) errors.push('offer_required');
+  if(input.currency!==undefined&&input.currency!=='USD')errors.push('offer_currency_unsupported');
   if(input.relationship==='Child' && !text(input.parent_sku)) errors.push('child_parent_required');
   if(input.human_reviewed !== true) errors.push('human_review_required');
   return {valid:errors.length===0, errors:[...new Set(errors)]};

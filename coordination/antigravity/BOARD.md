@@ -1,10 +1,10 @@
 # Fila de trabalho do Antigravity
 
-Data: 05/10/2026. Esta fila organiza entregas delegáveis; não altera as dependências nem o aceite das 54 stories de S4–S12. Nenhuma tarefa foi executada ou atribuída automaticamente.
+Data: 05/10/2026. Esta fila organiza entregas delegáveis; não altera as dependências nem o aceite das 54 stories de S4–S12. Nenhuma tarefa foi atribuída automaticamente. Regressões AG-01 recebidas no checkout foram integradas parcialmente pelo coordenador; jornadas reais continuam pendentes.
 
 | ID | Pacote | Prioridade | Liberação | Dependência |
 |---|---|---|---|---|
-| AG-01 | Harness E2E e regressões | P0 | Pronto para ambiente isolado | Baseline e protocolo |
+| AG-01 | Harness E2E e regressões | P0 | Regressões de contrato integradas; E2E pendente | reports/AG-01-integration.md |
 | AG-02 | UX/acessibilidade de componentes | P1 | Após AG-01 | Harness de regressão |
 | AG-03 | Corpus e avaliação offline da IA | P1 | Pronto | Dados sanitizados; anotações qualificadas |
 | AG-04 | Infraestrutura isolada | P0 | Pronto para diagnóstico/configuração | Docker/destino para execução real |
@@ -40,3 +40,5 @@ Leia PROMPT.md e a ficha em tasks/ antes de iniciar. Use reports/ para entregas;
 
 
 A frente principal e a sequência CX-01–06 estão em EXECUTION-CODEX-007.md. Codex mantém núcleo/integração; próximo incremento próprio: conexão Product Fees → economia no backend. Os escopos AG-02 de frontend ficam preservados. Antes de despachar tarefas novas, fornecer baseline atualizada; tarefas já iniciadas mantêm sua referência e entregam diff para integração.
+
+Checkpoint 008: Fees/economia, provenance e autoridade persistente integrados pelo coordenador. Baseline 009 publicada após a verificação completa para tarefas ainda não iniciadas; tarefas em andamento preservam sua referência e entregam diff. Regressões locais de AG-01 não liberam gates que exigem navegador/sessão/worker reais.

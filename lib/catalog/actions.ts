@@ -2,7 +2,6 @@ import type { AuthContext } from '../auth';
 import { buildAiGenerationPayload } from '../ai/contracts';
 import { generateListing } from '../ai/generate';
 import { recommendCategory } from '../ai/classify';
-import { normalizeImportedProduct } from './import';
 import { amazonAttributes, amazonDiscover, amazonFees, amazonPayload, amazonPreview, amazonReadback, amazonRestrictions } from '../marketplaces/amazon';
 import { categorySuggestions, channelSchema } from '../marketplaces/adapters';
 import { checkImage } from './media';
@@ -14,7 +13,10 @@ import type { AiRuntime } from '../ai/usage';
 import {buildEbayPackage,ebayAccountPreparation} from '../marketplaces/ebay-package';
 import {validateChannelCopy} from './copy';
 import {COPY_FIELDS} from './model';
-import {submissionMatches} from './reconciliation';
+import {amazonListingObservation} from './reconciliation';
+import {amazonConfig} from '../marketplaces/amazon';
+import {amazonFeeTarget,normalizeAmazonFeeEstimate} from '../marketplaces/amazon-fee-estimates';
+import {reconcileSource} from './source-reconciliation';
 
 export async function applyAction(input: ProductInput, auth: AuthContext, action: string, options: Record<string, unknown> = {}, aiRuntime:AiRuntime={}) {
   const product = structuredClone(input); product._catalog = createCatalog(product, product._catalog);
@@ -89,24 +91,10 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
     }
     case 'fees': {
       if (channel !== 'amazon-us') throw new CatalogError('Estimativa de tarifas disponível para Amazon.');
-      output=await amazonFees(product); product.amazon_fees={checked_at:new Date().toISOString(),price:Number(product.price),fulfillment:product.fulfillment,currency:'USD',result:output}; break;
+      const target=amazonFeeTarget(product,amazonConfig());output=await amazonFees(product);product.amazon_fees=normalizeAmazonFeeEstimate(output,target); break;
     }
     case 'apply-source-update': {
-      const update = product.source_update as typeof catalog.source;
-      if (!update?.snapshot) throw new CatalogError('Não existe atualização pendente da fonte.');
-      if (options.keep_current === true) {
-        if (!String(options.reason || '').trim()) throw new CatalogError('Registre o motivo para manter os dados atuais.');
-        product.source_resolution = { reason: String(options.reason), actor: auth.userId, at: new Date().toISOString() };
-      } else {
-        if (!Array.isArray(options.fields) || !options.fields.length) throw new CatalogError('Selecione os campos da fonte que deseja aplicar.');
-        const normalized = normalizeImportedProduct(update.snapshot, update.id);
-        for (const key of options.fields) {
-          if (typeof key !== 'string' || !['title','description','images','price','qty', ...TECHNICAL_FIELDS].includes(key)) throw new CatalogError('Campo de reconciliação inválido.');
-          product[key] = normalized[key];
-          if (catalog.facts[key]) catalog.facts[key] = { ...catalog.facts[key], value: normalized[key], status: 'pending' };
-        }
-      }
-      catalog.source = update; delete product.source_update; break;
+      reconcileSource(product,auth.userId,options);break;
     }
     case 'review': {
       if (options.expected_hash !== contentHash(product, channel)) throw new CatalogError('A versão revisada mudou. Recarregue o produto.', 409);
@@ -130,10 +118,8 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
       if (channel !== 'amazon-us') throw new CatalogError('Monitoramento por API habilitado somente para Amazon.');
       output = await amazonReadback(String(product.sku));
       const result = output as { attributes?:Record<string,unknown>;summaries?: { status?: string[] }[]; issues?: { severity?: string }[] };
-      const published = result.summaries?.some(summary => summary.status?.includes('BUYABLE')) === true;
-      const blocked = result.issues?.some(issue => issue.severity === 'ERROR') === true;
-      const matched=submissionMatches(amazonPayload(product),result);
-      listing.submission = { status: blocked ? 'rejected' : !matched?'unknown':published ? 'published' : 'processing', request_hash: listing.submission?.request_hash || '', submitted_at: listing.submission?.submitted_at || new Date().toISOString(), response: result, issues: result.issues, publication_status: matched&&published&&!blocked ? 'buyable' : 'not_buyable',...(matched?{verified_content_hash:contentHash(product,channel),verified_at:new Date().toISOString()}: {}) }; break;
+      const proof=amazonListingObservation(amazonPayload(product),String(product.sku),amazonConfig().marketplaceId,result);
+      listing.submission = { status:proof.status, request_hash: listing.submission?.request_hash || '', submitted_at: listing.submission?.submitted_at || new Date().toISOString(), response: result, issues: result.issues, publication_status:proof.buyable?'buyable':'not_buyable',...(proof.verified?{verified_content_hash:contentHash(product,channel),verified_at:new Date().toISOString()}: {}) }; break;
     }
     default: throw new CatalogError('Ação inválida.');
   }

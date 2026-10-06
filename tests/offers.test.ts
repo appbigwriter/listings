@@ -15,7 +15,7 @@ describe('granular offer updates',()=>{
     expect(()=>offerPatch({...product,relationship:'Parent'},['price'],'prelisting')).toThrow('pai');
   });
   it('rejects missing/fractional stock, imprecise price and arbitrary fields',()=>{
-    for(const qty of ['',undefined,'-1','1.5'])expect(()=>offerPatch({...product,qty},['qty'],'prelisting')).toThrow('inteiro');
+    for(const qty of ['',undefined,'-1','1.5',false,[],{},'0x10',' '])expect(()=>offerPatch({...product,qty},['qty'],'prelisting')).toThrow('inteiro');
     expect(()=>offerPatch({...product,price:1.234},['price'],'prelisting')).toThrow('casas decimais');
     expect(()=>offerPatch(product,['description'],'prelisting')).toThrow('preço');
   });

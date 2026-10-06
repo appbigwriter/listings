@@ -1,0 +1,16 @@
+{
+  "task": "AG-01",
+  "started_at": "2026-10-06T10:12:38.472Z",
+  "finished_at": "2026-10-06T10:12:41.931Z",
+  "status": "LOCAL_CONTRACT_TESTS_PASSED",
+  "exit_code": 0,
+  "tests": {
+    "total": 19,
+    "passed": 19,
+    "failed": 0
+  },
+  "scope": "PGlite database and pure module contracts; no browser, live worker, production identity or marketplace homologation",
+  "network_guard": "global fetch rejected by test setup; does not attest other network transports",
+  "migrations_applied_in_test": 20,
+  "output_sha256": "10de35f26df63f2a14fcc00f2d7793393f19883948d713b9d9bda254a8825d09"
+}

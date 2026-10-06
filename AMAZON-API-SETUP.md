@@ -28,6 +28,8 @@ Guardar os três segredos de autenticação no `.env` local ignorado pelo Git ou
 
 ## APIs e permissões
 
+Incremento 008: a projeção de economia já usa Product Fees por ASIN ou SellerSKU. Para o fluxo ASIN, o tutorial oficial pede **Pricing e Product Listing** no perfil de desenvolvedor e na aplicação; conferir os dois e obter nova autorização quando adicionar um papel. Isso habilita leituras de tarifas e não autoriza repricing/publicação automática. [Pré-requisitos oficiais de Product Fees](https://developer-docs.amazon.com/sp-api/docs/get-product-fee-estimates-asin).
+
 | API | Uso no sistema | Operações principais | Acesso / prioridade |
 | --- | --- | --- | --- |
 | Product Type Definitions `2020-09-01` | Classificar product types e obter atributos oficiais, enums e condicionais por marketplace e parentage. | `searchDefinitionsProductTypes`, `getDefinitionsProductType` | **Product Listing; obrigatório agora.** |

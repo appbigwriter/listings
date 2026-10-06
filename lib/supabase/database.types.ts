@@ -1,4 +1,4 @@
-// Generated from Supabase project yigqsjevwvqxrxvqhvtd on 2026-10-05. Regenerate after migrations.
+// Generated from Supabase project yigqsjevwvqxrxvqhvtd on 2026-10-06 UTC (20 migrations). Regenerate after migrations.
 export type Json =
   | string
   | number

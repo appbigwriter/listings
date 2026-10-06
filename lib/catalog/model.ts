@@ -4,6 +4,7 @@ import { CHANNELS, CHANNEL_LABELS, type Channel } from './channels';
 export { CHANNELS, CHANNEL_LABELS, type Channel } from './channels';
 export type ProductKind = 'physical' | 'custom' | 'service' | 'unknown';
 export type Fact = { value: unknown; source: string; status: 'confirmed' | 'pending'; observed_at: string };
+export type FieldSource = { authority:'source'|'human';source_id?:string;source_hash?:string;actor?:string;observed_at:string;value_hash:string };
 export type Issue = { code: string; field: string; message: string; severity: 'error' | 'warning'; action: string };
 export type SchemaSnapshot = { channel: Channel; category: string; product_type: string; version: string; fetched_at: string; checksum: string; schema: Record<string, unknown> };
 export type MediaCheck = { url: string; checked_at: string; width: number; height: number; format: string; sha256: string };
@@ -13,14 +14,17 @@ export type ChannelListing = {
   schema?: SchemaSnapshot; suggestions?: { id: string; name: string }[];
   recommendation?: { id: string; confidence: number; reason: string };
   approval?: { hash: string; actor: string; approved_at: string; signature?: string };
+  offer_authority?: OfferAuthority;
   report?: { ready: boolean; issues: Issue[]; checked_at: string };
   submission?: { status: string; request_hash: string; submitted_at: string; response?: unknown; issues?: unknown; publication_status: string;verified_content_hash?:string;verified_at?:string };
 };
+export type OfferAuthority={version:1;sku:string;owner_id:string;organization_id:string;channel:Channel;seller_id:string;marketplace_id:string;source:'prelisting';status:'active'|'paused';fields:('price'|'qty')[];values_hash:string;content_hash:string;actor:string;reason:string;recorded_at:string;expires_at:string;signature:string};
 export type CatalogDocument = {
   version: 1; product_id: string; kind: ProductKind; eligibility_confirmed: boolean;
   facts: Record<string, Fact>; variants: { sku: string; attributes: Record<string, unknown> }[];
   channels: Partial<Record<Channel, ChannelListing>>; media: MediaCheck[];
   source?: { id: string; hash: string; imported_at: string; snapshot: Record<string, unknown> };
+  field_sources?: Record<string,FieldSource>;
 };
 export type ProductInput = Record<string, unknown> & { sku?: string; title?: string; _catalog?: CatalogDocument };
 export const COPY_FIELDS=['title','bullets','description','keywords'] as const;

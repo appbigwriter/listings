@@ -125,3 +125,30 @@ Docker Desktop foi iniciado localmente, mas engine/status não responderam. Não
 Antes de PATCH de oferta, confirmar ASIN existente no produto/manifesto. O readback deve devolver SKU, marketplace e ASIN idênticos; divergência bloqueia a atualização antes da reserva/escrita. Para publicação inicial, usar o fluxo de listing.
 
 Prévia local encerrada em modo de identidade de teste. Servidor de desenvolvimento limitado a 127.0.0.1:3100 agora exige supabase-session/local-only=false; navegador confirmou /login (artifacts/catalog-auth-session-preview.png). Nenhum usuário/owner fictício foi criado no banco. Login operacional aguarda os e-mails reais já solicitados.
+
+
+## Incremento autônomo 008
+
+Product Fees: informar preço USD e frete cobrado ao cliente, inclusive zero confirmado. Consultar tarifas no SKU; em Economia e marketing, conferir a projeção. Estimativa vale por até 24h e depende da conta, identidade, preço, frete e fulfillment; alterações exigem consulta nova. Custos operacionais continuam informados com fonte/data, e a projeção não grava custos automaticamente nem duplica taxas Amazon manuais.
+
+Reconciliação: comparar antes/depois, selecionar campos e informar motivo tanto para aplicar quanto para manter valores. Registro inclui actor, hashes e campos aplicados/preservados. Dados técnicos aplicados precisam de confirmação nova. Fonte observada não é autorização automática para substituir preço/estoque.
+
+Ofertas: admin define autoridade na versão atual, para preço e/ou estoque FBM, com motivo/fonte e validade de 1–168h. Pausa bloqueia novos PATCHs. Preparar e revisar manifesto; envio continua condicionado ao piloto e flags. Mudança de conta/valores/conteúdo ou vencimento exige nova decisão. Essa configuração não cria sincronização automática.
+
+Famílias: pai/filho precisam de mesmo tema, marca, kind, categoria e tipo no canal. Para PUT individual de filho, o pai atual deve estar aprovado e comprovado pela leitura Amazon; não precisa ser BUYABLE. Para feed de filhos, incluir pai ativo; versões são reservadas juntas. Aplicada a migration 20261006024604_amazon_family_version_claim, 20 no histórico. Não reaplicar migrations antigas.
+
+Cobertura: Central → conferir cobertura atual → exportar relatório. Inclui preparações arquivadas do owner/org, até 5.000 registros, status de preparação e de observação externa separados. Fonte da loja inteira não foi reconciliada por esse relatório. Accepted/processing não significa buyable; prova vencida ou de outra versão exige readback. Relatório observado por páginas precisa ser atualizado após mudanças.
+
+Retomada de contingência única: 01:11 de 06/10/2026 (America/Sao_Paulo). Só aplicável se limite da sessão/créditos interromper o trabalho antes de 01:10 e houver backlog; nunca interromper execução ativa ou iniciar trabalho concorrente. Não é pausa programada da implementação.
+
+
+Worker de preparação: lease de 180s renovada a cada 45s enquanto a operação está em andamento; renovação e conferência têm timeout de 10s e exigem o mesmo owner/org/token/status. Perda/expiração/cancelamento impede persistência seguinte/checkpoint; operação externa em voo pode terminar e consumo IA continua auditável. Reinício real e supervisor ainda precisam de homologação no destino.
+
+eBay: readback comprovado grava verified_content_hash/verified_at; relatório chama o estado verified_published. Não é BUYABLE Amazon e não habilita o canal para operação real sem seu piloto.
+
+Checkpoint de 06/10: 231 testes/48 arquivos, typecheck/build de 41 rotas aprovados; audit zero. Docker Linux indisponível, pipe do engine ausente; nenhum container/deploy. Evidência atual em artifacts/execution-20261005-autonomous-008.json.
+
+
+Antes de release: executar npm run migrations:verify. Não alterar SQL já aplicada para acomodar testes; adicionar migration, conferir o histórico remoto, regenerar tipos e atualizar o manifesto datado após a verificação. Esse gate de CI não consulta o banco ao vivo.
+
+Lote failed com code invalid_job_checkpoint exige investigação do payload/cursor/results e novo lote válido; não reenfileirar indefinidamente o mesmo checkpoint corrompido. Cancelamento e diagnóstico não modificam submissões incertas.

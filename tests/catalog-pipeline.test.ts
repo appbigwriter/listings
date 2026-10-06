@@ -112,9 +112,10 @@ describe('catalog preparation pipeline', () => {
     expect(validateListing({ ...parent, human_reviewed: true }).valid).toBe(true);
     expect(amazonAttributes(parent).purchasable_offer).toBeUndefined();
     const child = readyProduct(); child.relationship = 'Child'; child.parent_sku = 'PARENT'; child.variation = 'SIZE/COLOR';
-    const mock = vi.spyOn(repository, 'loadProduct').mockResolvedValue({ product: parent, row: {} });
+    const parentVersion='2026-10-06T02:40:00Z';
+    const mock = vi.spyOn(repository, 'loadProduct').mockResolvedValue({ product: parent, row: {updated_at:parentVersion} });
     try {
-      await expect(assertFamily({} as SupabaseClient, auth, child, 'amazon-us')).resolves.toBeUndefined();
+      await expect(assertFamily({} as SupabaseClient, auth, child, 'amazon-us')).resolves.toEqual({sku:'PARENT',updated_at:parentVersion,content_hash:contentHash(parent)});
       parent.variation = 'COLOR';
       await expect(assertFamily({} as SupabaseClient, auth, child, 'amazon-us')).rejects.toThrow('família');
       expect(mock).toHaveBeenCalledWith(expect.anything(), auth, 'PARENT');

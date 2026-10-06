@@ -6,7 +6,7 @@
       "id": "AG-01",
       "title": "Harness E2E e regressões das jornadas",
       "priority": "P0",
-      "state": "PRONTO",
+      "state": "INTEGRADO_PARCIALMENTE",
       "deps": [],
       "stories": [
         "S4-04",
@@ -19,7 +19,8 @@
         "tests/antigravity/fixtures/**",
         "scripts/antigravity/e2e/**",
         "playwright.antigravity.config.ts"
-      ]
+      ],
+      "integration_report": "coordination/antigravity/reports/AG-01-integration.md"
     },
     {
       "id": "AG-02",
