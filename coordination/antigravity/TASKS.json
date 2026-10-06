@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "client_date": "2026-10-05",
+  "tasks": [
+    {
+      "id": "AG-01",
+      "title": "Harness E2E e regressões das jornadas",
+      "priority": "P0",
+      "state": "PRONTO",
+      "deps": [],
+      "stories": [
+        "S4-04",
+        "S4-05",
+        "S8-05",
+        "S12-02"
+      ],
+      "paths": [
+        "tests/antigravity/e2e/**",
+        "tests/antigravity/fixtures/**",
+        "scripts/antigravity/e2e/**",
+        "playwright.antigravity.config.ts"
+      ]
+    },
+    {
+      "id": "AG-02",
+      "title": "Usabilidade e acessibilidade dos componentes permitidos",
+      "priority": "P1",
+      "state": "APOS_AG-01",
+      "deps": [
+        "AG-01"
+      ],
+      "stories": [
+        "S8-05",
+        "S12-02",
+        "S12-04"
+      ],
+      "paths": [
+        "app/login/page.tsx",
+        "app/auth/complete/page.tsx",
+        "app/marketing/page.tsx",
+        "app/marketing/MarketingEconomicsEditor.tsx",
+        "app/catalog/SchemaEditor.tsx",
+        "app/catalog/ChannelCopyEditor.tsx",
+        "app/catalog/AssetPanel.tsx",
+        "app/catalog/*.module.css",
+        "app/marketing/*.module.css",
+        "tests/antigravity/ui/**"
+      ]
+    },
+    {
+      "id": "AG-03",
+      "title": "Corpus e avaliador determinístico da IA",
+      "priority": "P1",
+      "state": "PRONTO",
+      "deps": [],
+      "stories": [
+        "S7-01",
+        "S7-02",
+        "S7-03",
+        "S7-06",
+        "S8-01"
+      ],
+      "paths": [
+        "evals/antigravity/**",
+        "scripts/antigravity/evals/**",
+        "tests/antigravity/evals/**"
+      ]
+    },
+    {
+      "id": "AG-04",
+      "title": "Diagnóstico e configuração de infraestrutura isolada",
+      "priority": "P0",
+      "state": "PRONTO",
+      "deps": [],
+      "stories": [
+        "S7-05",
+        "S11-01",
+        "S11-03",
+        "S11-04",
+        "S11-06"
+      ],
+      "paths": [
+        "infrastructure/antigravity/**",
+        "scripts/antigravity/infra/**",
+        "compose.antigravity.yaml",
+        "docs/antigravity/infra/**"
+      ]
+    },
+    {
+      "id": "AG-05",
+      "title": "Resiliência e carga em ambiente descartável",
+      "priority": "P1",
+      "state": "APOS_AG-01",
+      "deps": [
+        "AG-01"
+      ],
+      "stories": [
+        "S9-02",
+        "S9-03",
+        "S11-02",
+        "S11-05"
+      ],
+      "paths": [
+        "tests/antigravity/resilience/**",
+        "scripts/antigravity/resilience/**",
+        "tests/antigravity/load/**"
+      ]
+    },
+    {
+      "id": "AG-06",
+      "title": "Runbooks e material de treinamento",
+      "priority": "P1",
+      "state": "PRONTO",
+      "deps": [],
+      "stories": [
+        "S8-01",
+        "S12-04",
+        "S12-06"
+      ],
+      "paths": [
+        "docs/antigravity/training/**",
+        "docs/antigravity/pilot/**"
+      ]
+    },
+    {
+      "id": "AG-07",
+      "title": "Extensões eBay em módulo isolado",
+      "priority": "P2",
+      "state": "CONDICIONAL",
+      "deps": [
+        "CONTRATO_EBAY_VALIDADO",
+        "NOVA_BASELINE"
+      ],
+      "stories": [
+        "S10-01",
+        "S10-04"
+      ],
+      "paths": [
+        "lib/marketplaces/ebay-family-package.ts",
+        "lib/marketplaces/ebay-advanced-aspects.ts",
+        "tests/antigravity/ebay/**"
+      ]
+    },
+    {
+      "id": "AG-08",
+      "title": "Preparação do conector Walmart",
+      "priority": "P2",
+      "state": "CONDICIONAL",
+      "deps": [
+        "GET_SPEC_WALMART_VALIDADO",
+        "NOVA_BASELINE"
+      ],
+      "stories": [
+        "S10-02",
+        "S10-04"
+      ],
+      "paths": [
+        "lib/marketplaces/walmart-package.ts",
+        "lib/marketplaces/walmart-feed.ts",
+        "tests/antigravity/walmart/**"
+      ]
+    }
+  ]
+}

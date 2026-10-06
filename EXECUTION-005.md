@@ -144,3 +144,7 @@ Docker: tentativa de inicialização local realizada, sem criar containers ou re
 Oferta Amazon: manifesto exige ASIN existente confirmado; getListingsItem precisa retornar SKU, marketplaceId e ASIN correspondentes antes de reservar/enviar PATCH. Divergência bloqueia sem escrita externa. [Contrato oficial getListingsItem](https://developer-docs.amazon/sp-api/lang-en_en/reference/getlistingsitem). Validação final: 177 testes/34 arquivos, typecheck e build/39 rotas passaram. Sem alterações produtivas de catálogo ou marketplace.
 
 Prévia local encerrada em modo de identidade de teste. Servidor de desenvolvimento limitado a 127.0.0.1:3100 agora exige supabase-session/local-only=false; navegador confirmou /login (artifacts/catalog-auth-session-preview.png). Nenhum usuário/owner fictício foi criado no banco. Login operacional aguarda os e-mails reais já solicitados.
+
+## Organização de trabalho externo — Antigravity
+
+Pacotes AG-01–08 organizados em ANTIGRAVITY-006-handoff.md e coordination/antigravity/BOARD.md. Há escopo de arquivos, dependências, aceite, baseline de conteúdo e modelo de relatório. Nenhum agente disparado e nenhuma story fechada por esta organização. Núcleo Amazon, APIs/segurança/ledgers/migrations e integração permanecem com o coordenador; execução em cópia isolada do estado atual, incluindo mudanças não commitadas pertinentes, sem secrets. AG-07/08 aguardam contratos definidos; demais pacotes avançam conforme as dependências locais da fila.
