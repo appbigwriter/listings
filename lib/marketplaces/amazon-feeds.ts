@@ -4,12 +4,14 @@ import { amazonConfig,amazonRequest } from './amazon';
 import { publicRequest } from '../net/public-request';
 import { readResponseWithLimit,isSafeRemoteUrl } from '../extract-security';
 import { validateFeedDocument,validateFeedReport } from './feed-schema';
+import {assertRecoveryReleased} from '../operations/recovery';
 
 export function isAmazonDocumentUrl(value:string) {
   try {const url=new URL(value);return url.protocol==='https:' && !url.username && !url.password && (url.hostname.endsWith('.amazonaws.com') || url.hostname.endsWith('.amazonaws.com.cn'));}catch{return false;}
 }
 export async function createAmazonFeedDocument() {return amazonRequest('/feeds/2021-06-30/documents',{},'POST',{contentType:'application/json; charset=UTF-8'});}
 export async function uploadAmazonFeed(url:string,payload:unknown) {
+  assertRecoveryReleased();
   validateFeedDocument(payload);
   if(!isAmazonDocumentUrl(url) || !await isSafeRemoteUrl(url))throw new Error('Destino de documento Amazon inválido.');
   const body=JSON.stringify(payload);if(Buffer.byteLength(body)>10_000_000)throw new Error('Feed limitado a 10 MB nesta integração.');

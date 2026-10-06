@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "checked_at": "2026-10-06T12:36:01.878Z",
+  "scope": "dormant_synthetic_connector_contracts",
+  "vitest": {
+    "command": "npx vitest run tests/antigravity/tiktok/provisioning.test.ts",
+    "files": 1,
+    "passed": 10,
+    "failed": 0
+  },
+  "typecheck": "passed",
+  "live_api_requests": 0,
+  "official_account_contract_received": false,
+  "publication_enabled": false,
+  "marketplace_homologated": false,
+  "sources": [
+    "https://partner.tiktokshop.com/docv2/page/tts-api-sdk-overview",
+    "https://partner.tiktokshop.com/docv2/page/api-versioning",
+    "https://partner.tiktokshop.com/docv2/page/678e3a4278f4c20311b8b57e",
+    "https://partner.tiktokshop.com/docv2/page/wfi3nz36",
+    "https://partner.tiktokshop.com/docv2/page/678e3a45786253031531b942"
+  ]
+}

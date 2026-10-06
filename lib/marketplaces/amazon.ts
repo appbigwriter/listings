@@ -4,8 +4,10 @@ import { publicFetch } from '../net/public-fetch';
 import { readResponseWithLimit } from '../extract-security';
 import {amazonFeeTarget} from './amazon-fee-estimates';
 import {isNumericInput} from '../catalog/numeric-input';
+import {traceEvent,withTrace} from '../operations/trace';
+import {assertAmazonRecoveryRequest} from '../operations/recovery';
 
-export class AmazonError extends Error { constructor(public status: number, public retryAfter: number, public stage = 'SP-API', public code?: string, public requestId?: string) { super(`Amazon ${stage} respondeu HTTP ${status}${code ? ` (${code})` : ''}.`); } }
+export class AmazonError extends Error { constructor(public status: number, public retryAfter: number, public stage = 'SP-API', public code?: string, public requestId?: string) { super(`Amazon ${stage} respondeu HTTP ${status}${code ? ` (${code})` : ''}.`);this.name='AmazonError'; } }
 const safeIdentifier = (value: unknown) => typeof value === 'string' && /^[A-Za-z0-9_.:-]{1,100}$/.test(value) ? value : undefined;
 export function retryAfterSeconds(value: string | null) { if (!value) return 30; const numeric=Number(value); return Number.isFinite(numeric) ? Math.max(0, numeric) : Math.max(0,(Date.parse(value)-Date.now())/1000) || 30; }
 export const amazonTelemetry: Record<string,{status:number;duration_ms:number;rate_limit:string|null;request_id?:string;checked_at:string}> = {};
@@ -41,12 +43,17 @@ async function refreshToken(configHash:string) {
   return cachedToken.value;
 }
 export async function amazonRequest(path: string, query: Record<string, string> = {}, method = 'GET', body?: unknown) {
+  return withTrace('amazon.request',{provider:'amazon'},()=>amazonRequestStep(path,query,method,body));
+}
+async function amazonRequestStep(path:string,query:Record<string,string>,method:string,body?:unknown){
+  assertAmazonRecoveryRequest(path,query,method);
   const config = amazonConfig(); const url = new URL(path, config.endpoint);
   if (url.origin !== config.endpoint || !path.startsWith('/')) throw new Error('Caminho Amazon inválido.');
   for (const [key, value] of Object.entries(query)) url.searchParams.set(key, value);
   const start=Date.now();
   const response = await fetch(url, { method, redirect: 'error', signal: AbortSignal.timeout(25000), headers: { 'x-amz-access-token': await accessToken(), 'x-amz-date': new Date().toISOString().replace(/[:-]|\.\d{3}/g, ''), 'user-agent': 'FBRPreListing/0.2 (Language=TypeScript)', 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
   const requestId=safeIdentifier(response.headers.get('x-amzn-requestid'));
+  traceEvent('provider.response',{http_status:response.status,provider_request_id:requestId,duration_ms:Date.now()-start});
   const operation=path.split('/').slice(0,3).join('/') + ':' + method;
   amazonTelemetry[operation]={status:response.status,duration_ms:Date.now()-start,rate_limit:response.headers.get('x-amzn-ratelimit-limit'),request_id:requestId,checked_at:new Date().toISOString()};
   const result = await readAmazonJson(response,5_000_000);

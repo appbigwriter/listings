@@ -1,3 +1,3 @@
 import { defineConfig } from 'vitest/config';
 
-export default defineConfig({ test: { include: ['tests/**/*.test.ts'], exclude: ['.kilo/**', 'node_modules/**', '.next/**'] } });
+export default defineConfig({ oxc:{jsx:{runtime:'automatic'}}, test: { include: ['tests/**/*.test.ts'], exclude: ['.kilo/**', 'node_modules/**', '.next/**'] } });

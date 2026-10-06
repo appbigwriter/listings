@@ -7,7 +7,7 @@ export async function api(path: string, body?: unknown) {
   }
   const data = await response.json();
   if (response.status === 401) { window.location.href = '/login'; throw new Error('Entre para acessar o catálogo.'); }
-  if (!response.ok) throw new Error(data.error || 'Não foi possível concluir a operação.');
+  if (!response.ok) {const correlation=response.headers.get('x-correlation-id');throw new Error((data.error||'Não foi possível concluir a operação.')+(correlation&&/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(correlation)?` [ID: ${correlation}]`:''));}
   return data;
 }
 export function download(value: unknown, name: string, type = 'application/json') {

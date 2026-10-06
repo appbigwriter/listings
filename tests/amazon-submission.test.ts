@@ -45,7 +45,7 @@ describe('Amazon version reservation before external writes',()=>{
  });
  it('reserves the exact PUT version and records its returned claim ID',async()=>{
   await executeAction(db as any,auth,product.sku,'submit',{confirm:true,expected_hash:contentHash(product)});
-  expect(mocks.rpc).toHaveBeenCalledWith('reserve_catalog_channel_submission',expect.objectContaining({p_version:version,p_sku:product.sku,p_hash:contentHash(product),p_target:{seller_id:'SELLER',marketplace_id:'ATVPDKIKX0DER',operation:'listing_put'}}));expect(mocks.submit).toHaveBeenCalledTimes(1);
+  expect(mocks.rpc).toHaveBeenCalledWith('reserve_catalog_channel_submission',expect.objectContaining({p_version:version,p_sku:product.sku,p_hash:contentHash(product),p_target:expect.objectContaining({seller_id:'SELLER',marketplace_id:'ATVPDKIKX0DER',operation:'listing_put',trace:expect.objectContaining({correlation_id:expect.stringMatching(/^[a-f0-9-]{36}$/)})})}));expect(mocks.submit).toHaveBeenCalledTimes(1);
  });
  it('blocks PATCH after a concurrent version change even when the prepared offer was reviewed',async()=>{
   const prepared=await prepareOffer(db as any,auth,product.sku,['price'],'prelisting');mocks.rpc.mockResolvedValue({error:{message:'Product version changed'}});

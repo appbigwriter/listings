@@ -42,3 +42,6 @@ Leia PROMPT.md e a ficha em tasks/ antes de iniciar. Use reports/ para entregas;
 A frente principal e a sequência CX-01–06 estão em EXECUTION-CODEX-007.md. Codex mantém núcleo/integração; próximo incremento próprio: conexão Product Fees → economia no backend. Os escopos AG-02 de frontend ficam preservados. Antes de despachar tarefas novas, fornecer baseline atualizada; tarefas já iniciadas mantêm sua referência e entregam diff para integração.
 
 Checkpoint 008: Fees/economia, provenance e autoridade persistente integrados pelo coordenador. Baseline 009 publicada após a verificação completa para tarefas ainda não iniciadas; tarefas em andamento preservam sua referência e entregam diff. Regressões locais de AG-01 não liberam gates que exigem navegador/sessão/worker reais.
+
+
+Retomada 009 — 06/10/2026: reconciliação Amazon corrigida, correlação interna estruturada, recuperação administrativa de offerId eBay, ensaio local de kill/restart do worker, atualidade da prova de compra e modo explícito de recuperação implementados. 249 testes/54 arquivos, typecheck e build/41 rotas passaram. Sem nova migration ou publicação. Evidências e limites em EXECUTION-009-retomada.md. Baseline 010 é destinada somente a tarefas ainda não iniciadas; referências anteriores e escopos Antigravity permanecem preservados. Gates reais continuam pendentes.

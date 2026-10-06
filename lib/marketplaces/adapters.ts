@@ -1,19 +1,15 @@
 import { hash, type Channel, type SchemaSnapshot } from '../catalog/model';
 import { amazonCategories, amazonSchema } from './amazon';
-import { marketplaceToken } from './oauth';
-import { readResponseWithLimit } from '../extract-security';
 import {ebayRequest} from './ebay';
 import {ebayAspectSchema} from './ebay-schema';
+import {walmartRequest} from './walmart';
+import {ebayAdvancedAspectSchema} from './ebay-advanced-aspects';
 
 export async function ebayRead(path: string) {
   return ebayRequest(path);
 }
 const ebay=ebayRead;
-async function walmart(path: string, method = 'GET', body?: unknown) {
-  const response = await fetch(`https://marketplace.walmartapis.com${path}`, { method, redirect:'error', signal: AbortSignal.timeout(15000), headers: { 'WM_SEC.ACCESS_TOKEN': await marketplaceToken('walmart'), ...(process.env.WALMART_CONSUMER_CHANNEL_TYPE ? { 'WM_CONSUMER.CHANNEL.TYPE': process.env.WALMART_CONSUMER_CHANNEL_TYPE } : {}), 'WM_QOS.CORRELATION_ID': crypto.randomUUID(), 'WM_SVC.NAME': 'Walmart Marketplace', accept: 'application/json', 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
-  if (!response.ok) throw new Error(`Walmart respondeu HTTP ${response.status}.`);
-  return JSON.parse(await readResponseWithLimit(response,5_000_000));
-}
+const walmart=walmartRequest;
 export async function categorySuggestions(channel: Channel, title: string) {
   if (channel === 'amazon-us') return amazonCategories(title);
   if (channel === 'ebay-us') {
@@ -36,15 +32,15 @@ export async function channelSchema(channel: Channel, productType: string, categ
   if (channel === 'ebay-us') {
     const tree = await ebay('/commerce/taxonomy/v1/get_default_category_tree_id?marketplace_id=EBAY_US');
     const result = await ebay(`/commerce/taxonomy/v1/category_tree/${tree.categoryTreeId}/get_item_aspects_for_category?category_id=${encodeURIComponent(category)}`);
-    const schema=ebayAspectSchema(result);
-    return { channel, category, product_type: productType, version: String(tree.categoryTreeVersion || hash(result)), fetched_at: new Date().toISOString(), checksum: hash(schema), schema };
+    const schema=ebayAdvancedAspectSchema(result);
+    return { channel, category, product_type: productType, version: String(tree.categoryTreeVersion || hash(result)), fetched_at: new Date().toISOString(), checksum: hash(schema), schema,metadata:{category_tree_id:String(tree.categoryTreeId),taxonomy:result} };
   }
   if (channel === 'walmart-us') {
     if (!process.env.WALMART_SPEC_VERSION) throw new Error('Configure a versão Get Spec vigente da sua conta Walmart.');
     const result = await walmart('/v3/items/spec', 'POST', { feedType: process.env.WALMART_FEED_TYPE || 'MP_ITEM', version: process.env.WALMART_SPEC_VERSION, productTypes: [productType] });
     const schema = result.schema || result;
     if (!schema.properties && !schema.$ref) throw new Error('Walmart não retornou um schema JSON reconhecido; verifique a versão Get Spec da conta.');
-    return { channel, category, product_type: productType, version: String(result.version || hash(schema)), fetched_at: new Date().toISOString(), checksum: hash(schema), schema };
+    return { channel, category, product_type: productType, version: String(result.version || process.env.WALMART_SPEC_VERSION), fetched_at: new Date().toISOString(), checksum: hash(schema), schema };
   }
   throw new Error('Schema indisponível para este canal.');
 }

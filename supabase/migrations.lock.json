@@ -1,7 +1,7 @@
 {
   "version": 1,
   "project_id": "yigqsjevwvqxrxvqhvtd",
-  "attested_at": "2026-10-06T04:23:50Z",
+  "attested_at": "2026-10-06T13:04:08.640Z",
   "remote_history": [
     {
       "version": "20261005165617",
@@ -82,6 +82,30 @@
     {
       "version": "20261006024604",
       "name": "amazon_family_version_claim"
+    },
+    {
+      "version": "20261006114133",
+      "name": "catalog_schema_refresh_jobs"
+    },
+    {
+      "version": "20261006115105",
+      "name": "operational_incidents"
+    },
+    {
+      "version": "20261006123021",
+      "name": "ebay_family_submission_claim"
+    },
+    {
+      "version": "20261006124540",
+      "name": "walmart_submission_claim"
+    },
+    {
+      "version": "20261006125043",
+      "name": "amazon_schema_event_queue"
+    },
+    {
+      "version": "20261006130351",
+      "name": "latest_submission_polling"
     }
   ],
   "files": [
@@ -164,7 +188,31 @@
     {
       "path": "20261006024604_amazon_family_version_claim.sql",
       "sha256": "3dbcb3802fd863eeadecab2562ad3630f0399081ddb9fd84db8a93a6a0131377"
+    },
+    {
+      "path": "20261006114133_catalog_schema_refresh_jobs.sql",
+      "sha256": "014add965e0459ad690d2cd41ad8bbf8cd25fbf68c408dbb8a5b886f40f6dcdf"
+    },
+    {
+      "path": "20261006115105_operational_incidents.sql",
+      "sha256": "9daaf85d25fa9ed98d9b459d3ca1c3ea50ff14b2768a33089970b4fe93d8fb41"
+    },
+    {
+      "path": "20261006123021_ebay_family_submission_claim.sql",
+      "sha256": "0b657ee763eeed3f6bde83e600dbebb25a0c8f6f47a31d7da38e826e5208baa7"
+    },
+    {
+      "path": "20261006124540_walmart_submission_claim.sql",
+      "sha256": "d07f436c26b946246f4bd8dd13dd30ed497509561f68d6dc771786472ebaec1f"
+    },
+    {
+      "path": "20261006125043_amazon_schema_event_queue.sql",
+      "sha256": "762a8ca8bd43cb5bdc785ebd5fe81fda50bc843de2071df1606f5178e72855a0"
+    },
+    {
+      "path": "20261006130351_latest_submission_polling.sql",
+      "sha256": "2d379f59ea617882789c17e3d6b58e0762d1aa933d49b80a59c15ec00cf3db91"
     }
   ],
-  "types_sha256": "f1b0f75cc8980f6fefe7dff1cb24d445786b90cbd4e732a389753e685b7967f0"
+  "types_sha256": "e59428cd7383b035e9a18a7cdc85200da20226112e7f1fbc056b4cb89405d6b3"
 }

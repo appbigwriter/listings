@@ -1,0 +1,18 @@
+{
+  "checked_at": "2026-10-06T12:41:33.495Z",
+  "config": "passed",
+  "daemon_required": false,
+  "services": [
+    "restore-check",
+    "restore-db",
+    "scanner",
+    "web",
+    "worker"
+  ],
+  "private_scanner_no_published_port": true,
+  "fixture_database_private": true,
+  "runtime_secret_allowlist": "passed",
+  "inherited_publication_flags_ignored": true,
+  "placeholder_refused": true,
+  "containers_started": false
+}

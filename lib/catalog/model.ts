@@ -6,17 +6,20 @@ export type ProductKind = 'physical' | 'custom' | 'service' | 'unknown';
 export type Fact = { value: unknown; source: string; status: 'confirmed' | 'pending'; observed_at: string };
 export type FieldSource = { authority:'source'|'human';source_id?:string;source_hash?:string;actor?:string;observed_at:string;value_hash:string };
 export type Issue = { code: string; field: string; message: string; severity: 'error' | 'warning'; action: string };
-export type SchemaSnapshot = { channel: Channel; category: string; product_type: string; version: string; fetched_at: string; checksum: string; schema: Record<string, unknown> };
+export type SchemaSnapshot = { channel: Channel; category: string; product_type: string; version: string; fetched_at: string; checksum: string; schema: Record<string, unknown>;metadata?:{category_tree_id:string;taxonomy:import('../marketplaces/ebay-advanced-aspects').EbayTaxonomyAspects} };
 export type MediaCheck = { url: string; checked_at: string; width: number; height: number; format: string; sha256: string };
 export type ChannelListing = {
   product_type: string; category: string; attributes: Record<string, unknown>;
   copy?: {locale:'en_US';title:string;bullets:string;description:string;keywords:string;source:'human'|'ai';grounding?:unknown};
   schema?: SchemaSnapshot; suggestions?: { id: string; name: string }[];
+  schema_change?: ReturnType<typeof import('./schema-change').schemaChange>;
+  schema_refresh_pending?: {event_id:string;requested_at:string;product_type_version:string};
+  family?: {variation_aspects:string[];image_variation_aspect:string};
   recommendation?: { id: string; confidence: number; reason: string };
   approval?: { hash: string; actor: string; approved_at: string; signature?: string };
   offer_authority?: OfferAuthority;
   report?: { ready: boolean; issues: Issue[]; checked_at: string };
-  submission?: { status: string; request_hash: string; submitted_at: string; response?: unknown; issues?: unknown; publication_status: string;verified_content_hash?:string;verified_at?:string };
+  submission?: { status: string; request_hash: string; submitted_at: string; response?: unknown; issues?: unknown; publication_status: string;verified_content_hash?:string;verified_at?:string;trace?:Record<string,unknown> };
 };
 export type OfferAuthority={version:1;sku:string;owner_id:string;organization_id:string;channel:Channel;seller_id:string;marketplace_id:string;source:'prelisting';status:'active'|'paused';fields:('price'|'qty')[];values_hash:string;content_hash:string;actor:string;reason:string;recorded_at:string;expires_at:string;signature:string};
 export type CatalogDocument = {
@@ -44,7 +47,7 @@ export function contentHash(input: ProductInput, channel: Channel = 'amazon-us')
   const { _catalog, human_reviewed, review_hash,amazon_fees,amazon_discovery,amazon_restrictions,ai_grounding, ...fields } = channelProduct(input,channel);
   const listing = _catalog?.channels[channel];
   return hash({ fields, kind: _catalog?.kind, eligibility_confirmed: _catalog?.eligibility_confirmed, facts: _catalog?.facts, variants: _catalog?.variants,
-    listing: listing && { product_type: listing.product_type, category: listing.category, attributes: listing.attributes, schema_checksum: listing.schema?.checksum,...(listing.copy?{locale:listing.copy.locale}:{}) }, media: _catalog?.media });
+    listing: listing && { product_type: listing.product_type, category: listing.category, attributes: listing.attributes, schema_checksum: listing.schema?.checksum,...(listing.schema?.metadata?{schema_metadata_hash:hash(listing.schema.metadata)}:{}),...(listing.family?{family:listing.family}:{}),...(listing.copy?{locale:listing.copy.locale}:{}) }, media: _catalog?.media });
 }
 export function channelFrom(value: unknown): Channel {
   if (CHANNELS.includes(value as Channel)) return value as Channel;

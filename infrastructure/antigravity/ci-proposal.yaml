@@ -1,0 +1,26 @@
+# Proposal: coordinator copies into .github/workflows only after integration.
+name: AG04 infrastructure rehearsal
+on: [workflow_dispatch]
+permissions: {contents: read}
+jobs:
+  isolated-rehearsal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: npm}
+      - run: npm ci
+      - run: node scripts/antigravity/infra/release-gate.mjs
+      - run: node --import=tsx scripts/antigravity/infra/scanner-check.mjs
+      - run: docker compose -f compose.antigravity.yaml build worker
+      - run: docker compose -f compose.antigravity.yaml up -d --wait scanner
+      - run: docker compose -f compose.antigravity.yaml --profile app run --rm --no-deps --entrypoint node worker --import=tsx scripts/antigravity/infra/scanner-check.mjs --live
+      - run: docker compose -f compose.antigravity.yaml --profile restore run --rm restore-check
+      - if: always()
+        run: docker compose -f compose.antigravity.yaml --profile app --profile restore down --volumes
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ag04-configuration
+          path: artifacts/antigravity/AG-04/

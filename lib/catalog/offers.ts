@@ -6,6 +6,8 @@ import { evaluateReadiness } from './readiness';
 import { CatalogError,loadProduct,scopeQuery,persistProduct } from './repository';
 import {assertOfferAuthority,recordOfferAuthority,offerFields} from './offer-authority';
 import {isNumericInput} from './numeric-input';
+import {traceEvent,traceHash,traceSnapshot,withTrace} from '../operations/trace';
+import {assertRecoveryReleased} from '../operations/recovery';
 
 export function offerPatch(product:ProductInput,fields:unknown,authority:unknown) {
   const selected=offerFields(fields);
@@ -45,14 +47,19 @@ export async function saveOfferAuthority(db:SupabaseClient,auth:AuthContext,body
  const data=await persistProduct(db,auth,product,loaded.row);return {updated_at:data.updated_at,authority:listing.offer_authority};
 }
 export async function submitOffer(db:SupabaseClient,auth:AuthContext,body:Record<string,unknown>) {
+  return withTrace('offer.submit',{sku_hash:traceHash(String(body.sku||'')),organization_hash:traceHash(auth.organizationId)},()=>submitOfferStep(db,auth,body));
+}
+async function submitOfferStep(db:SupabaseClient,auth:AuthContext,body:Record<string,unknown>){
+  assertRecoveryReleased();
   if(!hasCapability(auth,'publish')||process.env.PRELISTING_ENABLE_PUBLICATION!=='true'||process.env.PRELISTING_ENABLE_OFFER_PATCH!=='true'||body.confirm!==true)throw new CatalogError('Atualização de oferta desabilitada ou não autorizada.',403);
   const prepared=await prepareOffer(db,auth,String(body.sku),body.fields,body.authority);
   if(body.expected_hash!==prepared.request_hash)throw new CatalogError('Oferta ou versão mudou. Revise novamente.',409);
   const remote=await amazonReadback(prepared.sku);
   if(remote.sku!==prepared.sku||!remote.summaries?.some((summary:{marketplaceId?:string;asin?:string})=>summary.marketplaceId===prepared.target.marketplace_id&&summary.asin===prepared.target.asin))throw new CatalogError('SKU, marketplace e ASIN existentes não correspondem ao manifesto. Confirme a identidade antes de atualizar a oferta.',422);
   if(Date.parse(prepared.target.authority_expires_at)<=Date.now())throw new CatalogError('Autoridade venceu durante a consulta. Registre uma nova decisão antes do envio.',422);
-  const claim=await db.rpc('reserve_catalog_channel_submission',{p_owner:auth.userId,p_organization:auth.organizationId,p_sku:prepared.sku,p_channel:'amazon-us',p_version:prepared.updated_at,p_hash:prepared.request_hash,p_payload:{productType:prepared.payload.productType,attributes:prepared.attributes},p_target:prepared.target});
+  const claim=await db.rpc('reserve_catalog_channel_submission',{p_owner:auth.userId,p_organization:auth.organizationId,p_sku:prepared.sku,p_channel:'amazon-us',p_version:prepared.updated_at,p_hash:prepared.request_hash,p_payload:{productType:prepared.payload.productType,attributes:prepared.attributes},p_target:{...prepared.target,trace:traceSnapshot()}});
   if(claim.error||!claim.data)throw new CatalogError('Oferta mudou, já reservada ou SKU tem submissão incerta. Reconcilie antes de reenviar.',409);
+  traceEvent('submission.reserved',{submission_id:claim.data,content_hash:prepared.request_hash});
   try {
     const response=await amazonRequest(`/listings/2021-08-01/items/${encodeURIComponent(prepared.target.seller_id)}/${encodeURIComponent(prepared.sku)}`,{marketplaceIds:prepared.target.marketplace_id,issueLocale:'en_US'},'PATCH',prepared.payload);
     if(!['ACCEPTED','INVALID'].includes(response?.status))throw new CatalogError('Resposta Amazon sem resultado comprovado. Reconcilie antes de reenviar.',503);

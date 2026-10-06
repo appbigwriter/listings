@@ -1,3 +1,4 @@
+import {traceRequest} from '../../../../lib/operations/trace';
 import { NextRequest, NextResponse } from 'next/server';
 import { resolveAuthContext, unauthorized } from '../../../../lib/auth';
 import { getSupabase } from '../../../../lib/marketing/supabase';
@@ -7,7 +8,7 @@ import { buildSellerExport } from '../../../../lib/catalog/contracts';
 import { isChannel } from '../../../../lib/catalog/model';
 import { assertFamily } from '../../../../lib/catalog/family';
 
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest) {
   const auth = await resolveAuthContext(req); if (!auth) return NextResponse.json(unauthorized(), { status: 401 });
   const db = getSupabase(); if (!db) return NextResponse.json({ error: 'Supabase não configurado.' }, { status: 503 });
   try {
@@ -22,3 +23,5 @@ export async function GET(req: NextRequest) {
     return new NextResponse(body, { headers: { 'content-type': csv ? 'text/csv;charset=utf-8' : 'application/json', 'content-disposition': `attachment; filename="${name}-${channel}.${csv ? 'csv' : 'json'}"`, 'cache-control': 'no-store' } });
   } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Falha na exportação.' }, { status: error instanceof CatalogError ? error.status : 500 }); }
 }
+
+export function GET(req:NextRequest){return traceRequest('api.catalog.export',()=>handleGET(req));}

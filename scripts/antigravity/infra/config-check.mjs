@@ -1,0 +1,25 @@
+import {spawnSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+import {writeFileSync,mkdirSync} from 'node:fs';
+import {runtimeEnvironment} from './runtime.mjs';
+import {workerLiveness} from './worker-health.mjs';
+const result=spawnSync('docker',['compose','-f','compose.antigravity.yaml','--profile','app','--profile','restore','config','--format','json'],{encoding:'utf8',windowsHide:true});
+if(result.status!==0)throw new Error('Docker Compose configuration failed (no daemon needed)');
+const config=JSON.parse(result.stdout),services=config.services;
+assert.equal(config.name,'prelisting-ag04');
+assert.equal(config.networks.private.internal,true);
+for(const name of ['scanner','worker','restore-db','restore-check'])assert.equal(services[name].ports,undefined,`${name} must not publish ports`);
+assert.equal(services.web.ports.length,1);assert.equal(services.web.ports[0].host_ip,'127.0.0.1');assert.equal(services.web.ports[0].published,'33100');
+assert.deepEqual(services['restore-db'].networks,{private:null});
+for(const name of ['web','worker']){assert.equal(services[name].read_only,true);assert.ok(services[name].secrets.some(secret=>secret.source==='runtime_config'));assert.equal(services[name].env_file,undefined);}
+const fixture={NEXT_PUBLIC_SUPABASE_URL:'https://fixture.invalid',NEXT_PUBLIC_SUPABASE_ANON_KEY:'test-anon',SUPABASE_SERVICE_ROLE_KEY:'test-service',PRELISTING_APP_URL:'http://127.0.0.1:33100',PRELISTING_REVIEW_SECRET:'test-signature'};
+const env=runtimeEnvironment(fixture,{PATH:'fixture-path',PRELISTING_ENABLE_PUBLICATION:'true',SUPABASE_SERVICE_ROLE_KEY:'inherited-secret'});
+assert.equal(env.PRELISTING_ENABLE_PUBLICATION,'false');assert.equal(env.PRELISTING_RECOVERY_MODE,'true');assert.equal(env.SUPABASE_SERVICE_ROLE_KEY,'test-service');
+assert.throws(()=>runtimeEnvironment({...fixture,PRELISTING_ENABLE_FEEDS:'true'}));
+assert.throws(()=>runtimeEnvironment({...fixture,OPENAI_API_KEY:'REPLACE'}));assert.throws(()=>runtimeEnvironment([]));
+const now=Date.now();assert.equal(workerLiveness({pid:12,checked_at:new Date(now).toISOString()},now,()=>{}),true);
+assert.equal(workerLiveness({pid:12,checked_at:new Date(now-46000).toISOString()},now,()=>{}),false);
+assert.equal(workerLiveness({pid:12,checked_at:new Date(now).toISOString()},now,()=>{throw new Error('stopped');}),false);
+assert.equal(workerLiveness({pid:12,checked_at:new Date(now+6000).toISOString()},now,()=>{}),false);
+const evidence={checked_at:new Date().toISOString(),config:'passed',daemon_required:false,services:Object.keys(services),private_scanner_no_published_port:true,fixture_database_private:true,runtime_secret_allowlist:'passed',inherited_publication_flags_ignored:true,placeholder_refused:true,containers_started:false};
+mkdirSync('artifacts/antigravity/AG-04',{recursive:true});writeFileSync('artifacts/antigravity/AG-04/config-check.json',JSON.stringify(evidence,null,2));console.log(JSON.stringify(evidence,null,2));

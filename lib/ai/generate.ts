@@ -2,6 +2,8 @@ import OpenAI from 'openai';
 import { AI_LISTING_FIELDS, validateAiInput, validateAiListingResponse, type AiGenerationInput } from './contracts';
 import type { AiRuntime } from './usage';
 import type {Channel} from '../catalog/channels';
+import {validGrounding} from './grounding';
+import {validateChannelCopy} from '../catalog/copy';
 
 export async function generateListing(input: AiGenerationInput, runtime:AiRuntime={},target:{channel:Channel;locale:'en_US'}={channel:'amazon-us',locale:'en_US'}): Promise<Record<string, unknown> & { grounding: unknown }> {
   const checked = validateAiInput(input); if (!checked.ok) throw new Error(checked.error);
@@ -24,8 +26,9 @@ export async function generateListing(input: AiGenerationInput, runtime:AiRuntim
   ], response_format: { type: 'json_schema', json_schema: { name: 'listing_grounding', strict: true, schema: { type: 'object', properties: { supported: { type: 'boolean' }, reason: { type: 'string' }, evidence: { type: 'array', items: { type: 'object', properties: { field: { type: 'string' }, quote: { type: 'string' } }, required: ['field', 'quote'], additionalProperties: false } } }, required: ['supported', 'reason', 'evidence'], additionalProperties: false } } } });
   runtime.onUsage?.({model:verification.model,prompt_tokens:verification.usage?.prompt_tokens || 0,completion_tokens:verification.usage?.completion_tokens || 0});
   const audit = JSON.parse(verification.choices[0]?.message?.content || '{}');
-  if (audit.supported !== true || !Array.isArray(audit.evidence) || !audit.evidence.length || audit.evidence.some((entry: { field: string; quote: string }) => !entry.quote || !String(input.fbrFacts[entry.field] || '').includes(entry.quote))) throw new Error('A IA não conseguiu sustentar o texto nos fatos. Revise os dados e tente novamente.');
+  if (!validGrounding(audit,input)) throw new Error('A IA não conseguiu sustentar o texto nos fatos. Revise os dados e tente novamente.');
   const result = validateAiListingResponse(candidate, input, true);
   if (!result.ok) throw new Error(result.error);
+  validateChannelCopy({locale:target.locale,...Object.fromEntries(['title','bullets','description','keywords'].map(field=>[field,String(result.value[field]||'')]))},target.channel);
   return { ...result.value, grounding: { ...audit, automated_review: true, human_review_required: true } };
 }

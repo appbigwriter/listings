@@ -1,0 +1,581 @@
+{
+  "version": 1,
+  "corpus_id": "ag03-synthetic-contract-v1",
+  "corpus_hash": "64366fffef3693d5116403095ba273876bc5ad73c4cb985ffb23cfce8ff4b80e",
+  "checked_at": "2026-10-06T11:47:21.497Z",
+  "live_model_executed": false,
+  "remote_calls": 0,
+  "real_catalog_facts_verified": false,
+  "marketplace_homologated": false,
+  "total": 47,
+  "passed": 47,
+  "failed": 0,
+  "denominators": {
+    "saved_ai_outputs": 18,
+    "positive_ai_outputs": 5,
+    "negative_ai_outputs": 13,
+    "listing_contracts": 9,
+    "readiness_contracts": 5,
+    "family_contracts": 5,
+    "copy_contracts": 10,
+    "human_qualified_catalog_cases": 0
+  },
+  "ai": {
+    "version": 1,
+    "checked_at": "2026-10-06T11:47:21.497Z",
+    "scope": "saved_outputs_and_annotations",
+    "live_model_executed": false,
+    "total": 18,
+    "passed": 18,
+    "failed": 0,
+    "false_acceptances": 0,
+    "false_rejections": 0,
+    "qualified_catalog_cases": 0,
+    "qualified_for_quality_review": false,
+    "marketplace_homologated": false,
+    "results": [
+      {
+        "case_hash": "dccf3520b542c2a4e19fe0d6f0d7e40c17d253ad8a4204f05d07966a0ef26a2d",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "60d1dcb7fdf394a5ce03714b9778ac972d3a3e55956a1dea35ccbed115834a52",
+        "accepted": true,
+        "expected_accepted": true,
+        "passed": true,
+        "reasons": [],
+        "qualified": false
+      },
+      {
+        "case_hash": "9b38f16fa3b37255b0eee976f41305fa717a0e0a2f70b219d653c7a0f46b6531",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "82e4aba591c6b10dae2504d516879be7f460276ee11f162952a04d49c788b7d4",
+        "accepted": true,
+        "expected_accepted": true,
+        "passed": true,
+        "reasons": [],
+        "qualified": false
+      },
+      {
+        "case_hash": "1139d958cd43e4bc8913064ab46880c13a9cb501924f16d13bdafd088be29c33",
+        "input_hash": "ff3722d18eee3610ccff474b0bf3aa8a50e7899b12d9176c68fdb44cd653fd40",
+        "output_hash": "be0deee6a5088f7a38fc16d0c0ab2bb81bcfbec459f09b04efdd8b59261b0a14",
+        "accepted": true,
+        "expected_accepted": true,
+        "passed": true,
+        "reasons": [],
+        "qualified": false
+      },
+      {
+        "case_hash": "507df1ac2d2c6992dc5b8e225b603cdb688a82800bf5e095c87610774f38336b",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "fbab05161f5d3e8f989a7e01f8f67fdad152b1f765f40a06bd1b2374af4c056a",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "AI_UNSUPPORTED_VALUE:material"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "d996aec3ec6867abc1567322ade34a061d0ae066081bce46a906ec467e9e7269",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "4c9fc0346060db1a86d37ecd4801385600d6da24eaffaca7131e2cd38ad9e1c9",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "AI_UNSUPPORTED_VALUE:color"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "f364736acf59b4e714b745d91adb72508bba985df7ea6a27c3497a94d59afffb",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "1884dc6d946603392931b2e1ef7118a077ed44b6ee2c7a70114ab70be1ac63b6",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "AI_UNSUPPORTED_VALUE:included"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "30df023424e1b5f6f7e88e25ec519a73fc18f84052965926e7429fa88be0d3d7",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "6444a42c7424a805eb35d713cdbd106e5785ea545b7538b2aa8f6d7ff3c9b72a",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "AI_UNSUPPORTED_NUMBER:title"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "7560189287fda70c147ed600dfeb12dd63b041e4d0daa52a84eb72fee17a08e0",
+        "input_hash": "63e1e37c8b67a1f7cdc624511092deb5ecc1381cc5d2f69c275df8dd228ec3f7",
+        "output_hash": "b30fcd02391821ea944e7feee36d3e16afdb3f132383ff3e66f9a8bba65aa30a",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "AI_EXTERNAL_CLAIM_NOT_ALLOWED"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "10ff7bf8a8d926d11f9e6602d04aa0c0ad14e7cea12e12a5b12d51bd90dcc1cb",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "34441f518ff0a4f067bc6b34caf6901e20efd005a138cd5098e5a06533bc62a0",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "annotated_unsupported_claim"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "074933d6ce0393390d4531fa4217e06b589bf883da1a4fc2521fd7a0187fe006",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "60d1dcb7fdf394a5ce03714b9778ac972d3a3e55956a1dea35ccbed115834a52",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "grounding_invalid"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "1a784775e7a4179d45e04f2911d09d42b0434c9a1078861df636cf31af79d4e7",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "60d1dcb7fdf394a5ce03714b9778ac972d3a3e55956a1dea35ccbed115834a52",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "grounding_invalid"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "9c036994f77e3f095be795971285d1d88578db4d8c6a141ce77ec41c11ba91ad",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "60d1dcb7fdf394a5ce03714b9778ac972d3a3e55956a1dea35ccbed115834a52",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "grounding_invalid"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "a7165f2f6cc9d5d484bbc0c839f449d0cdbd6a592905c7544b907785a2a44032",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "2ad445d5edd90b99d8525fd8a865c0fde0f3f907a762a4584f8cb4cd253b84ed",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "AI_RESPONSE_FIELD_NOT_ALLOWED"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "061b00da2a9dccc7ab8be8e6f934d347a787d1cbc6fea9c6324395232b9d4206",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "c1b4d110e73fb4c02c2bec0fa4951db9af305eb4bbd7326da39fd6b53b1557a8",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "AI_RESPONSE_TYPE_INVALID"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "f1265d4b4b706858da2255637da61b49dd6b307a1db247179a353be9a8bddf4b",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "60d1dcb7fdf394a5ce03714b9778ac972d3a3e55956a1dea35ccbed115834a52",
+        "accepted": true,
+        "expected_accepted": true,
+        "passed": true,
+        "reasons": [],
+        "qualified": false
+      },
+      {
+        "case_hash": "2d53e8bfc2e5be1fcd7f0acb7e42a2899c13355fae339c3e374e154913197174",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "60d1dcb7fdf394a5ce03714b9778ac972d3a3e55956a1dea35ccbed115834a52",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "category_outside_contract",
+          "category_annotation_mismatch"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "21d74d54ede74ff2f8edafc9f599b7646688bcba96b573cfdc3baff0b987ba3a",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "60d1dcb7fdf394a5ce03714b9778ac972d3a3e55956a1dea35ccbed115834a52",
+        "accepted": false,
+        "expected_accepted": false,
+        "passed": true,
+        "reasons": [
+          "category_missing"
+        ],
+        "qualified": false
+      },
+      {
+        "case_hash": "675e5b48570c3a8cffa4db36e54ccdf76c2d13023b5b5e767ccc93cddfb99830",
+        "input_hash": "321f4d3885524c2f02c06150e5951fae68c263f46debbefb48f3a381c2612eb9",
+        "output_hash": "60d1dcb7fdf394a5ce03714b9778ac972d3a3e55956a1dea35ccbed115834a52",
+        "accepted": true,
+        "expected_accepted": true,
+        "passed": true,
+        "reasons": [],
+        "qualified": false
+      }
+    ]
+  },
+  "contracts": [
+    {
+      "case_hash": "7b18cbe4faea3dc8f5fe4c679c44b86a8a8243963853d616d5787779f0214d65",
+      "label": "identity-exemption-confirmed",
+      "kind": "listing",
+      "valid": true,
+      "codes": [],
+      "passed": true
+    },
+    {
+      "case_hash": "4ca5d9e67a12fda430b639fdbd820c7d4af57a0a5cd28c837b2f496a8ffff546",
+      "label": "identity-absent",
+      "kind": "listing",
+      "valid": false,
+      "codes": [
+        "identity_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "b547638caf950178cf5e8fae8907d93ffdc14f2f94027befaa634297a6fc8c4d",
+      "label": "invalid-gtin-checksum",
+      "kind": "listing",
+      "valid": false,
+      "codes": [
+        "gtin_invalid"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "5761fa8aad76698ff48d687fe4b5f2b99baf06ec897dd1d23376bda6c01dae33",
+      "label": "package-bool-not-measurement",
+      "kind": "listing",
+      "valid": false,
+      "codes": [
+        "package_dimensions_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "11c76baf28ace3b2c79b1869c075328f8d9a8b39440325398f0f4a9abc54932b",
+      "label": "price-bool-not-commercial-fact",
+      "kind": "listing",
+      "valid": false,
+      "codes": [
+        "offer_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "1b254527236d1a8477da2153ef21fd0e4fcb489dffae35aabd244ac25d266dad",
+      "label": "parent-excludes-package-and-offer",
+      "kind": "listing",
+      "valid": true,
+      "codes": [],
+      "passed": true
+    },
+    {
+      "case_hash": "6e1999f7d34a1e17914f5011d2e3b91c4b8b88c51f8a6f12cc95bc76e9b517d7",
+      "label": "child-parent-absent",
+      "kind": "listing",
+      "valid": false,
+      "codes": [
+        "child_parent_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "40037dbc3a0416a29f37dd9e1d68a3ff54d914d0424e251da630b6264cc539b3",
+      "label": "human-review-absent",
+      "kind": "listing",
+      "valid": false,
+      "codes": [
+        "human_review_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "d287565d1cd382879b830bc74b9c920162d1c161036c8f9e6bd7df9f294be306",
+      "label": "currency-unconverted",
+      "kind": "listing",
+      "valid": false,
+      "codes": [
+        "offer_currency_unsupported"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "1ae31b5136d5d6074273299d16d289cd0c667c490021891f28316568d783f2ef",
+      "label": "custom-fba-blocked",
+      "kind": "readiness",
+      "valid": false,
+      "codes": [
+        "custom_fbm_required",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "official_schema_required",
+        "media_check_required",
+        "media_review_required",
+        "policy_review_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "af5aa9e5423c80939bbe0ea0b8a8c03efc7379f9f4f1ccf7cf8784f62a1fbc62",
+      "label": "service-excluded",
+      "kind": "readiness",
+      "valid": false,
+      "codes": [
+        "eligibility_required",
+        "service_excluded",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "official_schema_required",
+        "media_check_required",
+        "media_review_required",
+        "policy_review_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "39fcc90c93559825b101abca698c2d92dbe1b1e86abd009935442260efad0993",
+      "label": "missing-confirmed-physical-facts",
+      "kind": "readiness",
+      "valid": false,
+      "codes": [
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "official_schema_required",
+        "media_check_required",
+        "media_review_required",
+        "policy_review_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "be23355a3bc7753fab45b14f18df8e5eee941853ad24f51f1bff85a00de0cf9a",
+      "label": "editorial-claim-blocked",
+      "kind": "readiness",
+      "valid": false,
+      "codes": [
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "official_schema_required",
+        "media_check_required",
+        "media_review_required",
+        "policy_review_required",
+        "editorial_review_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "1a072dad1c93f9750c948273fc88aa1e781234348377062ed3bcfe6b779d999d",
+      "label": "source-update-unresolved",
+      "kind": "readiness",
+      "valid": false,
+      "codes": [
+        "source_reconciliation_required",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "fact_unconfirmed",
+        "official_schema_required",
+        "media_check_required",
+        "media_review_required",
+        "policy_review_required"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "46ba2ba55906fe06b74876b4aaa7f7522c91bcddd2b8e8026cfb839d9bc19e4f",
+      "label": "family-compatible",
+      "kind": "family",
+      "valid": true,
+      "codes": [],
+      "passed": true
+    },
+    {
+      "case_hash": "c2368bde121197215b1392a7f517714e8a3b9c12f7c416692676c321a051a4b1",
+      "label": "family-theme-mismatch",
+      "kind": "family",
+      "valid": false,
+      "codes": [
+        "family_gate_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "b7daa00d56e84847b59c5ee454fd072dedbaa161f2f7cd4a1445b5242f81ba07",
+      "label": "family-brand-mismatch",
+      "kind": "family",
+      "valid": false,
+      "codes": [
+        "family_gate_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "050aa440bfe5d311e0cd52cee89bab12bfec6a97331570e90ff5881e76272d59",
+      "label": "family-self-parent",
+      "kind": "family",
+      "valid": false,
+      "codes": [
+        "family_gate_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "a1c246295e3e1c7cb6a1e734719d4c251e4d3fa12cd1c3b3b2c081f5796264b3",
+      "label": "family-missing-parent",
+      "kind": "family",
+      "valid": false,
+      "codes": [
+        "family_gate_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "6db81b8b4d368e03c82692a058972f053178f98de5e5d4511b1c47e4249dc75a",
+      "label": "amazon-title-200",
+      "kind": "copy",
+      "valid": true,
+      "codes": [],
+      "passed": true
+    },
+    {
+      "case_hash": "ea84f31f04bb8c66273b8c2f0e565ea9bf4912dbc491a03fa77398419de3fefc",
+      "label": "amazon-title-201",
+      "kind": "copy",
+      "valid": false,
+      "codes": [
+        "channel_copy_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "d9f00abc7365d080423d3a1405298a375d504f5ab416585a82bac8817934f703",
+      "label": "ebay-title-80",
+      "kind": "copy",
+      "valid": true,
+      "codes": [],
+      "passed": true
+    },
+    {
+      "case_hash": "0945a40568f1f653ee380be7d37e5928995075786828d60cbdcd849fe34c8046",
+      "label": "ebay-title-81",
+      "kind": "copy",
+      "valid": false,
+      "codes": [
+        "channel_copy_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "4c62c964d49d5653d795de9b8211de819448ef949ea3b4ddae340daf1fd7bfd7",
+      "label": "unicode-count-200",
+      "kind": "copy",
+      "valid": true,
+      "codes": [],
+      "passed": true
+    },
+    {
+      "case_hash": "58e3afeffa785423867f1b516c0615dba2c9c31f95547b6ec3bb223c092a044d",
+      "label": "control-character",
+      "kind": "copy",
+      "valid": false,
+      "codes": [
+        "channel_copy_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "dec254d574bd696066e3677faede63b4888b359fdfe2f5f46de60822633d23f1",
+      "label": "bullets-10001",
+      "kind": "copy",
+      "valid": false,
+      "codes": [
+        "channel_copy_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "e3bb2279b1c7ff06ec7159462176606ae96b2e97a049d489b2ecbd6b13ada6f8",
+      "label": "description-20001",
+      "kind": "copy",
+      "valid": false,
+      "codes": [
+        "channel_copy_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "143a6f6a2bcdbccf194d2f902f00005cdcec266d77b8caed12d997e6116b3546",
+      "label": "keywords-2501",
+      "kind": "copy",
+      "valid": false,
+      "codes": [
+        "channel_copy_rejected"
+      ],
+      "passed": true
+    },
+    {
+      "case_hash": "de669f3fd424b09cd9c6e52b371aada8c79aa3343783157da7ce2c6411790ff1",
+      "label": "locale-invalid",
+      "kind": "copy",
+      "valid": false,
+      "codes": [
+        "channel_copy_rejected"
+      ],
+      "passed": true
+    }
+  ]
+}

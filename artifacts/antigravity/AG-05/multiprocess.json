@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-10-06T15:22:47.908Z",
+  "worker_processes": 2,
+  "database": "PGlite PostgreSQL single engine via IPC broker",
+  "same_checkpoint_barrier": true,
+  "winners": 1,
+  "conflicts": 1,
+  "versions": 2,
+  "completed_job_replay_writes": 0,
+  "network": "blocked",
+  "real_supabase": false
+}

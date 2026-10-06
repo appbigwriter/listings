@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-10-06T15:22:53.642Z",
+  "phase": "resumed",
+  "new_mutation_refused": true,
+  "ledger_rows": 1,
+  "ledger_status": "submitting",
+  "stage": "external_request_started",
+  "external_replay": 0,
+  "network": "blocked",
+  "crash_point": "after",
+  "real_process_killed": true,
+  "external_response": "synthetic_local_fixture_not_marketplace",
+  "actual_reservation_rpc": true
+}

@@ -1,3 +1,4 @@
+import {traceRequest} from '../../../../lib/operations/trace';
 import { readJsonBody, RequestBodyError } from '../../../../lib/http';
 import { NextRequest, NextResponse } from 'next/server';
 import { resolveAuthContext, unauthorized } from '../../../../lib/auth';
@@ -9,7 +10,7 @@ import { CatalogError,scopeQuery } from '../../../../lib/catalog/repository';
 import { sourceDiff } from '../../../../lib/catalog/source-diff';
 
 export const runtime = 'nodejs';
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   const auth = await resolveAuthContext(req); if (!auth) return NextResponse.json(unauthorized(), { status: 401 });
   try {
     if (Number(req.headers.get('content-length')) > 6_000_000) throw new CatalogError('Importação acima de 5 MB.', 413);
@@ -34,3 +35,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ job }, { status: 202 });
   } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Falha na importação.' }, { status: error instanceof CatalogError || error instanceof RequestBodyError ? error.status : 502 }); }
 }
+
+export function POST(req:NextRequest){return traceRequest('api.catalog.import',()=>handlePOST(req));}

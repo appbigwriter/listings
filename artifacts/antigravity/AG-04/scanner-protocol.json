@@ -1,0 +1,27 @@
+{
+  "mode": "local_tcp_protocol_mock",
+  "results": [
+    {
+      "scenario": "clean_exact_protocol",
+      "status": "passed"
+    },
+    {
+      "scenario": "infected_rejected",
+      "status": "passed"
+    },
+    {
+      "scenario": "obsolete_signatures_refused",
+      "status": "passed"
+    },
+    {
+      "scenario": "incomplete_response_refused",
+      "status": "passed"
+    },
+    {
+      "scenario": "scanner_unavailable_refused",
+      "status": "passed"
+    }
+  ],
+  "real_engine_tested": false,
+  "production_upload": false
+}

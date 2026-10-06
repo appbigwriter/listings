@@ -1,4 +1,4 @@
-// Generated from Supabase project yigqsjevwvqxrxvqhvtd on 2026-10-06 UTC (20 migrations). Regenerate after migrations.
+// Generated from Supabase project yigqsjevwvqxrxvqhvtd on 2026-10-06 UTC; 26 migrations. Regenerate after migrations.
 export type Json =
   | string
   | number
@@ -330,6 +330,78 @@ export type Database = {
           },
         ]
       }
+      catalog_incident_evaluations: {
+        Row: {
+          evaluated_at: string
+          organization_id: string
+          owner_id: string
+        }
+        Insert: {
+          evaluated_at: string
+          organization_id: string
+          owner_id: string
+        }
+        Update: {
+          evaluated_at?: string
+          organization_id?: string
+          owner_id?: string
+        }
+        Relationships: []
+      }
+      catalog_incidents: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          channel: string | null
+          entity_id: string
+          evaluated_at: string
+          fingerprint: string
+          first_seen_at: string
+          id: string
+          last_seen_at: string
+          occurrences: number
+          organization_id: string
+          owner_id: string
+          resolved_at: string | null
+          rule: string
+          status: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          channel?: string | null
+          entity_id: string
+          evaluated_at: string
+          fingerprint: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          occurrences?: number
+          organization_id: string
+          owner_id: string
+          resolved_at?: string | null
+          rule: string
+          status?: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          channel?: string | null
+          entity_id?: string
+          evaluated_at?: string
+          fingerprint?: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          occurrences?: number
+          organization_id?: string
+          owner_id?: string
+          resolved_at?: string | null
+          rule?: string
+          status?: string
+        }
+        Relationships: []
+      }
       catalog_jobs: {
         Row: {
           attempts: number
@@ -384,6 +456,48 @@ export type Database = {
           status?: string
           total?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      catalog_schema_events: {
+        Row: {
+          account_id: string
+          created_at: string
+          event_time: string
+          id: string
+          marketplace_id: string
+          notification_id: string
+          organization_id: string
+          payload_hash: string
+          product_type_version: string
+          queued_jobs: number
+          status: string
+        }
+        Insert: {
+          account_id: string
+          created_at?: string
+          event_time: string
+          id?: string
+          marketplace_id: string
+          notification_id: string
+          organization_id: string
+          payload_hash: string
+          product_type_version: string
+          queued_jobs: number
+          status: string
+        }
+        Update: {
+          account_id?: string
+          created_at?: string
+          event_time?: string
+          id?: string
+          marketplace_id?: string
+          notification_id?: string
+          organization_id?: string
+          payload_hash?: string
+          product_type_version?: string
+          queued_jobs?: number
+          status?: string
         }
         Relationships: []
       }
@@ -870,10 +984,68 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      catalog_latest_submissions: {
+        Row: {
+          attempt_no: number | null
+          channel: string | null
+          created_at: string | null
+          feed_batch_id: string | null
+          id: string | null
+          organization_id: string | null
+          owner_id: string | null
+          request_hash: string | null
+          request_payload: Json | null
+          response: Json | null
+          sku: string | null
+          status: string | null
+          target: Json | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_submissions_feed_batch_id_fkey"
+            columns: ["feed_batch_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_feeds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
+      checkpoint_ebay_family_submission: {
+        Args: {
+          p_expected_version: string
+          p_id: string
+          p_organization: string
+          p_owner: string
+          p_response: Json
+          p_status: string
+        }
+        Returns: string
+      }
+      enqueue_amazon_schema_event: {
+        Args: {
+          p_account_id: string
+          p_event_time: string
+          p_new_types: Json
+          p_notification_id: string
+          p_organization: string
+          p_payload_hash: string
+          p_product_type_version: string
+        }
+        Returns: Json
+      }
       prelisting_session_active: { Args: never; Returns: boolean }
+      reconcile_catalog_incidents: {
+        Args: {
+          p_incidents: Json
+          p_observed_at: string
+          p_organization: string
+          p_owner: string
+        }
+        Returns: Json
+      }
       record_catalog_feed_outcome: {
         Args: {
           p_batch: string
@@ -945,6 +1117,17 @@ export type Database = {
           p_owner: string
           p_payload: Json
           p_retry_of?: string
+          p_target: Json
+        }
+        Returns: string
+      }
+      reserve_ebay_family_submission: {
+        Args: {
+          p_manifest: Json
+          p_organization: string
+          p_owner: string
+          p_parent_sku: string
+          p_payload: Json
           p_target: Json
         }
         Returns: string

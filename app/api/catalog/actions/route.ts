@@ -1,3 +1,4 @@
+import {traceRequest} from '../../../../lib/operations/trace';
 import { readJsonBody, RequestBodyError } from '../../../../lib/http';
 import { NextRequest, NextResponse } from 'next/server';
 import { resolveAuthContext, unauthorized } from '../../../../lib/auth';
@@ -9,7 +10,7 @@ import { contentHash, isChannel } from '../../../../lib/catalog/model';
 import { assertFamily } from '../../../../lib/catalog/family';
 
 export const runtime = 'nodejs';
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   const auth = await resolveAuthContext(req); if (!auth) return NextResponse.json(unauthorized(), { status: 401 });
   const db = getSupabase(); if (!db) return NextResponse.json({ error: 'Supabase não configurado.' }, { status: 503 });
   try {
@@ -23,3 +24,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(await executeAction(db, auth, String(body.sku), String(body.action), body));
   } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Falha na operação.' }, { status: error instanceof CatalogError || error instanceof RequestBodyError ? error.status : 502 }); }
 }
+
+export function POST(req:NextRequest){return traceRequest('api.catalog.actions',()=>handlePOST(req));}

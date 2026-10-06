@@ -1,0 +1,1800 @@
+{
+  "version": 1,
+  "id": "ag03-synthetic-contract-v1",
+  "provenance": {
+    "source": "synthetic_contract_fixture",
+    "real_catalog_facts_verified": false
+  },
+  "ai": [
+    {
+      "id": "copy-literal",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": true
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "copy-rewrite",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Blue synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": true
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "missing-optional-facts",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": true
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "material-invented",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Aluminum",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "color-invented",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Red",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "included-invented",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Mounting hardware"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "numeric-invented",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign 99 inches",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "reference-claim",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        },
+        "referenceData": {
+          "claim": "Certified fireproof"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only",
+        "description": "Certified fireproof"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "forbidden-claim",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only",
+        "description": "Guaranteed waterproof"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false,
+        "forbidden_claims": [
+          "waterproof"
+        ]
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "audit-unsupported",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": false,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "audit-forged-quote",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Not supplied"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "audit-null-evidence",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          null
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "output-extra-field",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only",
+        "price": 99
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "output-array-field",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only",
+        "bullets": [
+          "synthetic"
+        ]
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "category-candidate",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": true,
+        "category_ids": [
+          "fixture-signs"
+        ]
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      },
+      "category": {
+        "id": "fixture-signs",
+        "confidence": 0.7,
+        "reason": "Synthetic candidate match"
+      },
+      "candidates": [
+        {
+          "id": "fixture-signs",
+          "name": "Synthetic signs"
+        }
+      ]
+    },
+    {
+      "id": "category-invented",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false,
+        "category_ids": [
+          "fixture-signs"
+        ]
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      },
+      "category": {
+        "id": "invented",
+        "confidence": 1,
+        "reason": "Synthetic"
+      },
+      "candidates": [
+        {
+          "id": "fixture-signs",
+          "name": "Synthetic signs"
+        }
+      ]
+    },
+    {
+      "id": "category-missing",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": false,
+        "category_ids": [
+          "fixture-signs"
+        ]
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      }
+    },
+    {
+      "id": "category-low-confidence-valid-contract",
+      "input": {
+        "fbrFacts": {
+          "title": "Synthetic steel sign",
+          "material": "Steel",
+          "color": "Blue",
+          "included": "Sign only"
+        }
+      },
+      "output": {
+        "title": "Synthetic steel sign",
+        "material": "Steel",
+        "color": "Blue",
+        "included": "Sign only"
+      },
+      "audit": {
+        "supported": true,
+        "reason": "Literal synthetic fixture facts",
+        "evidence": [
+          {
+            "field": "title",
+            "quote": "Synthetic steel sign"
+          }
+        ]
+      },
+      "expected": {
+        "accepted": true,
+        "category_ids": [
+          "fixture-signs"
+        ]
+      },
+      "annotation": {
+        "source": "synthetic_contract_fixture"
+      },
+      "category": {
+        "id": "fixture-signs",
+        "confidence": 0.05,
+        "reason": "Ambiguous synthetic fixture"
+      },
+      "candidates": [
+        {
+          "id": "fixture-signs",
+          "name": "Synthetic signs"
+        }
+      ]
+    }
+  ],
+  "contracts": [
+    {
+      "id": "identity-exemption-confirmed",
+      "label": "identity-exemption-confirmed",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM"
+      },
+      "expected": {
+        "valid": true
+      }
+    },
+    {
+      "id": "identity-absent",
+      "label": "identity-absent",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": false,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM"
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "identity_required"
+        ]
+      }
+    },
+    {
+      "id": "invalid-gtin-checksum",
+      "label": "invalid-gtin-checksum",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "gtin": "123456789013",
+        "id_type": "UPC"
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "gtin_invalid"
+        ]
+      }
+    },
+    {
+      "id": "package-bool-not-measurement",
+      "label": "package-bool-not-measurement",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": true,
+        "human_reviewed": true,
+        "fulfillment": "FBM"
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "package_dimensions_required"
+        ]
+      }
+    },
+    {
+      "id": "price-bool-not-commercial-fact",
+      "label": "price-bool-not-commercial-fact",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": true,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM"
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "offer_required"
+        ]
+      }
+    },
+    {
+      "id": "parent-excludes-package-and-offer",
+      "label": "parent-excludes-package-and-offer",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": false,
+        "price": null,
+        "qty": null,
+        "pkg_length": null,
+        "pkg_width": null,
+        "pkg_height": null,
+        "pkg_weight": null,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Parent"
+      },
+      "expected": {
+        "valid": true,
+        "forbidden_codes": [
+          "offer_required",
+          "package_dimensions_required",
+          "identity_required"
+        ]
+      }
+    },
+    {
+      "id": "child-parent-absent",
+      "label": "child-parent-absent",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Child"
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "child_parent_required"
+        ]
+      }
+    },
+    {
+      "id": "human-review-absent",
+      "label": "human-review-absent",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": false,
+        "fulfillment": "FBM"
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "human_review_required"
+        ]
+      }
+    },
+    {
+      "id": "currency-unconverted",
+      "label": "currency-unconverted",
+      "kind": "listing",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "currency": "EUR"
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "offer_currency_unsupported"
+        ]
+      }
+    },
+    {
+      "id": "custom-fba-blocked",
+      "label": "custom-fba-blocked",
+      "kind": "readiness",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBA",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "custom",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "custom_fbm_required"
+        ]
+      }
+    },
+    {
+      "id": "service-excluded",
+      "label": "service-excluded",
+      "kind": "readiness",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "service",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "service_excluded"
+        ]
+      }
+    },
+    {
+      "id": "missing-confirmed-physical-facts",
+      "label": "missing-confirmed-physical-facts",
+      "kind": "readiness",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "fact_unconfirmed"
+        ]
+      }
+    },
+    {
+      "id": "editorial-claim-blocked",
+      "label": "editorial-claim-blocked",
+      "kind": "readiness",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign guaranteed",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "editorial_review_required"
+        ]
+      }
+    },
+    {
+      "id": "source-update-unresolved",
+      "label": "source-update-unresolved",
+      "kind": "readiness",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "source_update": {
+          "synthetic": true
+        },
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false,
+        "required_codes": [
+          "source_reconciliation_required"
+        ]
+      }
+    },
+    {
+      "id": "family-compatible",
+      "label": "family-compatible",
+      "kind": "family",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Child",
+        "parent_sku": "SYNTHETIC-PARENT",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": true
+      },
+      "parent": {
+        "sku": "SYNTHETIC-PARENT",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Parent",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "family-theme-mismatch",
+      "label": "family-theme-mismatch",
+      "kind": "family",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Child",
+        "parent_sku": "SYNTHETIC-PARENT",
+        "variation": "SIZE",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false
+      },
+      "parent": {
+        "sku": "SYNTHETIC-PARENT",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Parent",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "family-brand-mismatch",
+      "label": "family-brand-mismatch",
+      "kind": "family",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "OtherSynthetic",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Child",
+        "parent_sku": "SYNTHETIC-PARENT",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false
+      },
+      "parent": {
+        "sku": "SYNTHETIC-PARENT",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Parent",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "family-self-parent",
+      "label": "family-self-parent",
+      "kind": "family",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Child",
+        "parent_sku": "SYNTHETIC-ONLY-1",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false
+      },
+      "parent": {
+        "sku": "SYNTHETIC-PARENT",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Parent",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "family-missing-parent",
+      "label": "family-missing-parent",
+      "kind": "family",
+      "product": {
+        "sku": "SYNTHETIC-ONLY-1",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Child",
+        "parent_sku": "SYNTHETIC-ABSENT",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      },
+      "expected": {
+        "valid": false
+      },
+      "parent": {
+        "sku": "SYNTHETIC-PARENT",
+        "title": "Synthetic sign",
+        "brand": "SyntheticBrand",
+        "template_key": "fbrsigns_sign",
+        "template_version": "2026-01",
+        "product_type": "SYNTHETIC_SIGN",
+        "category": "SYNTHETIC_CATEGORY",
+        "origin": "US",
+        "images": [
+          "https://example.invalid/synthetic.jpg"
+        ],
+        "gtin_exempt": true,
+        "price": 10,
+        "qty": 1,
+        "pkg_length": 1,
+        "pkg_width": 1,
+        "pkg_height": 1,
+        "pkg_weight": 1,
+        "human_reviewed": true,
+        "fulfillment": "FBM",
+        "relationship": "Parent",
+        "variation": "COLOR",
+        "_catalog": {
+          "version": 1,
+          "product_id": "synthetic",
+          "kind": "physical",
+          "eligibility_confirmed": true,
+          "facts": {},
+          "variants": [],
+          "media": [],
+          "channels": {
+            "amazon-us": {
+              "product_type": "SYNTHETIC_SIGN",
+              "category": "SYNTHETIC_CATEGORY",
+              "attributes": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "amazon-title-200",
+      "label": "amazon-title-200",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "bullets": "",
+        "description": "",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": true
+      }
+    },
+    {
+      "id": "amazon-title-201",
+      "label": "amazon-title-201",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "bullets": "",
+        "description": "",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "ebay-title-80",
+      "label": "ebay-title-80",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "bullets": "",
+        "description": "",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": true
+      },
+      "channel": "ebay-us"
+    },
+    {
+      "id": "ebay-title-81",
+      "label": "ebay-title-81",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "bullets": "",
+        "description": "",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": false
+      },
+      "channel": "ebay-us"
+    },
+    {
+      "id": "unicode-count-200",
+      "label": "unicode-count-200",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧🪧",
+        "bullets": "",
+        "description": "",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": true
+      }
+    },
+    {
+      "id": "control-character",
+      "label": "control-character",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "Synthetic sign",
+        "bullets": "",
+        "description": "synthetic\u0001claim",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "bullets-10001",
+      "label": "bullets-10001",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "Synthetic sign",
+        "bullets": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "description": "",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "description-20001",
+      "label": "description-20001",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "Synthetic sign",
+        "bullets": "",
+        "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "keywords-2501",
+      "label": "keywords-2501",
+      "kind": "copy",
+      "product": {
+        "locale": "en_US",
+        "title": "Synthetic sign",
+        "bullets": "",
+        "description": "",
+        "keywords": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "expected": {
+        "valid": false
+      }
+    },
+    {
+      "id": "locale-invalid",
+      "label": "locale-invalid",
+      "kind": "copy",
+      "product": {
+        "locale": "pt_BR",
+        "title": "Synthetic sign",
+        "bullets": "",
+        "description": "",
+        "keywords": ""
+      },
+      "expected": {
+        "valid": false
+      }
+    }
+  ]
+}

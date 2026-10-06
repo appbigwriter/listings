@@ -1,3 +1,4 @@
+import {traceRequest} from '../../../../lib/operations/trace';
 import { readJsonBody, RequestBodyError } from '../../../../lib/http';
 import { NextRequest, NextResponse } from 'next/server';
 import { resolveAuthContext, unauthorized } from '../../../../lib/auth';
@@ -7,13 +8,13 @@ import { CatalogError, loadProduct, scopeQuery } from '../../../../lib/catalog/r
 import { isChannel } from '../../../../lib/catalog/model';
 
 export const runtime = 'nodejs';
-export async function GET(req: NextRequest) {
+async function handleGET(req: NextRequest) {
   const auth = await resolveAuthContext(req); if (!auth) return NextResponse.json(unauthorized(), { status: 401 });
   const db = getSupabase(); if (!db) return NextResponse.json({ error: 'Supabase não configurado.' }, { status: 503 });
   const result = await scopeQuery(db.from('catalog_jobs').select('id,kind,status,total,cursor,attempts,next_attempt_at,results,created_at,updated_at'), auth).order('created_at', { ascending: false }).limit(20);
   return NextResponse.json(result.error ? { error: 'Fila indisponível. Aplique a migration de catálogo.' } : { data: result.data }, { status: result.error ? 503 : 200 });
 }
-export async function POST(req: NextRequest) {
+async function handlePOST(req: NextRequest) {
   const auth = await resolveAuthContext(req); if (!auth) return NextResponse.json(unauthorized(), { status: 401 });
   const db = getSupabase(); if (!db) return NextResponse.json({ error: 'Supabase não configurado.' }, { status: 503 });
   try {
@@ -32,3 +33,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ job: await enqueueJob(db, auth, body.kind as JobKind, { skus, versions, channel: body.channel }) }, { status: 202 });
   } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Falha no processamento.' }, { status: error instanceof CatalogError || error instanceof RequestBodyError ? error.status : 500 }); }
 }
+
+export function GET(req:NextRequest){return traceRequest('api.catalog.jobs',()=>handleGET(req));}
+
+export function POST(req:NextRequest){return traceRequest('api.catalog.jobs',()=>handlePOST(req));}

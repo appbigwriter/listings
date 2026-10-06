@@ -1,8 +1,8 @@
 import { PGlite } from '@electric-sql/pglite';
 import { readFileSync, readdirSync } from 'node:fs';
 
-export async function createIsolatedTestDatabase(): Promise<PGlite> {
-  const db = new PGlite();
+export async function createIsolatedTestDatabase(dataDir?:string,beforeMigrations?:(db:PGlite)=>Promise<void>): Promise<PGlite> {
+  const db = new PGlite(dataDir);
   await db.exec(`
     create role anon;
     create role authenticated;
@@ -18,6 +18,10 @@ export async function createIsolatedTestDatabase(): Promise<PGlite> {
       id uuid primary key default gen_random_uuid(),
       sku text unique,
       title text,
+      brand text,
+      source_url text,
+      source_platform text,
+      source_snapshot jsonb,
       status text default 'draft',
       payload jsonb default '{}',
       updated_at timestamptz default now()
@@ -52,6 +56,7 @@ export async function createIsolatedTestDatabase(): Promise<PGlite> {
   await db.exec('grant all on product_marketing_profiles, marketing_tasks to authenticated, anon;');
   await db.exec('create schema storage; create table storage.buckets(id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);');
 
+  await beforeMigrations?.(db);
   const migrations = readdirSync('supabase/migrations').filter((name) => /^\d{14}_.+\.sql$/.test(name)).sort();
   for (const filename of migrations) {
     const sql = readFileSync(`supabase/migrations/${filename}`, 'utf8');

@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {loadDriftContract,driftQuery,compareDrift} from './remote-drift.mjs';
+const contract=loadDriftContract(),remote={checked_at:new Date().toISOString(),transaction_read_only:'on',migrations:contract.migrations,functions:contract.functions.map(fn=>({...fn,anon_execute:false})),tables:contract.tables.map(name=>({name,rls_enabled:true}))};
+assert.ok(contract.functions.length>=10);assert.ok(driftQuery(contract).startsWith('begin read only;'));assert.ok(driftQuery(contract).endsWith('rollback;'));
+assert.equal(compareDrift(contract,remote).live_remote_drift_checked,true);
+assert.throws(()=>compareDrift(contract,{...remote,migrations:remote.migrations.slice(1)}));assert.throws(()=>compareDrift(contract,{...remote,transaction_read_only:'off'}));
+assert.throws(()=>compareDrift(contract,{...remote,functions:remote.functions.map((fn,index)=>index?fn:{...fn,body_md5:'0'.repeat(32)})}));
+assert.throws(()=>compareDrift(contract,{...remote,functions:remote.functions.map((fn,index)=>index?fn:{...fn,anon_execute:true})}));
+assert.throws(()=>compareDrift(contract,{...remote,tables:remote.tables.map((table,index)=>index?table:{...table,rls_enabled:false})}));
+console.log(JSON.stringify({contract_parser:'passed',functions:contract.functions.length,tables:contract.tables.length,negative_drift_cases:5,remote_connection:false,synthetic_snapshot_only:true}));

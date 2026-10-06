@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "checked_at": "2026-10-06T11:51:05.655Z",
+  "scope": "documentation_links_and_unfilled_pilot_template",
+  "documents": 5,
+  "local_links": 16,
+  "broken_links": [],
+  "proposed_cases": 20,
+  "case_ids_match_matrix": true,
+  "no_invented_real_execution": true,
+  "training_executed": false,
+  "pilot_homologated": false,
+  "passed": true
+}

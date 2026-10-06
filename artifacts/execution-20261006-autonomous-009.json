@@ -1,0 +1,42 @@
+{
+  "validated_at": "2026-10-06T11:06:56.945Z",
+  "increment": "009",
+  "tests": {
+    "passed": 249,
+    "files": 54
+  },
+  "typecheck": "passed",
+  "build": {
+    "status": "passed",
+    "routes": 41
+  },
+  "migrations": {
+    "total": 20,
+    "new_applied": 0,
+    "integrity": "passed",
+    "live_remote_drift_checked": false
+  },
+  "remote_read_only": {
+    "checked_at": "2026-10-06T10:59:35Z",
+    "prelistings": 2,
+    "auth_users": 0,
+    "jobs": 0,
+    "submissions": 0,
+    "feeds": 0
+  },
+  "publication": "none",
+  "worker_restart": {
+    "child_process_killed": true,
+    "persistent_pglite": true,
+    "lease_expiry": "simulated",
+    "duplicate_validation": false,
+    "live_supervisor_verified": false
+  },
+  "operational_recovery": {
+    "implemented": true,
+    "configured_in_live_env": false,
+    "detects_restore_automatically": false
+  },
+  "live_homologation": "pending",
+  "evidence_document": "EXECUTION-009-retomada.md"
+}

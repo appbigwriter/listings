@@ -1,8 +1,16 @@
-import {marketplaceToken,oauthConfigured} from './oauth';
+import {marketplaceToken,oauthConfigured,invalidateMarketplaceToken} from './oauth';
 import {readResponseWithLimit} from '../extract-security';
-export class EbayError extends Error {constructor(public status:number,public codes:number[]=[]){super(`eBay respondeu HTTP ${status}${codes.length?' ('+codes.join(',')+')':''}.`);}}
+import {traceEvent,withTrace} from '../operations/trace';
+import {assertRecoveryReleased} from '../operations/recovery';
+export class EbayError extends Error {constructor(public status:number,public codes:number[]=[],public retryAfter=30){super(`eBay respondeu HTTP ${status}${codes.length?' ('+codes.join(',')+')':''}.`);this.name='EbayError';}}
 async function request(url:string,method:string,body?:unknown) {
+ return withTrace('ebay.request',{provider:'ebay'},()=>requestStep(url,method,body));
+}
+async function requestStep(url:string,method:string,body?:unknown){
+ if(method!=='GET')assertRecoveryReleased();
  const response=await fetch(url,{method,redirect:'error',signal:AbortSignal.timeout(15000),headers:{authorization:`Bearer ${await marketplaceToken('ebay')}`,'content-type':'application/json','content-language':'en-US','accept-language':'en-US'},body:body===undefined?undefined:JSON.stringify(body)});
+ traceEvent('provider.response',{http_status:response.status});
+ if(response.status===401)invalidateMarketplaceToken('ebay');
  if(response.status===204)return {};
  const text=await readResponseWithLimit(response,5_000_000);let data:any;
  try{data=text?JSON.parse(text):{};}catch{if(!response.ok)throw new EbayError(response.status);throw new Error('eBay retornou JSON inválido.');}

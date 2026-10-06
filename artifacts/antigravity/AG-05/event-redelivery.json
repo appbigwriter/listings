@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-10-06T15:22:44.185Z",
+  "handler": "actual_processListingEvent",
+  "database": "PGlite_actual_migrations",
+  "deliveries": 2,
+  "durable_rows": 1,
+  "attempts": 1,
+  "changed_duplicate": "409",
+  "foreign_organization": "404",
+  "network": "blocked",
+  "archived_status": "ignored",
+  "limitation": "Archived path; no actual SQS acknowledgement or remote readback"
+}

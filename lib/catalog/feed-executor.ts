@@ -7,6 +7,8 @@ import { CatalogError,loadProduct,scopeQuery } from './repository';
 import { assertFamily } from './family';
 import { buildAmazonFeed } from './feed';
 import { interpretFeedReport,type FeedManifestItem } from './feed-report';
+import {traceEvent,traceHash,traceSnapshot,withTrace} from '../operations/trace';
+import {assertRecoveryReleased} from '../operations/recovery';
 
 export async function prepareFeed(db:SupabaseClient,auth:AuthContext,skus:string[]) {
   if(!Array.isArray(skus)||!skus.length||skus.length>5000||new Set(skus).size!==skus.length||skus.some(sku=>typeof sku!=='string'))throw new CatalogError('Seleção de feed inválida.');
@@ -18,12 +20,17 @@ export async function prepareFeed(db:SupabaseClient,auth:AuthContext,skus:string
   return {feed,manifest,target,manifest_hash:hash({feed,manifest,target})};
 }
 export async function submitFeed(db:SupabaseClient,auth:AuthContext,skus:string[],expectedHash:string,confirm:boolean,retryOf?:unknown) {
+  return withTrace('feed.submit',{organization_hash:traceHash(auth.organizationId),workflow_hash:expectedHash},()=>submitFeedStep(db,auth,skus,expectedHash,confirm,retryOf));
+}
+async function submitFeedStep(db:SupabaseClient,auth:AuthContext,skus:string[],expectedHash:string,confirm:boolean,retryOf?:unknown){
+  assertRecoveryReleased();
   if(!hasCapability(auth,'publish') || process.env.PRELISTING_ENABLE_PUBLICATION!=='true' || process.env.PRELISTING_ENABLE_FEEDS!=='true' || confirm!==true)throw new CatalogError('Publicação de feeds desabilitada ou não autorizada.',403);
   if(retryOf!==undefined&&(typeof retryOf!=='string'||!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(retryOf)))throw new CatalogError('Identificador da tentativa anterior inválido.');
   const prepared=await prepareFeed(db,auth,skus);if(prepared.manifest_hash!==expectedHash)throw new CatalogError('O manifesto mudou. Prepare e revise novamente.',409);
   const reserved=await db.rpc('reserve_catalog_feed',{p_owner:auth.userId,p_organization:auth.organizationId,p_manifest_hash:expectedHash,p_manifest:prepared.manifest,p_payload:prepared.feed,p_target:prepared.target,p_retry_of:retryOf??null});
   if(reserved.error || !reserved.data)throw new CatalogError('Feed ou algum SKU já reservado, versão alterada ou submissão incerta. Consulte os lotes antes de tentar novamente.',409);
   const id=reserved.data;let externalStarted=false;
+  traceEvent('feed.reserved',{feed_id:id,workflow_hash:prepared.manifest_hash,total:prepared.manifest.length});
   const save=async(values:Record<string,unknown>)=>{const result=await scopeQuery(db.from('catalog_feeds').update({...values,updated_at:new Date().toISOString()}),auth).eq('id',id);if(result.error)throw new CatalogError('Falha ao registrar o feed. Consulte o lote antes de qualquer reenvio.',503);};
   try {
     const document=await createAmazonFeedDocument();if(typeof document.feedDocumentId!=='string'||typeof document.url!=='string')throw new Error('Documento Amazon inválido.');
@@ -36,11 +43,14 @@ export async function submitFeed(db:SupabaseClient,auth:AuthContext,skus:string[
     return {id,feed_id:submitted.feedId,status:'processing'};
   }catch(error) {
     await scopeQuery(db.from('catalog_feeds').update({status:externalStarted?'unknown':'failed',updated_at:new Date().toISOString()}),auth).eq('id',id);
-    await scopeQuery(db.from('catalog_submissions').update({status:externalStarted?'unknown':'rejected',response:{batch_id:id,error:'feed_submission_failed',external_started:externalStarted},updated_at:new Date().toISOString()}),auth).eq('feed_batch_id',id).eq('status','submitting');
+    await scopeQuery(db.from('catalog_submissions').update({status:externalStarted?'unknown':'rejected',response:{batch_id:id,error:'feed_submission_failed',external_started:externalStarted,trace:traceSnapshot()},updated_at:new Date().toISOString()}),auth).eq('feed_batch_id',id).eq('status','submitting');
     throw error;
   }
 }
 export async function monitorFeed(db:SupabaseClient,auth:AuthContext,id:string) {
+  return withTrace('feed.monitor',{feed_id:id,organization_hash:traceHash(auth.organizationId)},()=>monitorFeedStep(db,auth,id));
+}
+async function monitorFeedStep(db:SupabaseClient,auth:AuthContext,id:string){
   const found=await scopeQuery(db.from('catalog_feeds').select('*'),auth).eq('id',id).maybeSingle();if(found.error||!found.data)throw new CatalogError('Feed não encontrado.',404);
   const batch=found.data,config=amazonConfig();if(batch.target.seller_id!==config.sellerId||batch.target.marketplace_id!==config.marketplaceId)throw new CatalogError('Feed pertence a outra configuração de conta.',409);
   if(['completed','cancelled'].includes(batch.status))return {id,status:batch.status,processing_status:batch.processing_status};
@@ -66,11 +76,12 @@ export async function monitorFeed(db:SupabaseClient,auth:AuthContext,id:string) 
         // An old feed never overwrites the status of a newer product version.
         if(contentHash(loaded.product)===outcome.hash) {
           expectedVersion=loaded.row.updated_at;
-          submission={status:outcome.status,request_hash:outcome.hash,submitted_at:batch.created_at,response:{feed_id:batch.feed_id,message_id:outcome.message_id},issues:outcome.issues,publication_status:'not_verified'};
+          submission={status:outcome.status,request_hash:outcome.hash,submitted_at:batch.created_at,response:{feed_id:batch.feed_id,message_id:outcome.message_id,trace:traceSnapshot()},issues:outcome.issues,publication_status:'not_verified'};
         }
       }catch(error){if(!(error instanceof CatalogError)||error.status!==404)throw error;}
-      const updated=await db.rpc('record_catalog_feed_outcome',{p_owner:auth.userId,p_organization:auth.organizationId,p_batch:id,p_lease:lease,p_sku:outcome.sku,p_hash:outcome.hash,p_status:outcome.status,p_response:{batch_id:id,feed_id:batch.feed_id,message_id:outcome.message_id,issues:outcome.issues},p_expected_version:expectedVersion,p_submission:submission});
+      const updated=await db.rpc('record_catalog_feed_outcome',{p_owner:auth.userId,p_organization:auth.organizationId,p_batch:id,p_lease:lease,p_sku:outcome.sku,p_hash:outcome.hash,p_status:outcome.status,p_response:{batch_id:id,feed_id:batch.feed_id,message_id:outcome.message_id,issues:outcome.issues,trace:traceSnapshot()},p_expected_version:expectedVersion,p_submission:submission});
       if(updated.error||!updated.data)throw new CatalogError('Falha ao registrar atomicamente o resultado por SKU. O próximo monitor retomará o relatório.',503);
+      traceEvent('feed.item_recorded',{feed_id:id,sku_hash:traceHash(outcome.sku),content_hash:outcome.hash,state:outcome.status});
     }
     const remaining=await scopeQuery(db.from('catalog_submissions').select('id',{count:'exact',head:true}),auth).eq('feed_batch_id',id).in('status',['submitting','unknown']);
     if(remaining.error)throw new CatalogError('Falha ao verificar pendências do feed.',503);

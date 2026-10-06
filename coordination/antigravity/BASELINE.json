@@ -6,10 +6,10 @@
   "git_head": "f5d51550704ac4e11036eb1a72ad53872d481407",
   "git_branch": "main",
   "has_uncommitted_work": true,
-  "baseline_id": "4625e4568bbb43e2fc1edb65eb086bbd270c50d4bcc80c861544952a1ce8275b",
+  "baseline_id": "366eacbf6429f4c9cfffddb3109f3e83705b186981d1d0a8121dac820fc10e7d",
   "validation_reference": {
-    "tests": 231,
-    "test_files": 48,
+    "tests": 249,
+    "test_files": 54,
     "typecheck": "passed",
     "build_routes": 41,
     "supabase_migrations": 20,
@@ -36,7 +36,7 @@
     },
     {
       "path": ".env.example",
-      "sha256": "0cfa3c4be746495689969d204ee9edd57f8a5d5a8c6a3a9ece673520f976eefc"
+      "sha256": "4c4cdaa8fbaa72ddf1eeae78ea1514bb7af1322fcd0cae53034415c6636ceb6d"
     },
     {
       "path": ".github/workflows/verify.yml",
@@ -68,67 +68,67 @@
     },
     {
       "path": "app/api/catalog/actions/route.ts",
-      "sha256": "565f92410651fe8e443e6524692556ef26136edc51b7039184b4933396d940bc"
+      "sha256": "b7fadfe21c41a9bc91af31d42c71d20901a23ffe76fec261792e7119decf77b0"
     },
     {
       "path": "app/api/catalog/archive/route.ts",
-      "sha256": "25e521dec1cc3def0cb6f548d88fd8c88e7b2613ccec56b954493db9dd99cc51"
+      "sha256": "3d53142d99ab7731704024f0d5178883b6996936a387f1dd5a0d4abab96fe7f8"
     },
     {
       "path": "app/api/catalog/assets/route.ts",
-      "sha256": "0d79bcf6acad009f8f7dbf57a35195c5a01ce49e0963f296fbb6f214197e6b20"
+      "sha256": "f521ffdf0519c25b80c5056e4b6c3f23dda1c4cc75d821c7e553b094ada99b0e"
     },
     {
       "path": "app/api/catalog/coverage/route.ts",
-      "sha256": "6f165d23a3637134c72427bddc4a61eb0be567bf3d65d976c3eedebfaf5526fc"
+      "sha256": "5b5f6b7829285d099835f43fc6823fed5a9f79ba793c06e092e7a2adad4cb32a"
     },
     {
       "path": "app/api/catalog/ebay/route.ts",
-      "sha256": "5756e06aa97080ec2f07ffa00a80375e8b75adcffd8880dca01e45154c741088"
+      "sha256": "90c68cabd4f8afecd0f2a8ddaf87aa25862ac64a3e5502b153580fa0989b2f80"
     },
     {
       "path": "app/api/catalog/export/route.ts",
-      "sha256": "e050497bf41957fbc16804b45a5b54b3663e3e1916cfae1c057ed7bd847272c9"
+      "sha256": "a7afe190dcad871303fd5ff3deb1693823f8763027ee6b053b1541f52c0d0bf4"
     },
     {
       "path": "app/api/catalog/feed/route.ts",
-      "sha256": "ba8a307df95d978e679cf953542f00a734a17d1545844def2d3f553f4282628d"
+      "sha256": "adb948692de0c31f88e583dbd9ad9d49c9e5c91ed4ed9c2d09a1e13c53466836"
     },
     {
       "path": "app/api/catalog/history/route.ts",
-      "sha256": "4c628305213f032fcd00f8f2582d72122bc4e7bc10ac415469580f7c86fbcbb9"
+      "sha256": "4fc2b651a80faa7a263ee4d33ea285b714e299ab381c30cc32d393472d8c0ba7"
     },
     {
       "path": "app/api/catalog/import/route.ts",
-      "sha256": "3d57c4369c46ffc9c3584ae2c40394f127e28fa02c15691b22bba16373840369"
+      "sha256": "6314213e343b82887981f481175d6064099a93ced4f7b72f7134af8a18a41906"
     },
     {
       "path": "app/api/catalog/item/route.ts",
-      "sha256": "a2008b95110e01c9e1a4fef03e923d3e954b7cd358c0056e07520f741790f874"
+      "sha256": "888e574ced97833daa1f18103dc449efe6cd0e204c26aa58bed3be94e19367ec"
     },
     {
       "path": "app/api/catalog/jobs/route.ts",
-      "sha256": "2ab2ce0d72f8298c8b3a90a327aa4560e9b047fe3f617acd64e3bf307e5b630a"
+      "sha256": "972cc43091180cfa91c40c165cd0a25d7279eb8247b0e16fbe5f4e76b4b39d8b"
     },
     {
       "path": "app/api/catalog/offers/route.ts",
-      "sha256": "2124c3f382143af8718a7b744223ba9333f274f4eac06b47442da65d85e2b335"
+      "sha256": "aabf6db7e82ef7867e63d1710b67b7662da4e69cfee06d4ea4caaf1fb2633f8e"
     },
     {
       "path": "app/api/catalog/operations/route.ts",
-      "sha256": "5101587bb8109532bd2ed68643ec5c441ac37e0921a287d16f23d08b06e9aa37"
+      "sha256": "c09968e13cc80a1957deae83e32e08283b6856220647919e041bb0d00c0280eb"
     },
     {
       "path": "app/api/catalog/review/route.ts",
-      "sha256": "2b263318d20186274e6f5677475ee599035821e528e2caf6c4b480cfa46bc01b"
+      "sha256": "27b1705d683d6cb9b0e6d5564bcfb8ae3d0d5e8c522ec1cf0f85058e5abc1d6f"
     },
     {
       "path": "app/api/catalog/selection/route.ts",
-      "sha256": "fea29d602816c6df2fcb9d21f3c49e5ee51ed4a85bcf016c37ccb34555d77e18"
+      "sha256": "40270664ca72bf52a9aea12aaf567d2c1d23a7e5d9f4f21dc79d36c21396bd70"
     },
     {
       "path": "app/api/catalog/status/route.ts",
-      "sha256": "7395baa2b1aa2b184d51a68146a37b7c4495058c30515849728b562626d431ec"
+      "sha256": "d6a2ebded92bb15bfaa72748cfc4c5324da87b8e6ff58c78ed3858654b54dff9"
     },
     {
       "path": "app/api/extract/route.ts",
@@ -188,7 +188,7 @@
     },
     {
       "path": "app/catalog/[sku]/Editor.tsx",
-      "sha256": "4198c774339c44fd066cb1db61d1fed253b30d954cd8238557fbbd22c008999a"
+      "sha256": "108ae477b6996aa60865082bd68eb0020113365a7de7072eafe5872c1db77045"
     },
     {
       "path": "app/catalog/[sku]/page.tsx",
@@ -220,7 +220,11 @@
     },
     {
       "path": "app/catalog/EbayOperations.tsx",
-      "sha256": "7086ab2b70eb8cb8ea7c6bb87f9a40a60f4772328c5c0034a13f3b999c2669b9"
+      "sha256": "3b9e8a340d5f519ecf98593a67773931ed939286be9292abd9a0cb8fdaccbcb6"
+    },
+    {
+      "path": "app/catalog/EbayRecovery.tsx",
+      "sha256": "7091dc5743f71cbb60637ccc09676775d3d568ebe491379e1370ebf31ddf4b7d"
     },
     {
       "path": "app/catalog/FeedRecovery.tsx",
@@ -300,11 +304,11 @@
     },
     {
       "path": "artifacts/antigravity/AG-01/test-summary.json",
-      "sha256": "01449306235fadfae900ea5437afaaf332d74579cdd2c960ff2134b266ad8e25"
+      "sha256": "dacebdea293f92cb3b465f4f9d996705590499407f327bc44d701b2bfda4dbae"
     },
     {
       "path": "artifacts/antigravity/AG-01/vitest-results.json",
-      "sha256": "1dbe7f26044c10e33d61e80720848d8e8f94331abc199e490aa489a28f7bfbf6"
+      "sha256": "834cc1041b7623f8290386fe4b59373eaacaef9c2bb78431bcdda08929549078"
     },
     {
       "path": "compose.yaml",
@@ -323,8 +327,12 @@
       "sha256": "ab580ef03986b69f63ea9005f69693953b3b758912d34d0b0ba0c7c8d21f9242"
     },
     {
+      "path": "coordination/antigravity/BASELINE-009.json",
+      "sha256": "57316beddb4a0f3f541e4f0f8625a61ecf9950aae4e0d95f57c2cc32fb1c9158"
+    },
+    {
       "path": "coordination/antigravity/BOARD.md",
-      "sha256": "9695930c075056c350672c24429c6dfd3d0ef97f90be1d9babba6e8517a1b4db"
+      "sha256": "017ac50b93a6580649b0dac70b6421a7bd651e6f415612f752621f33d7a385f6"
     },
     {
       "path": "coordination/antigravity/check-baseline.mjs",
@@ -341,6 +349,10 @@
     {
       "path": "coordination/antigravity/reports/AG-01-integration.md",
       "sha256": "9a812aab48c4fb608b0019967d42f6cf555164c8ba514e35b0dad3d916099f01"
+    },
+    {
+      "path": "coordination/antigravity/reports/AG-01.md",
+      "sha256": "c72994696ea0ef7ca5fd4529c1466ba0de100f075d29ff46dc8db990f78081e6"
     },
     {
       "path": "coordination/antigravity/TASKS.json",
@@ -384,15 +396,19 @@
     },
     {
       "path": "EXECUTION-005.md",
-      "sha256": "81a30a642da5a664965d35bcbe9e63194f1af65538d50af4002fa3406eabf05a"
+      "sha256": "2c71be213db7a0bc8151f0fd100835ab5af75628259dd69afc2ea8a2f837e7a3"
     },
     {
       "path": "EXECUTION-008-autonomia.md",
       "sha256": "00529b81d92704d71ee9071e6e027688fe56d9f89aff4bad04b78dc532e7e556"
     },
     {
+      "path": "EXECUTION-009-retomada.md",
+      "sha256": "9448a37ae7ac63923aa5d9c472fce53ec0d86e3c66a3fd4d63aaba38d335ed07"
+    },
+    {
       "path": "EXECUTION-CODEX-007.md",
-      "sha256": "c89c2126203f117c48c43ffef567a8781275f273f196ae501c19add1dffc37b8"
+      "sha256": "5441f1b216587484b5545ae62054b064968d8255f44215cdb936654b0a567cd8"
     },
     {
       "path": "implementation_plan.md",
@@ -424,7 +440,7 @@
     },
     {
       "path": "lib/ai/usage.ts",
-      "sha256": "ec72782ee5d3150d6f6586e43c684b589e55183dc6bb3de7f3c1d3b89d393d5f"
+      "sha256": "208ed987c80637b5593ce0d26a5c6247fa54b61bb69856df61d37751cb9a0e26"
     },
     {
       "path": "lib/auth.ts",
@@ -432,7 +448,7 @@
     },
     {
       "path": "lib/catalog/actions.ts",
-      "sha256": "ae97e93f7b6f673e992ca50a4876abc7d05e1f1de5f5e3adde80d84e606fb9da"
+      "sha256": "18896a1fae0008e7eeaacf2b6275c86426c0746807e92529614b9bfe762c3b35"
     },
     {
       "path": "lib/catalog/active-listing.ts",
@@ -464,7 +480,7 @@
     },
     {
       "path": "lib/catalog/client.ts",
-      "sha256": "117038aa8d7e645f7db193b3e179a13dcf61e3cb300766967e71a2135022615b"
+      "sha256": "2220d5fbea295e5648a2a6c34dbe786a3e6eb2da9507e79a25841a98f2e69925"
     },
     {
       "path": "lib/catalog/contracts.ts",
@@ -476,19 +492,23 @@
     },
     {
       "path": "lib/catalog/coverage.ts",
-      "sha256": "1e99ca79f014af0aae3a081fb6ec652bc0c2c1dafabe215dba849af6bf6d005a"
+      "sha256": "bdd6ae87b1fb4fb17a423fc85d2689f5b5da0dfca68ac4e039e35f390e7b62f1"
     },
     {
       "path": "lib/catalog/ebay-executor.ts",
-      "sha256": "d7ea458d4f29f62befc13cb46ea5a54bb34c74c65397ac3c4e23d986e837834a"
+      "sha256": "1bf94cfae0e570132d302853b402d4b2fbd20b94671d3b4529834fe38f74537f"
+    },
+    {
+      "path": "lib/catalog/ebay-recovery.ts",
+      "sha256": "e0e9d4c8a921cdc0d82c9d1368c13747e6b70b269f89c12659a5e041a7b76285"
     },
     {
       "path": "lib/catalog/events.ts",
-      "sha256": "ba0371f01c8c6cc7cf317243de49d62cd5c3b7b1b90887a1d571a039e8c4a23b"
+      "sha256": "2b6499361c10f8a0a062ca493a16ed88a58e6b3411b7cee3daef4e51527745c2"
     },
     {
       "path": "lib/catalog/executor.ts",
-      "sha256": "b3d2841bc9d3eb648508b0f5c463abd2b1e5b6756b41ee33a165f57373695147"
+      "sha256": "12781905b437450fbd6f3c35a6ba86ee6bed6a787acb83853acfa05944a2308d"
     },
     {
       "path": "lib/catalog/family.ts",
@@ -496,7 +516,7 @@
     },
     {
       "path": "lib/catalog/feed-executor.ts",
-      "sha256": "a74069cddae1e168e39f0068e95824ee61182e6169feb9559bd5ffdc945ae3e1"
+      "sha256": "b31ce7b09e3eab97ec1f30dcca188c8fcea019bc6ea293b41c6b1327cbb1b562"
     },
     {
       "path": "lib/catalog/feed-report.ts",
@@ -528,7 +548,7 @@
     },
     {
       "path": "lib/catalog/jobs.ts",
-      "sha256": "2e42ad0ca25fe7a764b1abce4538888f984644216ad28be043b3b3f981e12f44"
+      "sha256": "7220e8b5fe759fb630a3f795a345475ce1c536b3cdfb022a112f4b705d917602"
     },
     {
       "path": "lib/catalog/media.ts",
@@ -536,7 +556,7 @@
     },
     {
       "path": "lib/catalog/model.ts",
-      "sha256": "88b3123b54ed42ef779edbafa328a194aede21719ec8cfcd21dbbeadcec76e7b"
+      "sha256": "89c1fab3e1abc97eb43899fadf3cffd634bd97f8a4d3ea4e298e3d1099797d11"
     },
     {
       "path": "lib/catalog/numeric-input.ts",
@@ -548,7 +568,11 @@
     },
     {
       "path": "lib/catalog/offers.ts",
-      "sha256": "8fd2df2f977c8767597f5b5f5741307835b403efe564c893597a51243a4a798e"
+      "sha256": "890ec84d8e926354c180e3af35de779b009133e2021664c59949fedd796308ba"
+    },
+    {
+      "path": "lib/catalog/publication-proof.ts",
+      "sha256": "f9e1178404ecae122ada093b99206f00eb75cc68878b32f4343e642b66187b69"
     },
     {
       "path": "lib/catalog/readiness.ts",
@@ -556,11 +580,11 @@
     },
     {
       "path": "lib/catalog/reconciliation.ts",
-      "sha256": "2dbc80d691dbfb571f1bbee382fb974f1056d75fa3533e45ddc473e328463d21"
+      "sha256": "c7dbe374a32db624568af65350cb2d5f1b9569ff0ef6a5876f22ee98ddc081fc"
     },
     {
       "path": "lib/catalog/repository.ts",
-      "sha256": "cd3af9c17a5988bd9f809ff1594328baeac51baf8cd1772aa42738b38e25007a"
+      "sha256": "9289026f0549c7c50e663ae6d19796bb47af70e675ca77261fd09b585825935a"
     },
     {
       "path": "lib/catalog/schema.ts",
@@ -620,7 +644,7 @@
     },
     {
       "path": "lib/marketing/review.ts",
-      "sha256": "aa8302ef17c843054058f49b6ce833c0e5b65e019f85ea5d03946ddf2e559646"
+      "sha256": "fc8ee47617c4af2910abe425aef0d53d999960a7e5c2e64b76a73348f9af93e1"
     },
     {
       "path": "lib/marketing/supabase.ts",
@@ -640,7 +664,7 @@
     },
     {
       "path": "lib/marketplaces/amazon-feeds.ts",
-      "sha256": "b83138a2c218014b74b0d48996962ef53b4747c36cdf3de39f52f65c8cce4ec4"
+      "sha256": "b71f347befe20cebdc3931316c32b37485933fccce5181fe1cd08c3d0e388f3d"
     },
     {
       "path": "lib/marketplaces/amazon-notifications.ts",
@@ -648,7 +672,7 @@
     },
     {
       "path": "lib/marketplaces/amazon.ts",
-      "sha256": "3d9603232ffae1cec21eb8e2a03ce24f9ca197f132b18b791276b718c44d5509"
+      "sha256": "dd4f34c5d58c3a4a64c8ca3f4beb9d4e8c6a0ad5b8751abaf04072c514cb3dde"
     },
     {
       "path": "lib/marketplaces/capabilities.ts",
@@ -656,7 +680,7 @@
     },
     {
       "path": "lib/marketplaces/ebay-package.ts",
-      "sha256": "dcd7bff682867ba9dabb55c3fddea4008ceff22ce337e0c923cb7d20b4875e3e"
+      "sha256": "efb9e8bd1082086554f20fc61268acc9ba72df0251cb3250d1b23113c739dd42"
     },
     {
       "path": "lib/marketplaces/ebay-schema.ts",
@@ -664,7 +688,7 @@
     },
     {
       "path": "lib/marketplaces/ebay.ts",
-      "sha256": "3b2cc2a677eb292f6c11facedb840251a500df9a660a3e0fe1d64787c455caff"
+      "sha256": "7cba05ebe4c17dddf33b404248c93486496d8f7326832d24167ad463e319077f"
     },
     {
       "path": "lib/marketplaces/feed-schema.ts",
@@ -707,6 +731,14 @@
       "sha256": "2c34d675368b499893699a7cae8dcb76f190a6d18b02ee1bcd6b846d0fc14d5f"
     },
     {
+      "path": "lib/operations/recovery.ts",
+      "sha256": "d73a1b007ae263f88cdbf378ba8099d56db1d2c51989c5a74811beeadcd13af0"
+    },
+    {
+      "path": "lib/operations/trace.ts",
+      "sha256": "a2517616b35e44bf6963950584773e3b2027885260cccaa09bfb978aeedd1ff0"
+    },
+    {
       "path": "lib/supabase/database.types.ts",
       "sha256": "f1b0f75cc8980f6fefe7dff1cb24d445786b90cbd4e732a389753e685b7967f0"
     },
@@ -732,7 +764,7 @@
     },
     {
       "path": "OPERATIONS-005.md",
-      "sha256": "f166bf450f13f075b69300ae508e6fcd61b29c5daebdb57b9484f073f25a677b"
+      "sha256": "dd1e788fe095242d13b5c4960bc2db74c3c61af8e0ca9ea293ea51efc03a464e"
     },
     {
       "path": "package-lock.json",
@@ -780,7 +812,7 @@
     },
     {
       "path": "scripts/catalog-worker.ts",
-      "sha256": "3c4a770b8ec7647476d5c9987f90ce5223f832a45aab47041e7516a0bf6d245c"
+      "sha256": "7f7fa304f8d18694140b7821ac55b1de003a2f8dda40eb313f5b1f9279cd6113"
     },
     {
       "path": "scripts/integration-check.ts",
@@ -789,6 +821,10 @@
     {
       "path": "scripts/provision-user.ts",
       "sha256": "afa60905c1ead38c271830b43209538b149e3512b7d06786ab0a2a5349e13890"
+    },
+    {
+      "path": "scripts/qa/worker-process-fixture.ts",
+      "sha256": "15cd9021212073f7d15196dd63688a84f163e317c0891e2203681505bf8072c5"
     },
     {
       "path": "scripts/source-check.ts",
@@ -808,7 +844,7 @@
     },
     {
       "path": "STATUS.md",
-      "sha256": "c50f5a7143a2fa6884542d7e9db0404dbe8464ca6c57a1848c6178b79d86c5e7"
+      "sha256": "8d40a1fd2db3b1812fb18c46effad2e6e1dd5e5c2cb03f3c581bfb6d6c11bc46"
     },
     {
       "path": "supabase/migrations.lock.json",
@@ -916,11 +952,15 @@
     },
     {
       "path": "tests/amazon-readback-proof.test.ts",
-      "sha256": "3996c64e2429d0ad12dbb726e4afdb146a044beb28a661420d8c564ce85c2c7b"
+      "sha256": "e9b40afc0b0788bb6f197f3c359eec2e7e0f4d5a819488644472b8a76a80f383"
+    },
+    {
+      "path": "tests/amazon-reconciliation-proof.test.ts",
+      "sha256": "838f13df27fe6ac1c724e004a7487ab64579f2fef95026f0a2941a8ea5e27a79"
     },
     {
       "path": "tests/amazon-submission.test.ts",
-      "sha256": "12cdf2cb2cbb791c5fe7f51c7e4da71d1056da60e4e8e871849d11c29ed648b4"
+      "sha256": "c242c4f360871189480abd2dbd080c40109b2c9ea491df0337363678cc02710b"
     },
     {
       "path": "tests/antigravity/e2e/auth-journey.e2e.test.ts",
@@ -956,7 +996,7 @@
     },
     {
       "path": "tests/antigravity/fixtures/mock-db-helper.ts",
-      "sha256": "43f43bcdcfae57ce8724ef9d5754f4b017936d666a9fc04bf7c384baf9e9ef89"
+      "sha256": "e7d326019fa6a87ac9964eb90a6c0daf4c784d36f792df905cd64b3ef98c9bc5"
     },
     {
       "path": "tests/antigravity/fixtures/mock-marketplaces.ts",
@@ -1016,7 +1056,11 @@
     },
     {
       "path": "tests/ebay-package.test.ts",
-      "sha256": "21f2a2950d0840948720c04c973099d0d5ebe1e498755e4a3aa328c0694aaa53"
+      "sha256": "294b21792b8baea686c75b469796b5b5b82790184a79793e203ac665a37038be"
+    },
+    {
+      "path": "tests/ebay-recovery.test.ts",
+      "sha256": "9a124b002817b54e34c8e4999436a6ffcbad54ca065b5c56c4523ee6675ed56e"
     },
     {
       "path": "tests/ebay-schema.test.ts",
@@ -1043,6 +1087,10 @@
       "sha256": "5f73a86cc4ae4e62d093f00fd80778713704f3f9508f9d687347db2254f8b488"
     },
     {
+      "path": "tests/fixtures/pglite-worker-adapter.ts",
+      "sha256": "3a79b1a8a0665068b1d7ffb62721f47a93356d8691628790730195a53aa7f381"
+    },
+    {
       "path": "tests/job-checkpoint.test.ts",
       "sha256": "544ac4c8b56a5af651c6353c143e917ac5976680475c74cf1f68fea8bcb55d3a"
     },
@@ -1065,6 +1113,10 @@
     {
       "path": "tests/marketing-profile-approval-gate.test.ts",
       "sha256": "f96bbfd8798f931699fc7864dc7b0359627784dc51749a228d1fdd46b147411a"
+    },
+    {
+      "path": "tests/marketing-publication-freshness.test.ts",
+      "sha256": "76c5d793875cd200fbdb32627b1a33dce6ad9892dd1b7e46d2e849033380f232"
     },
     {
       "path": "tests/marketing-review.test.ts",
@@ -1091,8 +1143,16 @@
       "sha256": "b0e8842c0eff1f85d9431f0c59ca7f0ffabbb2296a719493524a4a042a01df31"
     },
     {
+      "path": "tests/operational-recovery.test.ts",
+      "sha256": "1d51b6c5d270a6f34ae99484b511f59023f5a67a71f077c78349d5e963b2901b"
+    },
+    {
       "path": "tests/operational-security.test.ts",
       "sha256": "9b598631582f5e79e2160b39bf8181849d19f9810e34705640450cffd5d49825"
+    },
+    {
+      "path": "tests/operational-trace.test.ts",
+      "sha256": "cca7a25838c696f7d6df48c2b550f4e3d034ac6b17e35aaea41b851c3ff56ad0"
     },
     {
       "path": "tests/prd002-contracts.test.ts",
@@ -1116,7 +1176,11 @@
     },
     {
       "path": "tests/submission-reconciliation.test.ts",
-      "sha256": "04fa265531c548eeebe2909ad8eba4ba554631483957ac88b970b7be11921078"
+      "sha256": "f0601eef906755af4e7de0167eb963b77cc5a238e0ff6bf964e3b5de81c62ce5"
+    },
+    {
+      "path": "tests/worker-process-restart.test.ts",
+      "sha256": "3c2854c0a072d83d83f36d7205673922274fbd4fb4a24f8787c130970bfda6d9"
     },
     {
       "path": "tsconfig.json",
@@ -1127,7 +1191,7 @@
       "sha256": "871b6cfeb2dbbe3cfb25322aa36e53c78bfc844b73fadea6933572502f470661"
     }
   ],
-  "revision": "009",
-  "previous_baseline_id": "56397a5145175466b32594a14be0f559667a84ee82da6b497009b7dd4f35111e",
-  "generated_at": "2026-10-06T04:30:28.042Z"
+  "revision": "010",
+  "previous_baseline_id": "4625e4568bbb43e2fc1edb65eb086bbd270c50d4bcc80c861544952a1ce8275b",
+  "generated_at": "2026-10-06T11:07:08.201Z"
 }

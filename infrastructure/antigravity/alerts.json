@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "activation": "proposal_no_destinations_no_external_notifications",
+  "signals": [
+    {"name":"web_unhealthy","source":"container health + /api/health","condition":"3 consecutive failures","severity":"critical","limitation":"liveness does not prove database/API readiness"},
+    {"name":"worker_stopped","source":"container status/restarts","condition":"not running for 60 seconds or 3 restarts in 10 minutes","severity":"critical"},
+    {"name":"queue_stalled","source":"owner scoped operations API recent_jobs","condition":"pending older than 10 minutes or expired running lease older than 5 minutes","severity":"warning","limitation":"adapter/aggregator requires selected destination and authentication"},
+    {"name":"uncertain_submission","source":"owner scoped submission/feed ledger","condition":"unknown persists 15 minutes","severity":"warning","action":"reconcile; never automatically replay publication"},
+    {"name":"scanner_unhealthy","source":"clamdcheck.sh + scanner-check live","condition":"3 consecutive failures","severity":"critical"},
+    {"name":"signature_age","source":"ClamAV VERSION definitions_at","condition":"age greater than 48 hours warning; 72 hours blocked by application","severity":"warning"},
+    {"name":"backup_restore_stale","source":"signed or access controlled drill receipt","condition":"last successful isolated restore older than approved operational schedule","severity":"warning","limitation":"RPO/RTO/schedule must be supplied by FBR"},
+    {"name":"migration_drift","source":"live migration inventory + recorded manifest","condition":"version/hash mismatch","severity":"critical","limitation":"local manifest verifier alone cannot detect live drift"}
+  ],
+  "logging": {"format":"JSON correlation events already implemented in core","retention":"requires destination decision","excluded":["tokens","payloads","physical evidence","emails","raw SKU"]}
+}

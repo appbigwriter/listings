@@ -1,33 +1,275 @@
 {
- "AWSTemplateFormatVersion":"2010-09-09",
- "Description":"FBRSigns: existing SP-API partner EventBridge bus to private SQS with processing and delivery DLQs",
- "Parameters":{
-  "PartnerBusName":{"Type":"String","AllowedPattern":"aws\\.partner/sellingpartnerapi\\.amazon\\.com/.+"},
-  "PartnerEventSource":{"Type":"String","AllowedPattern":"aws\\.partner/sellingpartnerapi\\.amazon\\.com/.+"},
-  "ApplicationId":{"Type":"String","MinLength":1},
-  "SellerId":{"Type":"String","MinLength":1}
- },
- "Resources":{
-  "ProcessingDlq":{"Type":"AWS::SQS::Queue","Properties":{"MessageRetentionPeriod":1209600,"SqsManagedSseEnabled":true}},
-  "DeliveryDlq":{"Type":"AWS::SQS::Queue","Properties":{"MessageRetentionPeriod":1209600,"SqsManagedSseEnabled":true}},
-  "ListingsQueue":{"Type":"AWS::SQS::Queue","Properties":{"VisibilityTimeout":180,"ReceiveMessageWaitTimeSeconds":20,"MessageRetentionPeriod":345600,"SqsManagedSseEnabled":true,"RedrivePolicy":{"deadLetterTargetArn":{"Fn::GetAtt":["ProcessingDlq","Arn"]},"maxReceiveCount":5}}},
-  "ListingsRule":{"Type":"AWS::Events::Rule","Properties":{
-   "EventBusName":{"Ref":"PartnerBusName"},"State":"ENABLED",
-   "EventPattern":{"source":[{"Ref":"PartnerEventSource"}],"detail":{"NotificationType":["LISTINGS_ITEM_STATUS_CHANGE","LISTINGS_ITEM_ISSUES_CHANGE"],"NotificationMetadata":{"ApplicationId":[{"Ref":"ApplicationId"}]},"Payload":{"SellerId":[{"Ref":"SellerId"}]}}},
-   "Targets":[{"Id":"ListingsQueue","Arn":{"Fn::GetAtt":["ListingsQueue","Arn"]},"DeadLetterConfig":{"Arn":{"Fn::GetAtt":["DeliveryDlq","Arn"]}},"RetryPolicy":{"MaximumEventAgeInSeconds":86400,"MaximumRetryAttempts":185}}]
-  }},
-  "QueuePolicy":{"Type":"AWS::SQS::QueuePolicy","Properties":{
-   "Queues":[{"Ref":"ListingsQueue"},{"Ref":"DeliveryDlq"}],
-   "PolicyDocument":{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"events.amazonaws.com"},"Action":"sqs:SendMessage","Resource":[{"Fn::GetAtt":["ListingsQueue","Arn"]},{"Fn::GetAtt":["DeliveryDlq","Arn"]}],"Condition":{"ArnEquals":{"aws:SourceArn":{"Fn::GetAtt":["ListingsRule","Arn"]}},"StringEquals":{"aws:SourceAccount":{"Ref":"AWS::AccountId"}}}}]}
-  }}
- },
- "Outputs":{
-  "QueueUrl":{"Value":{"Ref":"ListingsQueue"}},
-  "QueueArn":{"Value":{"Fn::GetAtt":["ListingsQueue","Arn"]}},
-  "ProcessingDlqUrl":{"Value":{"Ref":"ProcessingDlq"}},
-  "DeliveryDlqUrl":{"Value":{"Ref":"DeliveryDlq"}},
-  "AccountId":{"Value":{"Ref":"AWS::AccountId"}},
-  "Region":{"Value":{"Ref":"AWS::Region"}},
-  "EventSource":{"Value":{"Ref":"PartnerEventSource"}}
- }
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "FBRSigns: existing SP-API partner EventBridge bus to private SQS with processing and delivery DLQs",
+  "Parameters": {
+    "PartnerBusName": {
+      "Type": "String",
+      "AllowedPattern": "aws\\.partner/sellingpartnerapi\\.amazon\\.com/.+"
+    },
+    "PartnerEventSource": {
+      "Type": "String",
+      "AllowedPattern": "aws\\.partner/sellingpartnerapi\\.amazon\\.com/.+"
+    },
+    "ApplicationId": {
+      "Type": "String",
+      "MinLength": 1
+    },
+    "SellerId": {
+      "Type": "String",
+      "MinLength": 1
+    }
+  },
+  "Resources": {
+    "ProcessingDlq": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "MessageRetentionPeriod": 1209600,
+        "SqsManagedSseEnabled": true
+      }
+    },
+    "DeliveryDlq": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "MessageRetentionPeriod": 1209600,
+        "SqsManagedSseEnabled": true
+      }
+    },
+    "ListingsQueue": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "VisibilityTimeout": 180,
+        "ReceiveMessageWaitTimeSeconds": 20,
+        "MessageRetentionPeriod": 345600,
+        "SqsManagedSseEnabled": true,
+        "RedrivePolicy": {
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "ProcessingDlq",
+              "Arn"
+            ]
+          },
+          "maxReceiveCount": 5
+        }
+      }
+    },
+    "ListingsRule": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventBusName": {
+          "Ref": "PartnerBusName"
+        },
+        "State": "ENABLED",
+        "EventPattern": {
+          "source": [
+            {
+              "Ref": "PartnerEventSource"
+            }
+          ],
+          "detail": {
+            "NotificationType": [
+              "LISTINGS_ITEM_STATUS_CHANGE",
+              "LISTINGS_ITEM_ISSUES_CHANGE"
+            ],
+            "NotificationMetadata": {
+              "ApplicationId": [
+                {
+                  "Ref": "ApplicationId"
+                }
+              ]
+            },
+            "Payload": {
+              "SellerId": [
+                {
+                  "Ref": "SellerId"
+                }
+              ]
+            }
+          }
+        },
+        "Targets": [
+          {
+            "Id": "ListingsQueue",
+            "Arn": {
+              "Fn::GetAtt": [
+                "ListingsQueue",
+                "Arn"
+              ]
+            },
+            "DeadLetterConfig": {
+              "Arn": {
+                "Fn::GetAtt": [
+                  "DeliveryDlq",
+                  "Arn"
+                ]
+              }
+            },
+            "RetryPolicy": {
+              "MaximumEventAgeInSeconds": 86400,
+              "MaximumRetryAttempts": 185
+            }
+          }
+        ]
+      }
+    },
+    "QueuePolicy": {
+      "Type": "AWS::SQS::QueuePolicy",
+      "Properties": {
+        "Queues": [
+          {
+            "Ref": "ListingsQueue"
+          },
+          {
+            "Ref": "DeliveryDlq"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              },
+              "Action": "sqs:SendMessage",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "ListingsQueue",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::GetAtt": [
+                    "DeliveryDlq",
+                    "Arn"
+                  ]
+                }
+              ],
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": [
+                    {
+                      "Fn::GetAtt": [
+                        "ListingsRule",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "DefinitionsRule",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                },
+                "StringEquals": {
+                  "aws:SourceAccount": {
+                    "Ref": "AWS::AccountId"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "DefinitionsRule": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventBusName": {
+          "Ref": "PartnerBusName"
+        },
+        "State": "ENABLED",
+        "EventPattern": {
+          "source": [
+            {
+              "Ref": "PartnerEventSource"
+            }
+          ],
+          "detail": {
+            "NotificationType": [
+              "PRODUCT_TYPE_DEFINITIONS_CHANGE"
+            ],
+            "NotificationMetadata": {
+              "ApplicationId": [
+                {
+                  "Ref": "ApplicationId"
+                }
+              ]
+            },
+            "Payload": {
+              "AccountId": [
+                {
+                  "Ref": "SellerId"
+                }
+              ]
+            }
+          }
+        },
+        "Targets": [
+          {
+            "Id": "ListingsQueue",
+            "Arn": {
+              "Fn::GetAtt": [
+                "ListingsQueue",
+                "Arn"
+              ]
+            },
+            "DeadLetterConfig": {
+              "Arn": {
+                "Fn::GetAtt": [
+                  "DeliveryDlq",
+                  "Arn"
+                ]
+              }
+            },
+            "RetryPolicy": {
+              "MaximumEventAgeInSeconds": 86400,
+              "MaximumRetryAttempts": 185
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "QueueUrl": {
+      "Value": {
+        "Ref": "ListingsQueue"
+      }
+    },
+    "QueueArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ListingsQueue",
+          "Arn"
+        ]
+      }
+    },
+    "ProcessingDlqUrl": {
+      "Value": {
+        "Ref": "ProcessingDlq"
+      }
+    },
+    "DeliveryDlqUrl": {
+      "Value": {
+        "Ref": "DeliveryDlq"
+      }
+    },
+    "AccountId": {
+      "Value": {
+        "Ref": "AWS::AccountId"
+      }
+    },
+    "Region": {
+      "Value": {
+        "Ref": "AWS::Region"
+      }
+    },
+    "EventSource": {
+      "Value": {
+        "Ref": "PartnerEventSource"
+      }
+    }
+  }
 }

@@ -1,11 +1,12 @@
-import {contentHash,type Channel} from './model';
+import {type Channel} from './model';
+import {currentPublicationProof} from './publication-proof';
 import {evaluateReadiness} from './readiness';
 import {productFromRow} from './repository';
 import {CAPABILITIES} from '../marketplaces/capabilities';
 export function coverageItem(row:Record<string,any>,channel:Channel,uncertain:boolean,now=Date.now()){
  const product=productFromRow(row),listing=product._catalog?.channels[channel],report=evaluateReadiness(product,channel),preflight=evaluateReadiness(product,channel,false);
  const preparation=row.status==='archived'?'archived':product._catalog?.kind==='service'?(product._catalog.eligibility_confirmed?'excluded_service':'service_exclusion_pending'):product.source_update?'source_conflict':report.ready?'approved':preflight.ready?'review_pending':'blocked';
- const submission=listing?.submission,verifiedAt=Date.parse(submission?.verified_at||''),verified=Boolean(row.status!=='archived'&&!uncertain&&!['unknown','submitting'].includes(submission?.status||'')&&submission?.verified_content_hash===contentHash(product,channel)&&Number.isFinite(verifiedAt)&&verifiedAt<=now+300000&&now-verifiedAt<=86400000);
+ const submission=listing?.submission,verified=Boolean(row.status!=='archived'&&!uncertain&&currentPublicationProof(product,channel,now));
  let external='not_submitted';
  if(uncertain||submission?.status==='unknown'||submission?.status==='submitting')external='uncertain';
  else if(submission){

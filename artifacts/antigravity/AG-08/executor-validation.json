@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "checked_at": "2026-10-06T12:42:01.784Z",
+  "scope": "synthetic_single_sku_mp_item_executor_and_multipart_transport",
+  "tests": {
+    "files": 1,
+    "passed": 6,
+    "failed": 0,
+    "command": "npx vitest run tests/antigravity/walmart/executor.test.ts"
+  },
+  "typecheck": "passed",
+  "live_external_requests": 0,
+  "actual_account_get_spec_received": false,
+  "real_publication": false,
+  "readback_proves_published": false,
+  "monitor_success_semantics": "accepted_not_verified",
+  "migration_applied_by_this_agent": false,
+  "sources": [
+    "https://developer.walmart.com/us-marketplace/reference/getpartnerconfigurations",
+    "https://developer.walmart.com/global-marketplace/docs/get-partner-configurations-1",
+    "https://developer.walmart.com/us-marketplace/reference/itembulkuploads",
+    "https://developer.walmart.com/us-marketplace/docs/feed-item-status-api"
+  ]
+}

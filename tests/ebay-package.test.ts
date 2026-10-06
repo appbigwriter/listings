@@ -15,6 +15,9 @@ describe('eBay inventory and offer preparation',()=>{
     expect(()=>buildEbayPackage({...product(),ebay_payment_policy:''})).toThrow('business policies');
     expect(()=>buildEbayPackage({...product(),relationship:'Child'})).toThrow('Inventory Item Group');
     expect(()=>buildEbayPackage({...product(),title:'A'.repeat(81)})).toThrow('80 caracteres');
+    for(const qty of [false,null,{},[],' '])expect(()=>buildEbayPackage({...product(),qty})).toThrow('estoque inteiro');
+    expect(()=>buildEbayPackage({...product(),pkg_weight:true})).toThrow('Embalagem');
+    expect(()=>buildEbayPackage({...product(),currency:'EUR'})).toThrow('USD');
   });
   it('does not reuse Amazon ASIN/exemption as an eBay identifier',()=>{
     expect(()=>buildEbayPackage({...product(),gtin:'',asin:'B012345678',gtin_exempt:true})).toThrow('ASIN');

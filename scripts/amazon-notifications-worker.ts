@@ -1,7 +1,7 @@
 import {SQSClient,ReceiveMessageCommand,DeleteMessageCommand} from '@aws-sdk/client-sqs';
 import {getSupabase} from '../lib/marketing/supabase';
 import {notificationConfig} from '../lib/marketplaces/amazon-notifications';
-import {processListingEvent} from '../lib/catalog/events';
+import {processAmazonEvent} from '../lib/catalog/events';
 
 async function main() {
  const config=notificationConfig(),db=getSupabase();if(!db)throw new Error('Supabase não configurado.');
@@ -14,7 +14,7 @@ async function main() {
   for(const message of response.Messages||[]) {
    if(!message.Body||!message.ReceiptHandle)continue;
    try {
-    const result=await processListingEvent(db,message.Body,config);
+    const result=await processAmazonEvent(db,message.Body,config);
     await client.send(new DeleteMessageCommand({QueueUrl:config.queueUrl,ReceiptHandle:message.ReceiptHandle}),{abortSignal:AbortSignal.timeout(15000)});
     console.log(JSON.stringify({event:result.id,status:result.status}));
    }catch{console.error(JSON.stringify({message_id:message.MessageId,status:'retained_for_retry',receive_count:message.Attributes?.ApproximateReceiveCount}));}

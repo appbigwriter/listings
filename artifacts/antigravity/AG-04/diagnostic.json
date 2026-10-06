@@ -1,0 +1,15 @@
+{
+  "recorded_at": "2026-10-06T11:48:51Z",
+  "docker_cli": "29.5.3",
+  "docker_context": "desktop-linux",
+  "docker_daemon": "unavailable_dockerDesktopLinuxEngine_named_pipe_missing",
+  "wsl_default_distribution": "Ubuntu",
+  "wsl_default_version": 2,
+  "daemon_started_or_other_projects_changed": false,
+  "docker_compose_config": "passed_without_daemon",
+  "backup_shell_syntax": "bash_n_passed_via_wsl",
+  "containers_built_or_started": false,
+  "real_clamav_executed": false,
+  "real_pg_dump_restore_executed": false,
+  "production_data_accessed": false
+}

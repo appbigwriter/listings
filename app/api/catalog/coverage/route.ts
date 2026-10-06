@@ -1,3 +1,4 @@
+import {traceRequest} from '../../../../lib/operations/trace';
 import {NextRequest,NextResponse} from 'next/server';
 import {resolveAuthContext,unauthorized} from '../../../../lib/auth';
 import {getSupabase} from '../../../../lib/marketing/supabase';
@@ -5,7 +6,7 @@ import {CatalogError,scopeQuery} from '../../../../lib/catalog/repository';
 import {hash,isChannel} from '../../../../lib/catalog/model';
 import {coverageItem} from '../../../../lib/catalog/coverage';
 export const runtime='nodejs';
-export async function GET(req:NextRequest){try{
+async function handleGET(req:NextRequest){try{
  const auth=await resolveAuthContext(req);if(!auth)return NextResponse.json(unauthorized(),{status:401});
  const channel=req.nextUrl.searchParams.get('channel')||'amazon-us';if(!isChannel(channel))throw new CatalogError('Canal inválido.');
  const offset=Number(req.nextUrl.searchParams.get('offset')||0),limit=Number(req.nextUrl.searchParams.get('limit')||100);
@@ -20,3 +21,5 @@ export async function GET(req:NextRequest){try{
  const uncertain=new Set((ledger.data||[]).map((row:{sku:string})=>row.sku)),checked_at=new Date().toISOString(),data=(rows.data||[]).map((row:Record<string,any>)=>coverageItem(row,channel,uncertain.has(row.sku)));
  return NextResponse.json({scope:'current_owner_in_organization',organization_id:auth.organizationId,owner_id:auth.userId,channel,total:rows.count,offset,limit,checked_at,data,page_hash:hash(data),includes_archived:true,population_basis:'owned_prelistings_only',source_store_population_reconciled:false,snapshot_consistency:'observations_per_page_not_atomic'}, {headers:{'cache-control':'private, no-store'}});
  }catch(error){return NextResponse.json({error:error instanceof Error?error.message:'Falha ao contabilizar cobertura.'},{status:error instanceof CatalogError?error.status:500});}}
+
+export function GET(req:NextRequest){return traceRequest('api.catalog.coverage',()=>handleGET(req));}

@@ -1,0 +1,53 @@
+{
+  "task": "AG-07",
+  "observed_at": "2026-10-06T11:49:49.280Z",
+  "baseline_id": "366eacbf6429f4c9cfffddb3109f3e83705b186981d1d0a8121dac820fc10e7d",
+  "execution": "shared workspace; explicit human authorization to multiple agents; isolated file scope",
+  "contracts": [
+    {
+      "path": "artifacts/ebay-inventory-openapi.json",
+      "version": "1.18.5",
+      "sha256": "070e35efbc1e6b0c67c702d3bd9d8a4fb5046bcd948dca7170f1bc33d5a36a46"
+    },
+    {
+      "path": "artifacts/ebay-taxonomy-openapi.json",
+      "version": "v1.1.1",
+      "sha256": "d1fab9404c71861c21b6d7a07b61d574b0a098a580fedd597310d4fd207482c8"
+    }
+  ],
+  "sources": [
+    "https://www.developer.ebay.com/api-docs/sell/static/inventory/inventory-item-groups.html",
+    "https://www.developer.ebay.com/develop/guides/sell/listing-creation",
+    "https://developer.ebay.com/api-docs/sell/static/metadata/sell-categories.html",
+    "https://developer.ebay.com/api-docs/sell/static/inventory/common-charger-directive.html"
+  ],
+  "tests": {
+    "command": "npx vitest run tests/antigravity/ebay/family-package.test.ts tests/ebay-schema.test.ts tests/ebay-package.test.ts",
+    "passed": 17,
+    "files": 3,
+    "new_tests": 10
+  },
+  "typecheck": "passed",
+  "network_marketplace_writes": 0,
+  "database_writes": 0,
+  "publication": "not_submitted",
+  "limitations": [
+    "No real category contract/policies/account validation or publication",
+    "Multiple controller combination unsupported pending explicit official semantics",
+    "Only English Device Charging Range supports NUMERIC_RANGE; other advanced formats blocked",
+    "All physical facts and ownership in tests are synthetic fixtures only"
+  ],
+  "integration_audit": {
+    "observed_at": "2026-10-06T12:44:36.307Z",
+    "passed": 23,
+    "files": 3,
+    "command": "npx vitest run tests/antigravity/ebay",
+    "combined_ui_ebay_schema": {
+      "passed": 45,
+      "files": 6
+    },
+    "typecheck": "passed",
+    "core_fixes": "coordinator integrated exact remote identities, lease/CAS projection guard, aspect provenance/merge preservation and parent context validation",
+    "production_publication": false
+  }
+}

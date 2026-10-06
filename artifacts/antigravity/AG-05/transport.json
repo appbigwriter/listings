@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-10-06T15:22:45.373Z",
+  "scenarios": [
+    "SPAPI_429_retry_after_123_no_retry",
+    "timeout_injected_after_mutation_started_no_retry",
+    "LWA_429_prevents_SPAPI"
+  ],
+  "transport": "actual_amazonRequest",
+  "injection": "fetch_boundary_only",
+  "network": "blocked",
+  "elapsed_timeout_measured": false,
+  "ledger": "separate_SQL_process_crash_tests"
+}

@@ -1,0 +1,118 @@
+name: prelisting-ag04
+services:
+  web:
+    profiles: [app]
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${AG04_PUBLIC_SUPABASE_URL:-}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${AG04_PUBLIC_SUPABASE_ANON_KEY:-}
+    image: prelisting-ag04:local
+    restart: unless-stopped
+    init: true
+    command: [node, scripts/antigravity/infra/runtime.mjs, web]
+    ports: ["127.0.0.1:33100:3000"]
+    secrets: [runtime_config]
+    environment:
+      NODE_ENV: production
+      PRELISTING_CLAMD_HOST: scanner
+      PRELISTING_CLAMD_PORT: "3310"
+    networks: [private, egress]
+    depends_on:
+      scanner: {condition: service_healthy}
+    read_only: true
+    tmpfs: [/tmp, /app/.next/cache]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: [CMD, wget, -q, -O, "-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  worker:
+    profiles: [app]
+    image: prelisting-ag04:local
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${AG04_PUBLIC_SUPABASE_URL:-}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${AG04_PUBLIC_SUPABASE_ANON_KEY:-}
+    restart: unless-stopped
+    init: true
+    command: [node, scripts/antigravity/infra/runtime.mjs, worker]
+    secrets: [runtime_config]
+    environment:
+      NODE_ENV: production
+      PRELISTING_CLAMD_HOST: scanner
+      PRELISTING_CLAMD_PORT: "3310"
+    networks: [private, egress]
+    depends_on:
+      scanner: {condition: service_healthy}
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    stop_grace_period: 60s
+    healthcheck:
+      test: [CMD, node, scripts/antigravity/infra/worker-health.mjs]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+  scanner:
+    image: ${AG04_CLAMAV_IMAGE:-clamav/clamav:1.4}
+    restart: unless-stopped
+    networks: [private, egress]
+    volumes: [signatures:/var/lib/clamav]
+    environment:
+      CLAMD_CONF_MaxFileSize: 5M
+      CLAMD_CONF_StreamMaxLength: 5M
+      CLAMD_CONF_MaxScanSize: 10M
+      FRESHCLAM_CONF_Checks: "12"
+    healthcheck:
+      test: [CMD, clamdcheck.sh]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 180s
+  restore-db:
+    profiles: [restore]
+    image: ${AG04_POSTGRES_IMAGE:-postgres:17-alpine}
+    environment:
+      POSTGRES_DB: ag04_fixture
+      POSTGRES_USER: ag04_fixture
+      POSTGRES_PASSWORD_FILE: /run/secrets/fixture_password
+    secrets: [fixture_password]
+    networks: [private]
+    volumes: [restore-db:/var/lib/postgresql/data, "./infrastructure/antigravity/restore-fixture.sql:/docker-entrypoint-initdb.d/fixture.sql:ro"]
+    healthcheck:
+      test: [CMD, pg_isready, -U, ag04_fixture, -d, ag04_fixture]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  restore-check:
+    profiles: [restore]
+    image: ${AG04_POSTGRES_IMAGE:-postgres:17-alpine}
+    environment:
+      PGHOST: restore-db
+      PGUSER: ag04_fixture
+      PGDATABASE: ag04_fixture
+    secrets: [fixture_password]
+    networks: [private]
+    depends_on:
+      restore-db: {condition: service_healthy}
+    volumes: ["./scripts/antigravity/infra/backup-restore.sh:/work/backup-restore.sh:ro"]
+    entrypoint: [sh, /work/backup-restore.sh]
+    read_only: true
+    tmpfs: [/tmp]
+secrets:
+  runtime_config:
+    file: ${AG04_RUNTIME_SECRET_FILE:-./infrastructure/antigravity/runtime.example.json}
+  fixture_password:
+    file: ${AG04_FIXTURE_PASSWORD_FILE:-./infrastructure/antigravity/fixture-password.txt}
+volumes:
+  signatures: {}
+  restore-db: {}
+networks:
+  private: {internal: true}
+  egress: {}

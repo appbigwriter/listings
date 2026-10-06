@@ -1,3 +1,4 @@
+import {traceRequest} from '../../../../lib/operations/trace';
 import {NextRequest,NextResponse} from 'next/server';
 import {resolveAuthContext,unauthorized} from '../../../../lib/auth';
 import {getSupabase} from '../../../../lib/marketing/supabase';
@@ -5,7 +6,7 @@ import {readBodyBytes,RequestBodyError} from '../../../../lib/http';
 import {CatalogError,loadProduct,scopeQuery} from '../../../../lib/catalog/repository';
 import {storeAsset,assetBytes} from '../../../../lib/catalog/assets';
 export const runtime='nodejs';
-export async function POST(req:NextRequest) {
+async function handlePOST(req:NextRequest) {
   const auth=await resolveAuthContext(req);if(!auth)return NextResponse.json(unauthorized(),{status:401});
   const db=getSupabase();if(!db)return NextResponse.json({error:'Supabase não configurado.'},{status:503});
   try {
@@ -16,7 +17,7 @@ export async function POST(req:NextRequest) {
     return NextResponse.json({data},{status:201});
   }catch(error){return NextResponse.json({error:error instanceof Error?error.message:'Falha no arquivo.'},{status:error instanceof CatalogError||error instanceof RequestBodyError?error.status:500});}
 }
-export async function GET(req:NextRequest) {
+async function handleGET(req:NextRequest) {
   const auth=await resolveAuthContext(req);if(!auth)return NextResponse.json(unauthorized(),{status:401});
   const db=getSupabase();if(!db)return NextResponse.json({error:'Supabase não configurado.'},{status:503});
   try {
@@ -28,3 +29,7 @@ export async function GET(req:NextRequest) {
     return NextResponse.json({data:result.data},{headers:{'cache-control':'private, no-store'}});
   }catch(error){return NextResponse.json({error:error instanceof Error?error.message:'Falha ao ler arquivos.'},{status:error instanceof CatalogError?error.status:500});}
 }
+
+export function POST(req:NextRequest){return traceRequest('api.catalog.assets',()=>handlePOST(req));}
+
+export function GET(req:NextRequest){return traceRequest('api.catalog.assets',()=>handleGET(req));}

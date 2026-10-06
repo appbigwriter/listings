@@ -1,6 +1,6 @@
 ## Checkpoint autônomo atual — 05/10/2026, noite
 
-231 testes/48 arquivos passaram; 20 migrations aplicadas e tipos alinhados; typecheck/build de 41 rotas e audit sem vulnerabilidades aprovados. Product Fees ligado à economia, provenance/reconciliação, autoridade persistente de ofertas, reserva de versão do pai e cobertura por canal implementados. AG-01 integrado parcialmente como regressões de contrato; jornadas reais pendentes. Detalhes/evidências: EXECUTION-008-autonomia.md. As 54 stories continuam sujeitas aos gates originais.
+249 testes/54 arquivos passaram; 20 migrations aplicadas e tipos alinhados; typecheck/build de 41 rotas e audit sem vulnerabilidades aprovados. Product Fees ligado à economia, provenance/reconciliação, autoridade persistente de ofertas, reserva de versão do pai e cobertura por canal implementados. AG-01 integrado parcialmente como regressões de contrato; jornadas reais pendentes. Detalhes/evidências: EXECUTION-008-autonomia.md e EXECUTION-009-retomada.md. As 54 stories continuam sujeitas aos gates originais.
 
 # Execução S4–S12 — incremento de 05/10/2026
 
@@ -57,25 +57,25 @@ Sergio autorizou iniciar todas as sprints autonomamente. Foram realizadas altera
 | S8-05 | em_execucao | Regressões de banco/rede/fila e smoke de navegador; falta sessão real/restart/dois usuários. |
 | S8-06 | bloqueada | Sergio precisa aceitar piloto e identificar SKUs/versões autorizados após QA. |
 | S9-01 | bloqueada | Executor individual com reserva atômica da versão; não há piloto autorizado por SKU/versão. |
-| S9-02 | em_execucao | Ledger captura payload/target, índice bloqueia versões incertas, readback conservador; falta simular crash e homologar live. |
+| S9-02 | em_execucao | Ledger captura payload/target, índice bloqueia versões incertas, readback exige SKU/marketplace/atributos e ausência de ERROR; falta crash de envio externo e homologação live. |
 | S9-03 | em_execucao | Feed/monitor/relatório, resultado por SKU transacional e nova tentativa explícita para falha comprovada antes de createFeed, preservando histórico; falta homologação real/crash de processos externos. |
 | S9-04 | em_execucao | PATCH merge preço/estoque FBM, reserva atômica da versão, manifesto/hash/ledger e confirmação explícita de autoridade; autoridade persistente assinada por conta/SKU/campos/versão/valores, com validade e pausa implementada; faltam homologação e compensação operacional. |
 | S9-05 | em_execucao | Consumidor EventBridge→SQS, contratos oficiais, origem/assinatura/conta, dedup/leases, readback atual e ack após término durável; template com DLQs preparado. Ativação/homologação dependem da conta AWS/destino/permissões. |
 | S9-06 | bloqueada | Monitoramento individual existe; aceite depende de catálogo publicado e histórias anteriores. |
-| S10-01 | em_execucao | Taxonomy/OAuth/copy/pacote, conta imutável comprovada, policies/NEW/localização, reserva atômica e executor Inventory/Offer/publish/readback standalone; aspectos requeridos/cardinalidade/enums/datas e condicionais de um controlador validados; condicionais avançados bloqueados. Faltam famílias/revisões/recuperação sem offerId e homologação. |
+| S10-01 | em_execucao | Taxonomy/OAuth/copy/pacote, conta imutável comprovada, policies/NEW/localização, reserva atômica e executor Inventory/Offer/publish/readback standalone; aspectos requeridos/cardinalidade/enums/datas e condicionais de um controlador validados; condicionais avançados bloqueados. Recuperação administrativa sem offerId implementada, mantém unknown até readback. Faltam famílias/revisões e homologação. |
 | S10-02 | em_execucao | Taxonomy/Get Spec + OAuth renovável; faltam payload/feed/processamento/readback. |
 | S10-03 | bloqueada | Aplicação/shop/versão/região TikTok não informadas; conector ainda não implementado. |
 | S10-04 | em_execucao | Matriz de capacidades e UI bloqueiam ações não suportadas; formatos oficiais completos por canal continuam. |
 | S10-05 | em_execucao | Tokens renováveis/segredos server-side; falta onboarding multicon­ta, revogação e sync com autoridade. |
 | S10-06 | bloqueada | Pilotos completos dependem de acessos/conectores e autorização por versão. |
 | S11-01 | em_execucao | Docker web/worker/secrets/loopback preparados; daemon/destino/HTTPS/staging ausentes. |
-| S11-02 | em_execucao | Worker durável, cancelamento e supervisor; retomada explícita de falhas/pendentes cria novo lote idempotente com versões atuais e preserva checkpoints antigos. Falta ensaio real de restart/escala. |
-| S11-03 | em_execucao | Painel com filas/reservas expiradas/erros/claims incertos/uso IA a partir dos ledgers duráveis; faltam alertas externos e correlation end-to-end. |
-| S11-04 | bloqueada | Backup/PITR, staging de restauração e RPO/RTO precisam de escolha/ambiente; história não concluída. |
+| S11-02 | em_execucao | Worker durável, cancelamento e supervisor; retomada explícita de falhas/pendentes cria novo lote idempotente com versões atuais e preserva checkpoints antigos. Ensaio local de kill/restart em processos Node e PostgreSQL persistente passou sem repetição de itens; faltam supervisor/Docker, escala e homologação remota. |
+| S11-03 | em_execucao | Painel com filas/reservas expiradas/erros/claims incertos/uso IA a partir dos ledgers duráveis; correlação estruturada interna ligada a APIs/jobs/IA/transportes e checkpoints implementada; faltam alertas/destino de logs e homologação operacional. |
+| S11-04 | bloqueada | Modo explícito de recuperação bloqueia novos envios/jobs de preparação e marketing, permite consultas/monitor. Backup/PITR, staging de restauração e RPO/RTO precisam de escolha/ambiente; história não concluída. |
 | S11-05 | em_execucao | DNS/bytes/JSON/cookies/roles/audit e paginação 5.000; benchmark local 5.000 rascunhos: 406 ms, +7 MB heap, RSS124 MB. Falta carga real DB/API/worker/browser e metas. |
 | S11-06 | em_execucao | CI e regressões SQL, timestamps remotos reconciliados; tipos remotos gerados e RPC de aprovação tipada; todas as migrations executadas automaticamente nos testes PostgreSQL. Faltam CI real/drift remoto/staging/release. |
 | S12-01 | em_execucao | Product Fees normalizado por conta/identidade/preço/frete/fulfillment/data, projeção USD consultiva e API/UI ligadas à economia; custos ausentes não viram zero e total estimado não duplica componentes. Faltam leitura real, custos reais e homologação por canal. |
-| S12-02 | em_execucao | Revisão com snapshot/hash/HMAC, decisão/status transacionais, custos pela tela com fonte/data e CAS, aprovação invalidada por preço/custos/planos/tracking. Homologação real de reload/papéis permanece. |
+| S12-02 | em_execucao | Revisão com snapshot/hash/HMAC, decisão/status transacionais, custos pela tela com fonte/data e CAS, aprovação invalidada por preço/custos/planos/tracking. Prova comprável deve ter até 24h, com verificação de data/hash compartilhada com cobertura. Homologação real de reload/papéis permanece. |
 | S12-03 | em_execucao | Handoff/UTMs/Kanban existentes; falta homologar no destino real; anúncios/gastos não executados. |
 | S12-04 | em_execucao | Manual de fluxo/credenciais/recuperação preparado; falta treino de equipe real e validação de responsabilidades. |
 | S12-05 | bloqueada | 203 registros contabilizados na prévia; relatório privado de cobertura/versões/status/ações por canal implementado, sem alegar população produtiva reconciliada. Rollout aguarda piloto, fatos, restore e liberação por canal. |

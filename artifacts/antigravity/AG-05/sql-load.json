@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-06T15:22:46.250Z",
+  "items": 5000,
+  "engine": "PGlite PostgreSQL actual migrations/triggers",
+  "insert_transaction_ms": 1708,
+  "total_ms": 1889,
+  "heap_growth_mb": 6,
+  "rss_mb": 410.02,
+  "rollback_preserved": true,
+  "foreign_owner_read_count": 0,
+  "job_limit_5001": "rejected",
+  "versions": 5000,
+  "network": "none",
+  "limitations": "Local WASM engine bulk SQL, no real PostgREST/Auth/marketplace or worker processing of all 5000 items; no SLA inferred."
+}

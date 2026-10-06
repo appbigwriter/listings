@@ -15,7 +15,7 @@ const validators:Record<string,ReturnType<typeof ajv.compile>>={LISTINGS_ITEM_ST
 export function notificationConfig():NotificationConfig {
  const region=process.env.AWS_REGION?.trim()||'',accountId=process.env.AMAZON_EVENTS_AWS_ACCOUNT_ID?.trim()||'',queueUrl=process.env.AMAZON_EVENTS_QUEUE_URL?.trim()||'';
  const organizationId=process.env.AMAZON_EVENTS_ORGANIZATION_ID?.trim()||'',source=process.env.AMAZON_EVENTS_SOURCE?.trim()||'',applicationId=process.env.AMAZON_EVENTS_APPLICATION_ID?.trim()||'';
- const subscriptions={LISTINGS_ITEM_STATUS_CHANGE:process.env.AMAZON_EVENTS_STATUS_SUBSCRIPTION_ID?.trim()||'',LISTINGS_ITEM_ISSUES_CHANGE:process.env.AMAZON_EVENTS_ISSUES_SUBSCRIPTION_ID?.trim()||''};
+ const subscriptions={LISTINGS_ITEM_STATUS_CHANGE:process.env.AMAZON_EVENTS_STATUS_SUBSCRIPTION_ID?.trim()||'',LISTINGS_ITEM_ISSUES_CHANGE:process.env.AMAZON_EVENTS_ISSUES_SUBSCRIPTION_ID?.trim()||'',...(process.env.AMAZON_EVENTS_DEFINITIONS_SUBSCRIPTION_ID?.trim()?{PRODUCT_TYPE_DEFINITIONS_CHANGE:process.env.AMAZON_EVENTS_DEFINITIONS_SUBSCRIPTION_ID.trim()}:{})};
  const amazon=amazonConfig();
  if(!amazon.configured||!/^\w{2}-[a-z]+-\d$/.test(region)||!/^\d{12}$/.test(accountId)||!/^[-\w]+$/.test(subscriptions.LISTINGS_ITEM_STATUS_CHANGE)||!/^[-\w]+$/.test(subscriptions.LISTINGS_ITEM_ISSUES_CHANGE)||!/^aws\.partner\/sellingpartnerapi\.amazon\.com\//.test(source)||!applicationId||! /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(organizationId))throw new CatalogError('Configure a conta, a organização, a fila EventBridge e as duas assinaturas antes de iniciar o consumidor.',503);
  let url:URL;try{url=new URL(queueUrl);}catch{throw new CatalogError('URL da fila SQS inválida.',503);}

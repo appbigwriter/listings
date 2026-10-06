@@ -3,6 +3,8 @@ import type {AuthContext} from '../auth';
 import {channelProduct,contentHash,hash} from '../catalog/model';
 import {CatalogError,productFromRow} from '../catalog/repository';
 import {evaluateReadiness} from '../catalog/readiness';
+import {currentPublicationProof} from '../catalog/publication-proof';
+import {recoveryMode} from '../operations/recovery';
 import {getMarketingProfileContext} from './profile-guard';
 import {buildReadinessGate,validateAmazonDestination} from './validation';
 function withoutOperationalFields(value:Record<string,unknown>|null|undefined) {
@@ -34,9 +36,10 @@ export async function loadMarketingReview(db:any,auth:AuthContext,sku:string,con
  if([amazon,meta,tracking].some(result=>result.error))throw new CatalogError('Não foi possível conferir planos e tracking.',503);
  const snapshot=marketingSnapshot(current.listing,current.profile,amazon.data,meta.data,tracking.data),versionHash=hash(snapshot);
  const gate=buildReadinessGate(snapshot.product,current.profile.economics?.margin);
+ if(recoveryMode())gate.blockers.push('operational_recovery_active');
  const prepared=productFromRow(current.listing),amazonListing=prepared._catalog?.channels['amazon-us'];
  if(!evaluateReadiness(prepared,'amazon-us').ready)gate.blockers.push('product_preparation_required');
- if(amazonListing?.submission?.status!=='published'||amazonListing.submission.publication_status!=='buyable'||amazonListing.submission.verified_content_hash!==contentHash(prepared,'amazon-us'))gate.blockers.push('listing_not_verified_buyable');
+ if(amazonListing?.submission?.status!=='published'||amazonListing.submission.publication_status!=='buyable'||!currentPublicationProof(prepared,'amazon-us'))gate.blockers.push('listing_not_verified_buyable');
  const costs=current.profile.economics?.costs;
  if(typeof costs?.source!=='string'||!costs.source.trim()||costs.source.length>1000||!Number.isFinite(Date.parse(costs?.calculated_at)))gate.blockers.push('cost_provenance_required');
  if(snapshot.tracking?.destination_url)gate.blockers.push(...validateAmazonDestination(snapshot.product,snapshot.tracking.destination_url));

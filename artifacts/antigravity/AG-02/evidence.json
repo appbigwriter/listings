@@ -1,0 +1,20 @@
+{
+  "task": "AG-02",
+  "observed_at": "2026-10-06T11:58:38.270Z",
+  "baseline_id": "366eacbf6429f4c9cfffddb3109f3e83705b186981d1d0a8121dac820fc10e7d",
+  "tests": {
+    "command": "npx vitest run tests/antigravity/ui",
+    "passed": 10,
+    "files": 2,
+    "kind": "isolated component handlers + server-rendered HTML semantics; not browser E2E"
+  },
+  "typecheck": "passed",
+  "browser_screenshots": "not performed",
+  "build": "coordinator integration check; no concurrent .next build",
+  "production_writes": 0,
+  "notes": [
+    "Mocked hooks execute actual component handlers for races/errors, not React browser reconciliation",
+    "No real authenticated users, real marketing profiles or evidence fixtures written to production",
+    "Core gates, API endpoints, payload semantics and review/publication unchanged"
+  ]
+}
