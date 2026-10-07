@@ -71,3 +71,32 @@ export async function monitorWalmart(db:SupabaseClient,auth:AuthContext,sku:stri
   return {data,output:{matched:true,status,publication_status:'not_verified',feed_id:feedId,requires_item_readback:true}};
  });
 }
+/**
+ * A feed receipt can be lost after an uncertain POST. This validates an
+ * administrator-provided association only; it deliberately does not discover,
+ * submit, or infer a published Walmart item.
+ */
+export function validateWalmartRecoveryInput(record:any,body:Record<string,unknown>,now=Date.now()){
+ const feedId=typeof body.feed_id==='string'?body.feed_id.trim():'',evidence=typeof body.evidence==='string'?body.evidence.trim():'',observedAt=typeof body.observed_at==='string'?Date.parse(body.observed_at):NaN;
+ if(!/^[A-Za-z0-9@_-]{1,200}$/.test(feedId)||evidence.length<10||evidence.length>2000||!Number.isFinite(observedAt))throw new CatalogError('Informe feedId, evidência operacional e data/hora observada.',422);
+ if(record?.status!=='unknown'||record?.response?.feed_id||record?.response?.stage!=='feed_request_started')throw new CatalogError('Recuperação exige envio Walmart incerto sem feedId confirmado.',409);
+ const created=Date.parse(record.created_at);if(!Number.isFinite(created)||now-created<180000||observedAt<created-300000||observedAt>now+300000)throw new CatalogError('A observação do feed não é compatível com o envio incerto.',409);
+ const items=record.request_payload?.MPItem;if(!Array.isArray(items)||items.length!==1||items[0]?.Orderable?.sku!==record.sku||items[0]?.Orderable?.productIdentifiers?.productIdType!=='GTIN'||typeof items[0]?.Orderable?.productIdentifiers?.productId!=='string')throw new CatalogError('Manifesto original não comprova SKU e GTIN únicos.',409);
+ return {feedId,evidence,observedAt:new Date(observedAt).toISOString(),gtin:items[0].Orderable.productIdentifiers.productId};
+}
+export async function recoverWalmartFeed(db:SupabaseClient,auth:AuthContext,body:Record<string,unknown>){
+ return withTrace('walmart.recover_feed',{sku_hash:traceHash(String(body.sku||'')),organization_hash:traceHash(auth.organizationId)},async()=>{
+  if(!hasCapability(auth,'publish')||body.confirm!==true)throw new CatalogError('Confirme a associação com papel de administrador.',403);
+  const sku=String(body.sku||''),loaded=await loadProduct(db,auth,sku);
+  const found=await scopeQuery(db.from('catalog_submissions').select('*'),auth).eq('sku',sku).eq('channel','walmart-us').order('created_at',{ascending:false}).limit(1).maybeSingle();
+  if(found.error)throw new CatalogError('Não foi possível consultar o ledger Walmart.',503);if(!found.data)throw new CatalogError('Envio Walmart não encontrado.',404);
+  const config=walmartAccountConfig(),record=found.data;
+  if(record.target?.account_id!==config.account_id||record.target?.marketplace_id!=='US'||record.target?.operation!=='walmart_mp_item')throw new CatalogError('Ledger pertence a outra conta/operação Walmart.',409);
+  if(body.claim_id!==record.id||body.expected_version!==record.updated_at)throw new CatalogError('O ledger mudou. Consulte novamente antes de associar o feed.',409);
+  const recovery=validateWalmartRecoveryInput(record,body);await assertWalmartIdentity(config);
+  const response={...record.response,feed_id:recovery.feedId,recovery:{actor:auth.userId,at:new Date().toISOString(),observed_at:recovery.observedAt,evidence:recovery.evidence,gtin:recovery.gtin,identity:'administrator_attested'},trace:traceSnapshot()};
+  const saved=await scopeQuery(db.from('catalog_submissions').update({response,updated_at:new Date().toISOString()}),auth).eq('id',record.id).eq('status','unknown').eq('updated_at',record.updated_at).select('id').maybeSingle();
+  if(saved.error||!saved.data)throw new CatalogError('O ledger mudou durante a recuperação. Recarregue antes de decidir.',409);
+  return {id:record.id,sku:loaded.row.sku,feed_id:recovery.feedId,status:'unknown',publication_status:'not_verified',message:'Feed associado por decisão auditada. Consulte o processamento; esta ação não publica nem permite replay.'};
+ });
+}

@@ -1,8 +1,9 @@
 {
-  "checked_at": "2026-10-06T12:41:33.495Z",
+  "checked_at": "2026-10-06T23:10:28.051Z",
   "config": "passed",
   "daemon_required": false,
   "services": [
+    "poller",
     "restore-check",
     "restore-db",
     "scanner",

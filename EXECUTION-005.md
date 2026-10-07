@@ -1,6 +1,6 @@
 ## Checkpoint autônomo atual — 05/10/2026, noite
 
-249 testes/54 arquivos passaram; 20 migrations aplicadas e tipos alinhados; typecheck/build de 41 rotas e audit sem vulnerabilidades aprovados. Product Fees ligado à economia, provenance/reconciliação, autoridade persistente de ofertas, reserva de versão do pai e cobertura por canal implementados. AG-01 integrado parcialmente como regressões de contrato; jornadas reais pendentes. Detalhes/evidências: EXECUTION-008-autonomia.md e EXECUTION-009-retomada.md. As 54 stories continuam sujeitas aos gates originais.
+351 testes/82 arquivos passaram; 28 migrations aplicadas e tipos alinhados; typecheck/build e audit sem vulnerabilidades aprovados. Product Fees ligado à economia, provenance/reconciliação, autoridade persistente de ofertas, reserva de versão do pai e cobertura por canal implementados. O fanout de schema Amazon, recuperação auditada de feed Walmart, polling opt-in, registro de contas por referência de cofre e verificação remota de deriva foram adicionados; jornadas reais continuam pendentes. Detalhes/evidências: EXECUTION-008-autonomia.md, EXECUTION-009-retomada.md e TASKLIST-011-operacao-restante.md. As 54 stories continuam sujeitas aos gates originais.
 
 # Execução S4–S12 — incremento de 05/10/2026
 

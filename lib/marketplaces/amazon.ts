@@ -18,7 +18,7 @@ async function readAmazonJson(response:Response,limit:number,stage='SP-API') {
 export function amazonConfig() {
   const env = process.env;
   const endpoint = env.AMAZON_SP_API_ENDPOINT || 'https://sellingpartnerapi-na.amazon.com';
-  if (!['https://sellingpartnerapi-na.amazon.com', 'https://sellingpartnerapi-eu.amazon.com', 'https://sellingpartnerapi-fe.amazon.com'].includes(endpoint)) throw new Error('Endpoint Amazon inválido.');
+  if (!['https://sellingpartnerapi-na.amazon.com', 'https://sandbox.sellingpartnerapi-na.amazon.com', 'https://sellingpartnerapi-eu.amazon.com', 'https://sellingpartnerapi-fe.amazon.com'].includes(endpoint)) throw new Error('Endpoint Amazon inválido.');
   const sellerId = env.AMAZON_SP_API_SELLER_ID || '';
   const marketplaceId = env.AMAZON_MARKETPLACE_ID || 'ATVPDKIKX0DER';
   if (marketplaceId !== 'ATVPDKIKX0DER') throw new Error('Este conector está configurado para Amazon US.');

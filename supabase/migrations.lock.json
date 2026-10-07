@@ -1,7 +1,7 @@
 {
   "version": 1,
   "project_id": "yigqsjevwvqxrxvqhvtd",
-  "attested_at": "2026-10-06T13:04:08.640Z",
+  "attested_at": "2026-10-06T23:13:43.889Z",
   "remote_history": [
     {
       "version": "20261005165617",
@@ -106,6 +106,14 @@
     {
       "version": "20261006130351",
       "name": "latest_submission_polling"
+    },
+    {
+      "version": "20261006230305",
+      "name": "amazon_schema_event_refresh_all"
+    },
+    {
+      "version": "20261006231324",
+      "name": "marketplace_account_registry"
     }
   ],
   "files": [
@@ -212,7 +220,15 @@
     {
       "path": "20261006130351_latest_submission_polling.sql",
       "sha256": "2d379f59ea617882789c17e3d6b58e0762d1aa933d49b80a59c15ec00cf3db91"
+    },
+    {
+      "path": "20261006230305_amazon_schema_event_refresh_all.sql",
+      "sha256": "bd1b5c2a87d1516e898bff22523050d451a62277603249be4856fd9d3fef4f4d"
+    },
+    {
+      "path": "20261006231324_marketplace_account_registry.sql",
+      "sha256": "a357a31c72edf61c59a03597ee3850fd3c3f5b20566d82882767322122eed0a2"
     }
   ],
-  "types_sha256": "e59428cd7383b035e9a18a7cdc85200da20226112e7f1fbc056b4cb89405d6b3"
+  "types_sha256": "b9f9df81b480022b4d35a1766b04cdb77c542fd6d6160a2e46659c33ee84d3f1"
 }

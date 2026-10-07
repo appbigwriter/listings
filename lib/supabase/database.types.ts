@@ -1,4 +1,3 @@
-// Generated from Supabase project yigqsjevwvqxrxvqhvtd on 2026-10-06 UTC; 26 migrations. Regenerate after migrations.
 export type Json =
   | string
   | number
@@ -723,6 +722,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      marketplace_accounts: {
+        Row: {
+          account_id: string
+          channel: string
+          configuration: Json
+          created_at: string
+          credential_ref: string
+          id: string
+          marketplace_id: string
+          organization_id: string
+          owner_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          account_id: string
+          channel: string
+          configuration?: Json
+          created_at?: string
+          credential_ref: string
+          id?: string
+          marketplace_id: string
+          organization_id: string
+          owner_id: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          channel?: string
+          configuration?: Json
+          created_at?: string
+          credential_ref?: string
+          id?: string
+          marketplace_id?: string
+          organization_id?: string
+          owner_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       meta_campaign_plans: {
         Row: {

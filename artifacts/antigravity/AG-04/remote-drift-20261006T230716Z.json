@@ -1,0 +1,275 @@
+{
+  "checked_at": "2026-10-06T23:07:16.232019+00:00",
+  "transaction_read_only": "on",
+  "migrations": [
+    {
+      "version": "20261005165617",
+      "name": "catalog_foundation"
+    },
+    {
+      "version": "20261005165628",
+      "name": "catalog_pipeline"
+    },
+    {
+      "version": "20261005165800",
+      "name": "catalog_explicit_grants"
+    },
+    {
+      "version": "20261005172255",
+      "name": "operational_security"
+    },
+    {
+      "version": "20261005173315",
+      "name": "catalog_history"
+    },
+    {
+      "version": "20261005173317",
+      "name": "ai_operation_budget"
+    },
+    {
+      "version": "20261005174912",
+      "name": "submission_reconciliation"
+    },
+    {
+      "version": "20261005182921",
+      "name": "amazon_feed_pipeline"
+    },
+    {
+      "version": "20261005185007",
+      "name": "catalog_assets"
+    },
+    {
+      "version": "20261005190025",
+      "name": "ai_cost_reservations"
+    },
+    {
+      "version": "20261005191420",
+      "name": "catalog_notification_events"
+    },
+    {
+      "version": "20261005191851",
+      "name": "feed_preflight_retry"
+    },
+    {
+      "version": "20261005192122",
+      "name": "atomic_feed_outcomes"
+    },
+    {
+      "version": "20261005193506",
+      "name": "channel_submission_claim"
+    },
+    {
+      "version": "20261005194420",
+      "name": "evidence_scan_receipts"
+    },
+    {
+      "version": "20261005231501",
+      "name": "marketing_approval_versions"
+    },
+    {
+      "version": "20261005232616",
+      "name": "amazon_submission_version_claim"
+    },
+    {
+      "version": "20261005233146",
+      "name": "catalog_archive_lifecycle"
+    },
+    {
+      "version": "20261005235250",
+      "name": "tracking_attribution_configuration"
+    },
+    {
+      "version": "20261006024604",
+      "name": "amazon_family_version_claim"
+    },
+    {
+      "version": "20261006114133",
+      "name": "catalog_schema_refresh_jobs"
+    },
+    {
+      "version": "20261006115105",
+      "name": "operational_incidents"
+    },
+    {
+      "version": "20261006123021",
+      "name": "ebay_family_submission_claim"
+    },
+    {
+      "version": "20261006124540",
+      "name": "walmart_submission_claim"
+    },
+    {
+      "version": "20261006125043",
+      "name": "amazon_schema_event_queue"
+    },
+    {
+      "version": "20261006130351",
+      "name": "latest_submission_polling"
+    },
+    {
+      "version": "20261006230305",
+      "name": "amazon_schema_event_refresh_all"
+    }
+  ],
+  "functions": [
+    {
+      "name": "checkpoint_ebay_family_submission",
+      "argument_count": 6,
+      "body_md5": "df535e7553458bf58ed94d140bd41155",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "enqueue_amazon_schema_event",
+      "argument_count": 7,
+      "body_md5": "6b1ab22e401355e0db16b30eaffc07b6",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "prelisting_capture_version",
+      "argument_count": 0,
+      "body_md5": "6241f4a069c205572243f84978a1200e",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "prelisting_session_active",
+      "argument_count": 0,
+      "body_md5": "f238b493b84cc792fa2cb119bc43e853",
+      "security_definer": true,
+      "authenticated_execute": true,
+      "anon_execute": false
+    },
+    {
+      "name": "reconcile_catalog_incidents",
+      "argument_count": 4,
+      "body_md5": "c5f4017a28d7ca5d8bf454651aec690e",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "record_catalog_feed_outcome",
+      "argument_count": 10,
+      "body_md5": "264fbffeac74010d49c08713b4004d1b",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "record_marketing_approval",
+      "argument_count": 7,
+      "body_md5": "841be35e7676cc0799ea2770e395634d",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "reserve_catalog_ai_operation",
+      "argument_count": 5,
+      "body_md5": "d42e40bf25a5cf9eb32c4e31dcf101d1",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "reserve_catalog_ai_operation_cost",
+      "argument_count": 8,
+      "body_md5": "dcd9afaf618732d363eedacc5ee7f6cc",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "reserve_catalog_channel_submission",
+      "argument_count": 8,
+      "body_md5": "1c13f8bb9f9a422cf90868165d1236c4",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "reserve_catalog_feed",
+      "argument_count": 7,
+      "body_md5": "8e840328a413471648cba9e00d6cf11d",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "reserve_ebay_family_submission",
+      "argument_count": 6,
+      "body_md5": "40188dde99b2c0303586628f49ef6168",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    },
+    {
+      "name": "set_catalog_archive",
+      "argument_count": 6,
+      "body_md5": "b988fb555ee15c151d68dc9188210335",
+      "security_definer": false,
+      "authenticated_execute": false,
+      "anon_execute": false
+    }
+  ],
+  "views": [
+    {
+      "name": "catalog_latest_submissions",
+      "security_invoker": true,
+      "authenticated_select": false,
+      "anon_select": false,
+      "service_select": true
+    }
+  ],
+  "tables": [
+    {
+      "name": "catalog_ai_operations",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_assets",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_events",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_feeds",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_incident_evaluations",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_incidents",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_jobs",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_schema_events",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_submissions",
+      "rls_enabled": true
+    },
+    {
+      "name": "catalog_versions",
+      "rls_enabled": true
+    },
+    {
+      "name": "prelistings",
+      "rls_enabled": true
+    }
+  ]
+}

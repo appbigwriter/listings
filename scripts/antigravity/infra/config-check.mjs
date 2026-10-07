@@ -3,15 +3,15 @@ import assert from 'node:assert/strict';
 import {writeFileSync,mkdirSync} from 'node:fs';
 import {runtimeEnvironment} from './runtime.mjs';
 import {workerLiveness} from './worker-health.mjs';
-const result=spawnSync('docker',['compose','-f','compose.antigravity.yaml','--profile','app','--profile','restore','config','--format','json'],{encoding:'utf8',windowsHide:true});
+const result=spawnSync('docker',['compose','-f','compose.antigravity.yaml','--profile','app','--profile','scheduler','--profile','restore','config','--format','json'],{encoding:'utf8',windowsHide:true});
 if(result.status!==0)throw new Error('Docker Compose configuration failed (no daemon needed)');
 const config=JSON.parse(result.stdout),services=config.services;
 assert.equal(config.name,'prelisting-ag04');
 assert.equal(config.networks.private.internal,true);
-for(const name of ['scanner','worker','restore-db','restore-check'])assert.equal(services[name].ports,undefined,`${name} must not publish ports`);
+for(const name of ['scanner','worker','poller','restore-db','restore-check'])assert.equal(services[name].ports,undefined,`${name} must not publish ports`);
 assert.equal(services.web.ports.length,1);assert.equal(services.web.ports[0].host_ip,'127.0.0.1');assert.equal(services.web.ports[0].published,'33100');
 assert.deepEqual(services['restore-db'].networks,{private:null});
-for(const name of ['web','worker']){assert.equal(services[name].read_only,true);assert.ok(services[name].secrets.some(secret=>secret.source==='runtime_config'));assert.equal(services[name].env_file,undefined);}
+for(const name of ['web','worker','poller']){assert.equal(services[name].read_only,true);assert.ok(services[name].secrets.some(secret=>secret.source==='runtime_config'));assert.equal(services[name].env_file,undefined);}
 const fixture={NEXT_PUBLIC_SUPABASE_URL:'https://fixture.invalid',NEXT_PUBLIC_SUPABASE_ANON_KEY:'test-anon',SUPABASE_SERVICE_ROLE_KEY:'test-service',PRELISTING_APP_URL:'http://127.0.0.1:33100',PRELISTING_REVIEW_SECRET:'test-signature'};
 const env=runtimeEnvironment(fixture,{PATH:'fixture-path',PRELISTING_ENABLE_PUBLICATION:'true',SUPABASE_SERVICE_ROLE_KEY:'inherited-secret'});
 assert.equal(env.PRELISTING_ENABLE_PUBLICATION,'false');assert.equal(env.PRELISTING_RECOVERY_MODE,'true');assert.equal(env.SUPABASE_SERVICE_ROLE_KEY,'test-service');
