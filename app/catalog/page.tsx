@@ -25,13 +25,70 @@ export default function CatalogHome() {
   useEffect(() => { void refresh(); }, [refresh]);
   useEffect(() => {
     if (!jobs.some(job => ['pending', 'running'].includes(job.status))) return;
-    const timer = setInterval(() => { void refresh(); }, 10000);
+    const timer = setInterval(() => { void refresh(); }, 3000);
     return () => clearInterval(timer);
   }, [jobs, refresh]);
   const run = async (task: () => Promise<void>) => { setBusy(true); setError(''); try { await task(); } catch (error) { setError(error instanceof Error ? error.message : 'Falha na operação.'); } finally { setBusy(false); } };
   return <main className="mx-auto max-w-7xl p-6 md:p-10">
     <header className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-widest text-blue-600">FBRSigns · Product operations</p><h1 className="text-3xl font-black mt-2">Central de preparação</h1><p className="text-slate-500 mt-2">Importe o catálogo, resolva pendências e aprove cada versão por marketplace.</p></div><nav className="flex gap-3"><Link className="btn" href="/workspace">Extrair referência</Link><Link className="btn" href="/marketing">Marketing</Link><button className="btn" onClick={() => run(async () => { const response = await fetch('/api/auth/session', { method: 'DELETE' }); if (!response.ok) throw new Error('Não foi possível revogar a sessão. Tente novamente.'); window.location.href = '/login'; })}>Sair</button></nav></header>
     {error && <p role="alert" className="my-5 rounded-lg bg-red-50 p-4 text-red-700">{error}</p>}
+    {jobs.some(j => ['pending', 'running'].includes(j.status)) && (() => {
+      const active = jobs.find(j => ['pending', 'running'].includes(j.status))!;
+      const percent = Math.min(100, Math.round(((active.cursor || 0) / (active.total || 1)) * 100));
+      return (
+        <section role="status" aria-live="polite" className="mt-5 rounded-xl border border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 p-5 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="flex h-3 w-3 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+              </span>
+              <div>
+                <h3 className="font-bold text-blue-950 text-base">
+                  Processamento em andamento: <span className="uppercase tracking-wider">{active.kind}</span>
+                </h3>
+                <p className="text-xs text-blue-700 mt-0.5">
+                  {active.cursor} de {active.total} itens processados ({percent}%) · Os produtos são inseridos e atualizados no catálogo em tempo real.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                className="btn btn-primary text-xs"
+                disabled={busy}
+                onClick={() => run(async () => {
+                  let current = active;
+                  while (current && ['pending', 'running'].includes(current.status)) {
+                    const res = await api('/api/catalog/jobs', { action: 'process', id: current.id });
+                    current = res.job;
+                    await refresh();
+                    if (current.status === 'completed' || current.status === 'failed' || current.status === 'cancelled') break;
+                  }
+                })}
+              >
+                {busy ? 'Processando…' : 'Processar lote pelo navegador'}
+              </button>
+              <button
+                className="btn text-xs border-red-200 text-red-700 hover:bg-red-50"
+                disabled={busy}
+                onClick={() => run(async () => {
+                  await api('/api/catalog/jobs', { action: 'cancel', id: active.id });
+                  await refresh();
+                })}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+          <div className="mt-3 w-full bg-blue-200 rounded-full h-2.5 overflow-hidden">
+            <div
+              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+              style={{ width: `${percent}%` }}
+            ></div>
+          </div>
+        </section>
+      );
+    })()}
     <section className="card mt-6"><div className="flex flex-wrap items-center gap-4"><label>Marketplace <select className="ml-2 rounded border p-2" value={channel} onChange={event => setChannel(event.target.value as Channel)}>{CHANNELS.map(key => <option key={key} value={key}>{CHANNEL_LABELS[key]}</option>)}</select></label><span className="text-sm text-slate-500">{status?.channels?.[channel] ? 'Conector configurado · acesso precisa ser validado' : 'Conector sem credenciais'}</span><span className="text-sm text-slate-500">{status?.ai ? 'IA configurada' : 'IA sem chave'}</span><button className="btn ml-auto" onClick={() => run(refresh)} disabled={busy}>Atualizar</button></div>{status && !status.jobs && <p className="mt-3 rounded bg-amber-50 p-3 text-sm text-amber-800">A fila persistente depende da migration de catálogo. Revise as migrations antes de ativar a gravação e o worker.</p>}</section>
     <div className="grid gap-5 mt-5 md:grid-cols-2"><section className="card"><h2 className="font-bold text-lg">Importar produtos</h2><p className="text-sm text-slate-500 mt-1">CSV ou JSON com SKU e título. Dados técnicos entram como pendentes.</p><div className="flex gap-3 mt-4"><select aria-label="Formato de importação" className="border rounded p-2" value={format} onChange={event => { setFormat(event.target.value); setPreview(null); }}>{['json', 'csv'].map(value => <option key={value}>{value}</option>)}</select><input aria-label="Arquivo de catálogo" type="file" accept=".csv,.json" onChange={async event => { const file = event.target.files?.[0]; if (!file) return; if (file.size > 5000000) { setError('Arquivo acima de 5 MB.'); return; } setFormat(file.name.endsWith('.csv') ? 'csv' : 'json'); setImportText(await file.text()); setSource('arquivo'); setPreview(null); }} /></div><textarea aria-label="Conteúdo do catálogo" className="mt-3 h-28 w-full border rounded p-3 font-mono text-xs" value={importText} onChange={event => { setImportText(event.target.value); setSource('arquivo'); setPreview(null); }} placeholder='[{"sku":"FBR-001","title":"Roll-up 33 inches"}]' /><div className="flex flex-wrap gap-2 mt-3"><button className="btn" disabled={busy || !importText} onClick={() => run(async () => { setSource('arquivo'); setPreview(await api('/api/catalog/import', { text: importText, format, source: 'arquivo' })); })}>Prévia do arquivo</button><button className="btn" disabled={busy || !status?.source} onClick={() => run(async () => { setSource('configured'); setPreview(await api('/api/catalog/import', { source: 'configured' })); })}>Ler catálogo da loja</button><button className="btn btn-primary" disabled={busy || !preview || preview.invalid > 0 || !status?.jobs} onClick={() => run(async () => { await api('/api/catalog/import', { text: JSON.stringify(preview.preview.map((item: any) => item.product?._catalog?.source?.snapshot)), format: 'json', source: source === 'configured' ? 'loja-configurada' : source, confirm: true }); setPreview(null); await refresh(); })}>Importar prévia revisada</button></div>{preview && <div className="mt-3 max-h-56 overflow-auto text-sm"><p>{preview.valid} válidos · {preview.invalid} inválidos</p>{preview.diff&&<p>{preview.diff.items.filter((item:any)=>item.status==='new').length} novos · {preview.diff.items.filter((item:any)=>item.status==='changed').length} alterados · {preview.diff.absent.length} ausentes na fonte completa</p>}{preview.diff?.absent.length>0&&<p className="text-amber-800">Ausentes: {preview.diff.absent.join(', ')}. Revise antes de arquivar; nenhuma remoção é automática.</p>}{preview.preview.map((item: any) => <p key={item.index} className={item.error ? 'text-red-600' : 'text-slate-600'}>{item.product?.sku} {item.product?.title} {item.error}</p>)}</div>}</section>
     <section className="card"><h2 className="font-bold text-lg">Criar um rascunho</h2><div className="grid gap-3 mt-4"><label className="field">SKU<input value={newSku} onChange={event => setNewSku(event.target.value)} /></label><label className="field">Título<input value={newTitle} onChange={event => setNewTitle(event.target.value)} /></label><button className="btn btn-primary" disabled={busy || !status?.catalog_ready || !newSku || !newTitle} onClick={() => run(async () => { await api('/api/listings', { sku: newSku, title: newTitle }); window.location.href = `/catalog/${encodeURIComponent(newSku)}`; })}>Salvar rascunho</button></div><p className="text-sm text-slate-500 mt-4">Categoria, medidas e identificadores podem ser preenchidos durante a preparação.</p></section></div>
