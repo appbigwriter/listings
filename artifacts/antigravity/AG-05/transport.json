@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-07T00:05:20.348Z",
+  "checked_at": "2026-10-07T00:20:40.154Z",
   "scenarios": [
     "SPAPI_429_retry_after_123_no_retry",
     "timeout_injected_after_mutation_started_no_retry",
