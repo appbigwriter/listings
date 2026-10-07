@@ -2,12 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const publicApi = ['/api/generate', '/api/generate-field'];
 
+function isLoopback(url: string) {
+  try { return ['localhost', '127.0.0.1', '::1'].includes(new URL(url).hostname); } catch { return false; }
+}
+
 export function middleware(req: NextRequest) {
   if (!req.nextUrl.pathname.startsWith('/api/')) return NextResponse.next();
   if (req.nextUrl.pathname==='/api/health' && req.method==='GET') return NextResponse.next();
   if (!['GET','HEAD','OPTIONS'].includes(req.method)) {
     const origin = req.headers.get('origin');
-    if (req.headers.get('sec-fetch-site') === 'cross-site' || origin && origin !== req.nextUrl.origin) return NextResponse.json({ error: 'Origem da requisição não autorizada.' }, { status: 403 });
+    const host = req.headers.get('x-forwarded-host') || req.headers.get('host');
+    const proto = req.headers.get('x-forwarded-proto') || req.nextUrl.protocol.replace(':', '');
+    const headerOrigin = host ? `${proto}://${host}` : undefined;
+    const isSame = !origin || origin === req.nextUrl.origin || origin === headerOrigin || (
+      process.env.NODE_ENV !== 'production' && isLoopback(origin) && (isLoopback(req.nextUrl.origin) || (headerOrigin ? isLoopback(headerOrigin) : false))
+    );
+    if (req.headers.get('sec-fetch-site') === 'cross-site' || !isSame) return NextResponse.json({ error: 'Origem da requisição não autorizada.' }, { status: 403 });
     if (Number(req.headers.get('content-length')) > 6_000_000) return NextResponse.json({ error: 'Requisição acima do limite.' }, { status: 413 });
   }
   if (req.nextUrl.pathname.startsWith('/api/auth/')) return NextResponse.next();

@@ -13,11 +13,19 @@ async function main() {
     const result=await db.auth.admin.listUsers({page,perPage:100}); if(result.error) throw new Error('Não foi possível conferir usuários.');
     user=result.data.users.find(candidate=>candidate.email?.toLowerCase()===email); if(user || result.data.users.length<100) break;
   }
-  if (!args.includes('--apply')) { console.log(JSON.stringify({mode:'dry_run',user_exists:Boolean(user),role,organization,invite_required:!user}));return; }
+  const password=args.includes('--password')?option('--password'):'';
+  if (!args.includes('--apply')) { console.log(JSON.stringify({mode:'dry_run',user_exists:Boolean(user),role,organization,invite_required:!user&&!password,create_direct:!user&&Boolean(password)}));return; }
   if (!user) {
-    if (!args.includes('--invite') || !process.env.PRELISTING_APP_URL?.startsWith('https://')) throw new Error('Novo usuário exige --invite e PRELISTING_APP_URL HTTPS para o convite.');
-    const invited=await db.auth.admin.inviteUserByEmail(email,{redirectTo:`${process.env.PRELISTING_APP_URL}/auth/complete`});
-    if(invited.error || !invited.data.user) throw new Error('Não foi possível convidar o usuário.'); user=invited.data.user;
+    if (password) {
+      if (password.length < 6) throw new Error('A senha deve ter pelo menos 6 caracteres.');
+      const created = await db.auth.admin.createUser({ email, password, email_confirm: true, app_metadata: { organization_id: organization, prelisting_roles: [role] } });
+      if (created.error || !created.data.user) throw new Error(`Não foi possível criar o usuário: ${created.error?.message || 'Erro desconhecido'}`);
+      user = created.data.user;
+    } else {
+      if (!args.includes('--invite') || !process.env.PRELISTING_APP_URL?.startsWith('https://')) throw new Error('Novo usuário sem --password exige --invite e PRELISTING_APP_URL HTTPS para o convite por e-mail.');
+      const invited=await db.auth.admin.inviteUserByEmail(email,{redirectTo:`${process.env.PRELISTING_APP_URL}/auth/complete`});
+      if(invited.error || !invited.data.user) throw new Error('Não foi possível convidar o usuário.'); user=invited.data.user;
+    }
   }
   const updated=await db.auth.admin.updateUserById(user.id,{app_metadata:{...user.app_metadata,organization_id:organization,prelisting_roles:[role]}});
   if(updated.error) throw new Error('Falha ao aplicar o papel. O usuário ainda não tem o privilégio solicitado.');
