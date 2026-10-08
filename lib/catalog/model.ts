@@ -15,7 +15,7 @@ export type ChannelListing = {
   schema_change?: ReturnType<typeof import('./schema-change').schemaChange>;
   schema_refresh_pending?: {event_id:string;requested_at:string;product_type_version:string};
   family?: {variation_aspects:string[];image_variation_aspect:string};
-  recommendation?: { id: string; confidence: number; reason: string };
+  recommendation?: { id: string; confidence: number; reason: string; accepted?: boolean };
   approval?: { hash: string; actor: string; approved_at: string; signature?: string };
   offer_authority?: OfferAuthority;
   report?: { ready: boolean; issues: Issue[]; checked_at: string };

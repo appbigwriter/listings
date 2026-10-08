@@ -74,8 +74,16 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
       const recommendation = await recommendCategory(String(product.title), String(product.description || ''), listing.suggestions!, aiRuntime);
       if (recommendation) {
         listing.recommendation = recommendation;
-        if (!listing.product_type && recommendation.confidence >= 0.85) listing.product_type = recommendation.id;
-        if (channel === 'ebay-us' && !listing.category && recommendation.confidence >= 0.85) listing.category = recommendation.id;
+        if (channel === 'amazon-us' && recommendation.accepted === false) {
+          // Remove a stale value produced by the former unsafe auto-classifier.
+          if (listing.product_type === recommendation.id) listing.product_type = '';
+          if (listing.category === recommendation.id) listing.category = '';
+          if (product.product_type === recommendation.id) product.product_type = '';
+          if (product.category === recommendation.id) product.category = '';
+        }
+        // Amazon product types must be confirmed against the official definition schema.
+        // A category suggestion is evidence for review, never an automatic assignment.
+        if (channel === 'ebay-us' && recommendation.accepted !== false && !listing.category && recommendation.confidence >= 0.85) listing.category = recommendation.id;
       }
       output = { suggestions: listing.suggestions, recommendation }; break;
     }
