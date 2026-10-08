@@ -1,0 +1,7 @@
+# SignFlare — Logo
+
+Data: 08/10/2026. Gerado com a ferramenta nativa ImageGen. Arquivo raster PNG com fundo transparente.
+
+## Prompt utilizado
+
+Use case: logo-brand. Create one polished primary logo for the American brand SignFlare, maker of signs, printed vinyl decals, acrylic signs, banners and small business displays. Exact wordmark text: "SignFlare", capital S and F, spelled S-i-g-n-F-l-a-r-e. Use very bold modern sans-serif typography, confident geometric letterforms, excellent readable kerning, professional and impactful. Intuitive icon: a simple recognizable upright sign panel with a single integrated four-point flare/spark at its upper-right corner, suggesting signage that stands out. Design the icon as a distinctive compact flat symbol with strong silhouette, not a flame and not a complex illustration. Horizontal lockup, icon to left and wordmark to right, perfectly balanced optical spacing. Dark navy wordmark; vivid orange icon and flare, matching the navy/orange direction of the SignFlare catalog. Clean flat vector-like shapes, crisp edges, minimal details, suitable for storefront signage, Amazon brand presence, packaging and print. Transparent background with actual alpha. Only one logo, no presentation sheet, no tagline, no supplementary text, no mockup, no scenery, no gradients, no glow, no shadows, no 3D, no watermark. Generous but compact transparent margins around the logo.
