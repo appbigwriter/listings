@@ -1,0 +1,63 @@
+name: Catalog operations
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Operation to run'
+        required: true
+        default: 'poll'
+        type: choice
+        options: [poll, validate]
+  schedule:
+    - cron: '17 * * * *'
+jobs:
+  read-only-monitor:
+    if: github.event_name == 'schedule' || inputs.mode == 'poll'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NODE_ENV: production
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      PRELISTING_AUTH_MODE: trusted-gateway
+      PRELISTING_ALLOW_LOCAL_ONLY: 'false'
+      PRELISTING_APP_URL: https://prelistings.fbrsigns.com
+      PRELISTING_ENABLE_PUBLICATION: 'false'
+      PRELISTING_ENABLE_FEEDS: 'false'
+      PRELISTING_ENABLE_OFFER_PATCH: 'false'
+      PRELISTING_POLLING_INTERVAL_MINUTES: '1'
+      PRELISTING_POLLING_MAX_JOBS: '100'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run catalog:poll -- --once
+  validate-runtime:
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'validate'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      PRELISTING_AUTH_MODE: supabase-session
+      PRELISTING_ALLOW_LOCAL_ONLY: 'false'
+      PRELISTING_APP_URL: https://prelistings.fbrsigns.com
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: gpt-4o-mini
+      SOURCE_CATALOG_URL: https://fbrsigns.com
+      PRELISTING_ENABLE_PUBLICATION: 'false'
+      PRELISTING_ENABLE_FEEDS: 'false'
+      PRELISTING_ENABLE_OFFER_PATCH: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run config:validate

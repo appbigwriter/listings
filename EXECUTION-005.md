@@ -1,4 +1,8 @@
-## Checkpoint autônomo atual — 05/10/2026, noite
+## Checkpoint autônomo atual — 08/10/2026, 17:30
+
+356 testes/85 arquivos passaram; 30 migrations aplicadas e tipos alinhados; typecheck, build e integridade do manifesto aprovados. A Sprint P0 da nova Central de Preparação ganhou estados por campo, exceções agrupadas, regras com precedência, prontidão versionada, backfill seguro e API autenticada. T-102 ganhou estados de credencial, bloqueio de writes e incidentes deduplicados por conta. Nenhuma publicação externa foi executada; tokens, contas, dados físicos e homologação real continuam dependências externas.
+
+## Checkpoint autônomo anterior — 05/10/2026, noite
 
 351 testes/82 arquivos passaram; 28 migrations aplicadas e tipos alinhados; typecheck/build e audit sem vulnerabilidades aprovados. Product Fees ligado à economia, provenance/reconciliação, autoridade persistente de ofertas, reserva de versão do pai e cobertura por canal implementados. O fanout de schema Amazon, recuperação auditada de feed Walmart, polling opt-in, registro de contas por referência de cofre e verificação remota de deriva foram adicionados; jornadas reais continuam pendentes. Detalhes/evidências: EXECUTION-008-autonomia.md, EXECUTION-009-retomada.md e TASKLIST-011-operacao-restante.md. As 54 stories continuam sujeitas aos gates originais.
 

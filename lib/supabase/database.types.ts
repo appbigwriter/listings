@@ -184,6 +184,51 @@ export type Database = {
           },
         ]
       }
+      catalog_channel_readiness: {
+        Row: {
+          blockers: Json
+          channel: string
+          evaluated_at: string
+          id: string
+          inputs_hash: string
+          next_action: string | null
+          organization_id: string
+          owner_id: string
+          schema_version: string | null
+          sku: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          blockers?: Json
+          channel: string
+          evaluated_at?: string
+          id?: string
+          inputs_hash: string
+          next_action?: string | null
+          organization_id: string
+          owner_id: string
+          schema_version?: string | null
+          sku: string
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          blockers?: Json
+          channel?: string
+          evaluated_at?: string
+          id?: string
+          inputs_hash?: string
+          next_action?: string | null
+          organization_id?: string
+          owner_id?: string
+          schema_version?: string | null
+          sku?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       catalog_events: {
         Row: {
           attempts: number
@@ -252,6 +297,119 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "prelistings"
             referencedColumns: ["id", "organization_id", "owner_id"]
+          },
+        ]
+      }
+      catalog_exception_groups: {
+        Row: {
+          action: string
+          assigned_to: string | null
+          channel: string | null
+          code: string
+          created_at: string
+          field_path: string | null
+          fingerprint: string
+          id: string
+          impact_count: number
+          message: string
+          next_action: string | null
+          observed_version: string | null
+          organization_id: string
+          owner_id: string
+          resolved_at: string | null
+          severity: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          action: string
+          assigned_to?: string | null
+          channel?: string | null
+          code: string
+          created_at?: string
+          field_path?: string | null
+          fingerprint: string
+          id?: string
+          impact_count?: number
+          message: string
+          next_action?: string | null
+          observed_version?: string | null
+          organization_id: string
+          owner_id: string
+          resolved_at?: string | null
+          severity: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          action?: string
+          assigned_to?: string | null
+          channel?: string | null
+          code?: string
+          created_at?: string
+          field_path?: string | null
+          fingerprint?: string
+          id?: string
+          impact_count?: number
+          message?: string
+          next_action?: string | null
+          observed_version?: string | null
+          organization_id?: string
+          owner_id?: string
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      catalog_exceptions: {
+        Row: {
+          created_at: string
+          family_key: string | null
+          group_id: string
+          id: string
+          observed_version: string | null
+          organization_id: string
+          owner_id: string
+          resolution: Json | null
+          sku: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          family_key?: string | null
+          group_id: string
+          id?: string
+          observed_version?: string | null
+          organization_id: string
+          owner_id: string
+          resolution?: Json | null
+          sku: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          family_key?: string | null
+          group_id?: string
+          id?: string
+          observed_version?: string | null
+          organization_id?: string
+          owner_id?: string
+          resolution?: Json | null
+          sku?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_exceptions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_exception_groups"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -328,6 +486,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      catalog_field_states: {
+        Row: {
+          channel: string
+          confidence: number | null
+          created_at: string
+          evidence: Json
+          field_path: string
+          id: string
+          observed_version: string | null
+          organization_id: string
+          owner_id: string
+          scope_key: string
+          scope_type: string
+          sku: string
+          source: Json
+          state: string
+          updated_at: string
+          value: Json | null
+        }
+        Insert: {
+          channel: string
+          confidence?: number | null
+          created_at?: string
+          evidence?: Json
+          field_path: string
+          id?: string
+          observed_version?: string | null
+          organization_id: string
+          owner_id: string
+          scope_key: string
+          scope_type: string
+          sku: string
+          source?: Json
+          state: string
+          updated_at?: string
+          value?: Json | null
+        }
+        Update: {
+          channel?: string
+          confidence?: number | null
+          created_at?: string
+          evidence?: Json
+          field_path?: string
+          id?: string
+          observed_version?: string | null
+          organization_id?: string
+          owner_id?: string
+          scope_key?: string
+          scope_type?: string
+          sku?: string
+          source?: Json
+          state?: string
+          updated_at?: string
+          value?: Json | null
+        }
+        Relationships: []
       }
       catalog_incident_evaluations: {
         Row: {
@@ -455,6 +670,63 @@ export type Database = {
           status?: string
           total?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      catalog_preparation_rules: {
+        Row: {
+          approved_by: string | null
+          channel: string | null
+          created_at: string
+          evidence: Json
+          field_path: string
+          id: string
+          organization_id: string
+          owner_id: string
+          priority: number
+          scope_key: string
+          scope_type: string
+          status: string
+          updated_at: string
+          valid_from: string
+          valid_until: string | null
+          value: Json
+        }
+        Insert: {
+          approved_by?: string | null
+          channel?: string | null
+          created_at?: string
+          evidence?: Json
+          field_path: string
+          id?: string
+          organization_id: string
+          owner_id: string
+          priority?: number
+          scope_key: string
+          scope_type: string
+          status?: string
+          updated_at?: string
+          valid_from?: string
+          valid_until?: string | null
+          value: Json
+        }
+        Update: {
+          approved_by?: string | null
+          channel?: string | null
+          created_at?: string
+          evidence?: Json
+          field_path?: string
+          id?: string
+          organization_id?: string
+          owner_id?: string
+          priority?: number
+          scope_key?: string
+          scope_type?: string
+          status?: string
+          updated_at?: string
+          valid_from?: string
+          valid_until?: string | null
+          value?: Json
         }
         Relationships: []
       }
@@ -730,12 +1002,15 @@ export type Database = {
           configuration: Json
           created_at: string
           credential_ref: string
+          credential_state: string
           id: string
+          last_checked_at: string | null
           marketplace_id: string
           organization_id: string
           owner_id: string
           status: string
           updated_at: string
+          writes_blocked_until: string | null
         }
         Insert: {
           account_id: string
@@ -743,12 +1018,15 @@ export type Database = {
           configuration?: Json
           created_at?: string
           credential_ref: string
+          credential_state?: string
           id?: string
+          last_checked_at?: string | null
           marketplace_id: string
           organization_id: string
           owner_id: string
           status: string
           updated_at?: string
+          writes_blocked_until?: string | null
         }
         Update: {
           account_id?: string
@@ -756,14 +1034,76 @@ export type Database = {
           configuration?: Json
           created_at?: string
           credential_ref?: string
+          credential_state?: string
           id?: string
+          last_checked_at?: string | null
           marketplace_id?: string
           organization_id?: string
           owner_id?: string
           status?: string
           updated_at?: string
+          writes_blocked_until?: string | null
         }
         Relationships: []
+      }
+      marketplace_credential_incidents: {
+        Row: {
+          code: string
+          created_at: string
+          evidence: Json
+          first_seen_at: string
+          id: string
+          last_seen_at: string
+          marketplace_account_id: string
+          message: string
+          organization_id: string
+          owner_id: string
+          resolved_at: string | null
+          status: string
+          updated_at: string
+          writes_blocked: boolean
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          evidence?: Json
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          marketplace_account_id: string
+          message: string
+          organization_id: string
+          owner_id: string
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+          writes_blocked?: boolean
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          evidence?: Json
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          marketplace_account_id?: string
+          message?: string
+          organization_id?: string
+          owner_id?: string
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+          writes_blocked?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_credential_incidents_marketplace_account_id_fkey"
+            columns: ["marketplace_account_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       meta_campaign_plans: {
         Row: {
@@ -1173,6 +1513,7 @@ export type Database = {
         }
         Returns: string
       }
+      resolve_vault_secret: { Args: { p_name: string }; Returns: string }
       set_catalog_archive: {
         Args: {
           p_archive: boolean

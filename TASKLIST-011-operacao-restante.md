@@ -4,9 +4,9 @@ Atualizada em 06/10/2026 a partir do código, evidências locais e do backlog S4
 
 ## Situação verificada
 
-- A base Supabase possui 26 migrations aplicadas, inclusive jobs de refresh de schema, incidentes, reservas de famílias eBay, limite/claim Walmart, eventos Amazon e view de última submissão. Falta a verificação final de deriva após as migrations 24–26.
+- A base Supabase possui 30 migrations aplicadas, incluindo a fundação da Central de Preparação e incidentes de credencial; o manifesto local está alinhado à última atestação remota.
 - O core de catálogo, revisão por versão, filas/checkpoints, Amazon, eBay standalone/famílias, Walmart inicial, polling somente leitura, IA avaliada em corpus sintético e marketing persistente estão implementados localmente.
-- O projeto passou por typecheck, build, `npm audit` e 351 testes em 82 arquivos após a última alteração.
+- O projeto passou por typecheck, build e 356 testes em 85 arquivos após a última alteração; a auditoria de dependências permanece sem vulnerabilidades altas/conhecidas.
 - Não há usuários reais no Auth, os dois registros legados continuam sem owner/organização, o token Amazon ainda retornou `invalid_grant`, e nenhum listing, anúncio ou gasto foi publicado.
 
 ## Atualização de execução — 06/10/2026
@@ -19,6 +19,8 @@ Atualizada em 06/10/2026 a partir do código, evidências locais e do backlog S4
 - [x] T-006 — tasklist e registro de execução atualizados com estado técnico e limitações de homologação.
 - [x] T-106 — serviço `poller` opt-in adicionado ao compose; o intervalo permanece `0` até configuração operacional.
 - [~] T-101 — registro multi-conta, RLS e API administrativa foram adicionados na migration `20261006231324_marketplace_account_registry`; a injeção efetiva de credenciais por cofre e a seleção dinâmica pelos executores dependem do provedor de cofre/contas reais.
+- [x] T-102 — estados `healthy`, `refresh_required`, `invalid`, `insufficient_scope`, `rate_limited` e `revoked`, bloqueio de writes e incidentes deduplicados por conta adicionados na migration `20261008202918_credential_incidents`; o conector do cofre e os sinais reais do provedor continuam externos.
+- [x] P0-09 — backfill seguro em dry-run/aplicação administrativa, paginado até 5.000, cria apenas estados `suggested` rastreáveis a partir do payload existente e preserva registros sem owner/organização.
 
 ## P0 — fechar consistência técnica antes de qualquer piloto
 
@@ -32,7 +34,7 @@ Atualizada em 06/10/2026 a partir do código, evidências locais e do backlog S4
 ## P1 — completar os itens ainda provisionáveis em código
 
 - [~] **T-101 — Onboarding multi-conta por canal.** Registro server-side, RLS e API administrativa prontos; falta conectar o cofre e os executores às contas reais.
-- [ ] **T-102 — Estados de credencial e revogação.** Centralizar token inválido, refresh falho, escopo insuficiente e rate limit como incidentes acionáveis por conta; impedir novo write para a conta afetada e preservar monitoramento somente leitura quando seguro.
+- [x] **T-102 — Estados de credencial e revogação.** Centralização, bloqueio de writes e incidente acionável implementados; falta somente ligar cada executor aos sinais do cofre/provedor real.
 - [ ] **T-103 — Completar adaptador TikTok após contrato oficial.** Implementar somente depois de receber versão, OpenAPI/SDK oficial, hosts, paths, identidade da loja e mecanismo de refresh. O código de signing já existe; faltam parser de token, mapper de categorias/atributos, ledger, revisão, monitor e readback.
 - [ ] **T-104 — Completar readback Walmart.** Consumir contrato oficial de Get Item/Offer para comprovar conta, SKU, atributos da versão e disponibilidade. Até isso existir, status de processamento permanece `accepted`/`not_verified`.
 - [ ] **T-105 — Evoluir manutenção eBay.** Cobrir alteração de famílias/ofertas existentes, atualização controlada de preço/estoque e recuperação com provas externas, sempre sem replay automático de writes incertos.
