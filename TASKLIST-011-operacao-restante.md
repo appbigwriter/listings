@@ -4,7 +4,7 @@ Atualizada em 06/10/2026 a partir do código, evidências locais e do backlog S4
 
 ## Situação verificada
 
-- A base Supabase possui 30 migrations aplicadas, incluindo a fundação da Central de Preparação e incidentes de credencial; o manifesto local está alinhado à última atestação remota.
+- A base Supabase possui 32 migrations aplicadas, incluindo a fundação da Central de Preparação, incidentes de credencial e reconciliação de reservas de IA; o manifesto local está alinhado à última atestação remota.
 - O core de catálogo, revisão por versão, filas/checkpoints, Amazon, eBay standalone/famílias, Walmart inicial, polling somente leitura, IA avaliada em corpus sintético e marketing persistente estão implementados localmente.
 - O projeto passou por typecheck, build e 356 testes em 85 arquivos após a última alteração; a auditoria de dependências permanece sem vulnerabilidades altas/conhecidas.
 - Não há usuários reais no Auth, os dois registros legados continuam sem owner/organização, o token Amazon ainda retornou `invalid_grant`, e nenhum listing, anúncio ou gasto foi publicado.
@@ -21,6 +21,7 @@ Atualizada em 06/10/2026 a partir do código, evidências locais e do backlog S4
 - [~] T-101 — registro multi-conta, RLS e API administrativa foram adicionados na migration `20261006231324_marketplace_account_registry`; a injeção efetiva de credenciais por cofre e a seleção dinâmica pelos executores dependem do provedor de cofre/contas reais.
 - [x] T-102 — estados `healthy`, `refresh_required`, `invalid`, `insufficient_scope`, `rate_limited` e `revoked`, bloqueio de writes e incidentes deduplicados por conta adicionados na migration `20261008202918_credential_incidents`; o conector do cofre e os sinais reais do provedor continuam externos.
 - [x] P0-09 — backfill seguro em dry-run/aplicação administrativa, paginado até 5.000, cria apenas estados `suggested` rastreáveis a partir do payload existente e preserva registros sem owner/organização.
+- [x] T-109 — reservas de IA falhadas reconciliadas; lotes de IA fazem prévia de operações e custo antes de enfileirar, sem bloquear o catálogo por falhas anteriores.
 
 ## P0 — fechar consistência técnica antes de qualquer piloto
 

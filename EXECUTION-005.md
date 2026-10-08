@@ -1,6 +1,6 @@
 ## Checkpoint autônomo atual — 08/10/2026, 17:30
 
-356 testes/85 arquivos passaram; 30 migrations aplicadas e tipos alinhados; typecheck, build e integridade do manifesto aprovados. A Sprint P0 da nova Central de Preparação ganhou estados por campo, exceções agrupadas, regras com precedência, prontidão versionada, backfill seguro e API autenticada. T-102 ganhou estados de credencial, bloqueio de writes e incidentes deduplicados por conta. Nenhuma publicação externa foi executada; tokens, contas, dados físicos e homologação real continuam dependências externas.
+356 testes/85 arquivos passaram; 32 migrations aplicadas e tipos alinhados; typecheck, build e integridade do manifesto aprovados. A Sprint P0 da nova Central de Preparação ganhou estados por campo, exceções agrupadas, regras com precedência, prontidão versionada, backfill seguro e API autenticada. T-102 ganhou estados de credencial, bloqueio de writes e incidentes deduplicados por conta. A reserva de IA agora reconcilia falhas e pré-valida lotes. Nenhuma publicação externa foi executada; tokens, contas, dados físicos e homologação real continuam dependências externas.
 
 ## Checkpoint autônomo anterior — 05/10/2026, noite
 

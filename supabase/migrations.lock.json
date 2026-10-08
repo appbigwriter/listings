@@ -1,7 +1,7 @@
 {
   "version": 1,
   "project_id": "yigqsjevwvqxrxvqhvtd",
-  "attested_at": "2026-10-08T21:03:28.000Z",
+  "attested_at": "2026-10-08T22:00:40.000Z",
   "remote_history": [
     {
       "version": "20261005165617",
@@ -126,6 +126,10 @@
     {
       "version": "20261008210322",
       "name": "vault_resolver"
+    },
+    {
+      "version": "20261008220033",
+      "name": "ai_failed_reservation_reconciliation"
     }
   ],
   "files": [
@@ -252,6 +256,10 @@
     {
       "path": "20261008210322_vault_resolver.sql",
       "sha256": "4857c55f08572eef747a6016338e75b862473f13c2b1273980820c9195a443dd"
+    },
+    {
+      "path": "20261008220033_ai_failed_reservation_reconciliation.sql",
+      "sha256": "d575de7230c80cefce45e13ab048f9578a24a5cece9549cf8afaec38bdc16ed9"
     }
   ],
   "types_sha256": "8c12e4c53ca743a7f0c24908744fbb981cf47f5adebb3fa62b31247c8aec9060"

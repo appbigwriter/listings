@@ -13,7 +13,7 @@ async function handleGET(req:NextRequest) {
     scopeQuery(db.from('catalog_jobs').select('id,kind,status,cursor,total,results,created_at,updated_at'),auth).order('updated_at',{ascending:false}).limit(20),
     scopeQuery(db.from('catalog_submissions').select('id,sku,channel,status,target,feed_batch_id,created_at,updated_at'),auth).in('status',['unknown','submitting']).order('created_at').limit(100),
     scopeQuery(db.from('catalog_feeds').select('id,status,feed_id,processing_status,created_at,updated_at'),auth).in('status',['unknown','failed','processing','submitting','uploading','preparing']).order('created_at').limit(100),
-    scopeQuery(db.from('catalog_ai_operations').select('reserved_usd_micro,estimated_usd_micro',{count:'exact'}),auth).gte('created_at',day).order('created_at',{ascending:false}).limit(1000),
+    scopeQuery(db.from('catalog_ai_operations').select('reserved_usd_micro,estimated_usd_micro',{count:'exact'}),auth).gte('created_at',day).in('status',['reserved','completed']).order('created_at',{ascending:false}).limit(1000),
     scopeQuery(db.from('catalog_events').select('id,sku,notification_type,status,attempts,error_code,event_time,updated_at'),auth).in('status',['pending','processing','failed']).order('created_at').limit(100),
   ]);
   if([queued,stalled,failed,uncertain,feeds,ai,events].some(result=>result.error))return NextResponse.json({error:'Diagnóstico operacional indisponível.'},{status:503});

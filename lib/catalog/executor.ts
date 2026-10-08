@@ -61,7 +61,7 @@ async function executeActionStep(db:SupabaseClient,auth:AuthContext,sku:string,a
       const data = await persistProduct(db, auth, result.product, loaded.row);
       await usage?.finish('completed');
       return { data, output: result.output, report: result.report, content_hash: contentHash(result.product, channel) };
-    } catch (error) { await usage?.finish('failed'); throw error; }
+    } catch (error) { await usage?.finish('failed', error); throw error; }
   }
   if (channel !== 'amazon-us' || process.env.PRELISTING_ENABLE_PUBLICATION !== 'true' || options.confirm !== true || options.expected_hash !== contentHash(loaded.product, channel)) throw new CatalogError('Publicação desabilitada ou versão não confirmada.', 403);
   if (!evaluateReadiness(loaded.product, channel).ready) throw new CatalogError('Produto bloqueado para publicação.', 422);

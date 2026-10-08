@@ -169,14 +169,14 @@ describe('catalog SQL migration on local PostgreSQL', () => {
       expect((await db.query("select has_table_privilege('authenticated','catalog_events','INSERT') as allowed")).rows).toEqual([{allowed:false}]);
     }finally{await db.exec('reset role;rollback');}
   });
-  it('shares monetary reservations across owners in an organization and keeps uncertain cost reserved',async()=>{
+  it('shares monetary reservations across owners and releases failed reservations',async()=>{
     const organization='00000000-0000-4000-8000-000000000099';
     await db.exec('set role service_role');
     try {
       const reserve=async(owner:string)=>db.query<{id:string|null}>('select reserve_catalog_ai_operation_cost($1,$2,$3,$4,100,100,60,$5) as id',[owner,organization,'COST-SKU','generate',JSON.stringify({model:'fixture'})]);
       const first=await reserve(userA);expect(first.rows[0].id).not.toBeNull();
       await db.query("update catalog_ai_operations set status='failed' where id=$1",[first.rows[0].id]);
-      expect((await reserve(userB)).rows[0].id).toBeNull();
+      expect((await reserve(userB)).rows[0].id).not.toBeNull();
     }finally{await db.exec('reset role');}
     expect((await db.query("select has_function_privilege('authenticated','reserve_catalog_ai_operation_cost(uuid,uuid,text,text,integer,bigint,bigint,jsonb)','EXECUTE') as allowed")).rows).toEqual([{allowed:false}]);
   });

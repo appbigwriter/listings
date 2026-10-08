@@ -6,6 +6,7 @@ import { getSupabase } from '../../../../lib/marketing/supabase';
 import { cancelJob, enqueueJob, JOB_KINDS, processJob,retryJob, type JobKind } from '../../../../lib/catalog/jobs';
 import { CatalogError, loadProduct, scopeQuery } from '../../../../lib/catalog/repository';
 import { isChannel } from '../../../../lib/catalog/model';
+import { configuredAiPricing, dailyMicroUsd, reservationMicroUsd } from '../../../../lib/ai/cost';
 
 export const runtime = 'nodejs';
 async function handleGET(req: NextRequest) {
@@ -24,6 +25,19 @@ async function handlePOST(req: NextRequest) {
     if (body.action === 'process') return NextResponse.json({ job: await processJob(db, auth, String(body.id)) });
     if (!JOB_KINDS.includes(body.kind) || body.kind === 'import' || !Array.isArray(body.skus) || body.skus.length > 5000 || !isChannel(body.channel)) throw new CatalogError('Processamento inválido.');
     const skus: string[] = [...new Set<string>(body.skus.map((value: unknown) => String(value)))];
+    if (['classify', 'generate'].includes(body.kind)) {
+      const limit = Number(process.env.PRELISTING_AI_DAILY_OPERATIONS || 200);
+      const today = new Date().toISOString().slice(0, 10);
+      const current = await db.from('catalog_ai_operations').select('reserved_usd_micro').eq('organization_id', auth.organizationId).eq('day', today).in('status', ['reserved', 'completed']);
+      if (current.error) throw new CatalogError('Não foi possível calcular o orçamento do lote.', 503);
+      const remaining = Math.max(0, limit - (current.data || []).length);
+      if (skus.length > remaining) throw new CatalogError(`Lote de IA excede o orçamento de operações disponível (${skus.length} solicitadas, ${remaining} restantes). Divida o lote ou aumente PRELISTING_AI_DAILY_OPERATIONS.`, 429);
+      const daily = dailyMicroUsd(), pricing = configuredAiPricing();
+      if (daily !== null && pricing) {
+        const reserved = (current.data || []).reduce((sum: number, row: any) => sum + Number(row.reserved_usd_micro || 0), 0);
+        if (reserved + skus.length * reservationMicroUsd(pricing, body.kind) > daily) throw new CatalogError('Lote de IA excede o orçamento diário em USD. Reduza o lote ou ajuste PRELISTING_AI_DAILY_USD.', 429);
+      }
+    }
     const versions: Record<string, string> = {};
     for (let offset = 0; offset < skus.length; offset += 100) {
       const found = await scopeQuery(db.from('prelistings').select('sku,updated_at'), auth).in('sku', skus.slice(offset, offset + 100)).neq('status', 'archived');

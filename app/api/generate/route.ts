@@ -14,6 +14,6 @@ export async function POST(req: NextRequest) {
     if (!input.ok) return NextResponse.json({ error: input.error }, { status: 400 });
     const db=getSupabase();if(!db)throw new CatalogError('Supabase não configurado.',503);
     const usage=await reserveAiOperation(db,auth,'workspace-draft','generate');
-    try {const result=await generateListing(input.value,usage.runtime);await usage.finish('completed');return NextResponse.json(result);}catch(error){await usage.finish('failed');throw error;}
+    try {const result=await generateListing(input.value,usage.runtime);await usage.finish('completed');return NextResponse.json(result);}catch(error){await usage.finish('failed',error);throw error;}
   } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Falha na geração.' }, { status: error instanceof CatalogError || error instanceof RequestBodyError?error.status:422 }); }
 }
