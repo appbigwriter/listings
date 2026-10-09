@@ -61,6 +61,7 @@ async function amazonRequestStep(path:string,query:Record<string,string>,method:
   return result;
 }
 export async function amazonCategories(title: string) {
+  if (amazonConfig().endpoint.includes('sandbox')) return [];
   const result = await amazonRequest('/definitions/2020-09-01/productTypes', { marketplaceIds: amazonConfig().marketplaceId, itemName: title, locale: 'en_US', searchLocale: 'en_US' });
   return (result.productTypes || []).map((item: { name: string; displayName: string }) => ({ id: item.name, name: item.displayName || item.name }));
 }
@@ -68,6 +69,9 @@ export async function amazonRelatedProducts(input: ProductInput) {
   const config = amazonConfig();
   const title = String(input.title || '').trim();
   if (!title) throw new Error('Título necessário para pesquisar produtos correlatos.');
+  // Amazon Sandbox does not provide a dependable free-text catalog corpus. Avoid
+  // sending arbitrary keyword searches that the static/dynamic sandbox rejects.
+  if (config.endpoint.includes('sandbox') && !input.asin && !input.gtin) return [];
   const keywords = title.replace(/[^a-zA-Z0-9\s-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200);
   const result = await amazonRequest('/catalog/2022-04-01/items', { keywords, marketplaceIds: config.marketplaceId, includedData: 'summaries,identifiers,productTypes,classifications', locale: 'en_US', pageSize: '10' });
   const items = Array.isArray(result.items) ? result.items : [];
