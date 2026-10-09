@@ -21,8 +21,9 @@ export function aiOperationLimits(action:string) {
 }
 export function reservationMicroUsd(pricing:AiPricing,action:string) {
   const limits=aiOperationLimits(action);
-  // Reserve all context as input plus the full output allowance for every possible call.
-  return costMicroUsd(pricing,pricing.max_context_tokens*limits.calls,limits.maxCompletionTokens*limits.calls);
+  // Requests are bounded to 24 KB of serialized text; reserve additional room for up to four low-detail images.
+  const inputTokens=Math.min(pricing.max_context_tokens-limits.maxCompletionTokens,32768);
+  return costMicroUsd(pricing,inputTokens*limits.calls,limits.maxCompletionTokens*limits.calls);
 }
 export function dailyMicroUsd() {
   const value=process.env.PRELISTING_AI_DAILY_USD?.trim();if(!value)return null;

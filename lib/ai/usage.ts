@@ -28,7 +28,8 @@ export async function reserveAiOperation(db:SupabaseClient,auth:AuthContext,sku:
   return {runtime:{onUsage:(usage:Usage)=>{calls.push(usage);},beforeCall:(request:{model:string;max_completion_tokens?:number|null;messages:unknown;response_format?:unknown})=>{
     started++;
     if(started>operationLimits.calls||!Number.isInteger(request.max_completion_tokens)||Number(request.max_completion_tokens)>operationLimits.maxCompletionTokens||Number(request.max_completion_tokens)<1)throw new CatalogError('Chamada excede a reserva de IA.',503);
-    if(pricing&&(request.model!==pricing.model||Buffer.byteLength(JSON.stringify({messages:request.messages,response_format:request.response_format}))+2048+Number(request.max_completion_tokens)>pricing.max_context_tokens))throw new CatalogError('Modelo ou entrada excede o contexto reservado. Reduza os fatos/candidatos ou confira a tabela de preços.',422);
+    const inputBytes=Buffer.byteLength(JSON.stringify({messages:request.messages,response_format:request.response_format}));
+    if(pricing&&(request.model!==pricing.model||inputBytes>24000||inputBytes+8192+Number(request.max_completion_tokens)>pricing.max_context_tokens))throw new CatalogError('Modelo ou entrada excede o contexto reservado. Reduza os fatos/candidatos ou confira a tabela de preços.',422);
   }},finish:async(status:'completed'|'failed',failure?:unknown)=>{
     const estimated=pricing&&calls.length?calls.reduce((sum,call)=>sum+costMicroUsd(pricing,call.prompt_tokens,call.completion_tokens),0):null;
     const failureMessage=failure instanceof Error?failure.message:typeof failure==='string'?failure:'Falha sem diagnóstico.';

@@ -12,10 +12,10 @@ describe('AI cost reservation and estimation',()=>{
     expect(()=>second.runtime.beforeCall({...request,model:'different'})).toThrow('Modelo');
     expect(()=>second.runtime.beforeCall({...request,messages:['x'.repeat(128000)]})).toThrow('contexto');
   });
-  it('reserves both generation calls at full context/output and rounds conservatively',()=>{
+  it('reserves both bounded generation calls and rounds conservatively',()=>{
     vi.useFakeTimers();vi.setSystemTime(new Date('2026-10-05'));
     const pricing=configuredAiPricing('gpt-4o-mini')!;
-    expect(reservationMicroUsd(pricing,'generate')).toBe(41400);expect(reservationMicroUsd(pricing,'classify')).toBe(20700);expect(reservationMicroUsd(pricing,'research')).toBe(20700);
+    expect(reservationMicroUsd(pricing,'generate')).toBe(12831);expect(reservationMicroUsd(pricing,'prepare')).toBe(12831);expect(reservationMicroUsd(pricing,'classify')).toBe(6416);expect(reservationMicroUsd(pricing,'research')).toBe(6416);
     expect(costMicroUsd(pricing,1,1)).toBe(1);expect(costMicroUsd(pricing,1000000,1000000)).toBe(750000);
   });
   it('does not silently invent rates for another model or retain expired rates',()=>{

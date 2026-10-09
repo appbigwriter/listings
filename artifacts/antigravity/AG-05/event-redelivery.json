@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-09T14:12:02.592Z",
+  "checked_at": "2026-10-09T14:47:55.121Z",
   "handler": "actual_processListingEvent",
   "database": "PGlite_actual_migrations",
   "deliveries": 2,

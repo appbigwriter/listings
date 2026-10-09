@@ -22,6 +22,10 @@ export default function PendingIssueLinks() {
         const link = document.createElement('a');
         link.href = `#${id}`; link.dataset.pendingLink = 'true'; link.textContent = 'Abrir correção →';
         link.className = 'mt-2 inline-block font-semibold text-blue-700 underline';
+        link.addEventListener('click', event => {
+          const exact = document.querySelector<HTMLElement>(`#${id} [data-field="${CSS.escape(field)}"]`);
+          if (exact) { event.preventDefault(); exact.scrollIntoView({ behavior: 'smooth', block: 'center' }); exact.focus({ preventScroll: true }); }
+        });
         card.appendChild(link);
       });
     };
