@@ -26,9 +26,9 @@ export async function generateListing(input: AiGenerationInput, runtime:AiRuntim
   ], response_format: { type: 'json_schema', json_schema: { name: 'listing_grounding', strict: true, schema: { type: 'object', properties: { supported: { type: 'boolean' }, reason: { type: 'string' }, evidence: { type: 'array', items: { type: 'object', properties: { field: { type: 'string' }, quote: { type: 'string' } }, required: ['field', 'quote'], additionalProperties: false } } }, required: ['supported', 'reason', 'evidence'], additionalProperties: false } } } });
   runtime.onUsage?.({model:verification.model,prompt_tokens:verification.usage?.prompt_tokens || 0,completion_tokens:verification.usage?.completion_tokens || 0});
   const audit = JSON.parse(verification.choices[0]?.message?.content || '{}');
-  if (!validGrounding(audit,input)) throw new Error('A IA não conseguiu sustentar o texto nos fatos. Revise os dados e tente novamente.');
+  const grounded = validGrounding(audit, input);
   const result = validateAiListingResponse(candidate, input, true);
   if (!result.ok) throw new Error(result.error);
   validateChannelCopy({locale:target.locale,...Object.fromEntries(['title','bullets','description','keywords'].map(field=>[field,String(result.value[field]||'')]))},target.channel);
-  return { ...result.value, grounding: { ...audit, automated_review: true, human_review_required: true } };
+  return { ...result.value, grounding: { ...audit, supported: grounded, automated_review: true, human_review_required: true, review_reason: grounded ? undefined : 'O rascunho contém afirmações que exigem conferência contra a fonte do produto.' } };
 }
