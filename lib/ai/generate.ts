@@ -28,7 +28,7 @@ export async function generateListing(input: AiGenerationInput, runtime:AiRuntim
   const audit = JSON.parse(verification.choices[0]?.message?.content || '{}');
   const grounded = validGrounding(audit, input);
   const factualCandidate = { ...candidate } as Record<string, unknown>;
-  for (const field of ['material', 'color', 'included']) if (Object.hasOwn(input.fbrFacts, field)) factualCandidate[field] = typeof input.fbrFacts[field] === 'string' ? input.fbrFacts[field] : '';
+  for (const field of ['material', 'color', 'included']) factualCandidate[field] = typeof input.fbrFacts[field] === 'string' ? input.fbrFacts[field] : '';
   const result = validateAiListingResponse(factualCandidate, input, true);
   if (!result.ok) throw new Error(result.error);
   validateChannelCopy({locale:target.locale,...Object.fromEntries(['title','bullets','description','keywords'].map(field=>[field,String(result.value[field]||'')]))},target.channel);
