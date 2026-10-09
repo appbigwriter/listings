@@ -27,7 +27,9 @@ export async function generateListing(input: AiGenerationInput, runtime:AiRuntim
   runtime.onUsage?.({model:verification.model,prompt_tokens:verification.usage?.prompt_tokens || 0,completion_tokens:verification.usage?.completion_tokens || 0});
   const audit = JSON.parse(verification.choices[0]?.message?.content || '{}');
   const grounded = validGrounding(audit, input);
-  const result = validateAiListingResponse(candidate, input, true);
+  const factualCandidate = { ...candidate } as Record<string, unknown>;
+  for (const field of ['material', 'color', 'included']) if (Object.hasOwn(input.fbrFacts, field)) factualCandidate[field] = typeof input.fbrFacts[field] === 'string' ? input.fbrFacts[field] : '';
+  const result = validateAiListingResponse(factualCandidate, input, true);
   if (!result.ok) throw new Error(result.error);
   validateChannelCopy({locale:target.locale,...Object.fromEntries(['title','bullets','description','keywords'].map(field=>[field,String(result.value[field]||'')]))},target.channel);
   return { ...result.value, grounding: { ...audit, supported: grounded, automated_review: true, human_review_required: true, review_reason: grounded ? undefined : 'O rascunho contém afirmações que exigem conferência contra a fonte do produto.' } };

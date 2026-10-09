@@ -44,4 +44,5 @@ describe('AI UI/API payload contract', () => {
     const payload = buildAiGenerationPayload({ ...form, title: 'FBR title', source_text: 'RivalBrand' });
     expect(validateAiListingResponse({ title: 'RivalBrand' }, payload)).toMatchObject({ ok: false, error: 'AI_EXTERNAL_CLAIM_NOT_ALLOWED' });
   });
+
 });
