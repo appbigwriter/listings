@@ -13,8 +13,8 @@ import {invalidJobCheckpoint} from './job-checkpoint';
 import {traceEvent,traceSnapshot,traceHash,withTrace} from '../operations/trace';
 import {assertRecoveryReleased,recoveryMode} from '../operations/recovery';
 
-export type JobKind = 'import' | 'research' | 'classify' | 'generate' | 'validate' | 'media' | 'monitor' | 'schema';
-export const JOB_KINDS: JobKind[] = ['import', 'research', 'classify', 'generate', 'validate', 'media', 'monitor','schema'];
+export type JobKind = 'import' | 'research' | 'classify' | 'generate' | 'prepare' | 'validate' | 'media' | 'monitor' | 'schema';
+export const JOB_KINDS: JobKind[] = ['import', 'research', 'classify', 'generate', 'prepare', 'validate', 'media', 'monitor','schema'];
 export async function cancelJob(db: SupabaseClient, auth: AuthContext, id: string) {
   const cancelled = await scopeQuery(db.from('catalog_jobs').update({ status: 'cancelled', updated_at: new Date().toISOString() }), auth).eq('id', id).in('status', ['pending','running']).select('*').maybeSingle();
   if (cancelled.error) throw new CatalogError('Não foi possível cancelar o lote.', 503);

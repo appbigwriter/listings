@@ -7,7 +7,7 @@ describe('AI cost reservation and estimation',()=>{
     vi.useFakeTimers();vi.setSystemTime(new Date('2026-10-05'));vi.stubEnv('OPENAI_MODEL','gpt-4o-mini');
     const db={rpc:vi.fn().mockResolvedValue({data:'reservation',error:null})};
     const operation=await reserveAiOperation(db as any,{userId:'owner',organizationId:'org',mode:'supabase-session'},'A','classify');
-    const request={model:'gpt-4o-mini',max_completion_tokens:1000,messages:[]};operation.runtime.beforeCall(request);expect(()=>operation.runtime.beforeCall(request)).toThrow('reserva');
+    const request={model:'gpt-4o-mini',max_completion_tokens:2500,messages:[]};operation.runtime.beforeCall(request);expect(()=>operation.runtime.beforeCall(request)).toThrow('reserva');
     const second=await reserveAiOperation(db as any,{userId:'owner',organizationId:'org',mode:'supabase-session'},'A','generate');
     expect(()=>second.runtime.beforeCall({...request,model:'different'})).toThrow('Modelo');
     expect(()=>second.runtime.beforeCall({...request,messages:['x'.repeat(128000)]})).toThrow('contexto');
@@ -15,7 +15,7 @@ describe('AI cost reservation and estimation',()=>{
   it('reserves both generation calls at full context/output and rounds conservatively',()=>{
     vi.useFakeTimers();vi.setSystemTime(new Date('2026-10-05'));
     const pricing=configuredAiPricing('gpt-4o-mini')!;
-    expect(reservationMicroUsd(pricing,'generate')).toBe(41400);expect(reservationMicroUsd(pricing,'classify')).toBe(19800);
+    expect(reservationMicroUsd(pricing,'generate')).toBe(41400);expect(reservationMicroUsd(pricing,'classify')).toBe(20700);expect(reservationMicroUsd(pricing,'research')).toBe(20700);
     expect(costMicroUsd(pricing,1,1)).toBe(1);expect(costMicroUsd(pricing,1000000,1000000)).toBe(750000);
   });
   it('does not silently invent rates for another model or retain expired rates',()=>{

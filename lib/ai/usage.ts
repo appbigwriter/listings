@@ -1,13 +1,14 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { AuthContext } from '../auth';
 import { CatalogError,scopeQuery } from '../catalog/repository';
-import {configuredAiPricing,reservationMicroUsd,costMicroUsd,dailyMicroUsd} from './cost';
+import {configuredAiPricing,reservationMicroUsd,costMicroUsd,dailyMicroUsd,aiOperationLimits} from './cost';
 import {traceEvent,traceSnapshot} from '../operations/trace';
 export type Usage = { model:string; prompt_tokens:number; completion_tokens:number };
 export type AiRuntime = { onUsage?:(usage:Usage)=>void;beforeCall?:(request:{model:string;max_completion_tokens?:number|null;messages:unknown;response_format?:unknown})=>void };
 export async function reserveAiOperation(db:SupabaseClient,auth:AuthContext,sku:string,action:string) {
-  const limit=Number(process.env.PRELISTING_AI_DAILY_OPERATIONS || 200);
+  const limit=Number(process.env.PRELISTING_AI_DAILY_OPERATIONS || 1000);
   if (!Number.isInteger(limit) || limit<1 || limit>10000) throw new CatalogError('Limite diário de IA inválido.',503);
+  const operationLimits=aiOperationLimits(action);
   const pricing=configuredAiPricing(),daily=dailyMicroUsd();
   if(daily!==null&&!pricing)throw new CatalogError('Atualize a tabela de preços/contexto do modelo antes de usar o orçamento monetário.',503);
   const result=await db.rpc('reserve_catalog_ai_operation_cost',{p_owner:auth.userId,p_organization:auth.organizationId,p_sku:sku,p_action:action,p_limit:limit,p_daily_usd_micro:daily,p_reserved_usd_micro:pricing?reservationMicroUsd(pricing,action):0,p_pricing:pricing});
@@ -25,8 +26,8 @@ export async function reserveAiOperation(db:SupabaseClient,auth:AuthContext,sku:
   const calls:Usage[]=[];
   let started=0;
   return {runtime:{onUsage:(usage:Usage)=>{calls.push(usage);},beforeCall:(request:{model:string;max_completion_tokens?:number|null;messages:unknown;response_format?:unknown})=>{
-    started++;const allowed=action==='generate'?2:1,output=action==='generate'?2500:action==='research'?2500:1000;
-    if(started>allowed||!Number.isInteger(request.max_completion_tokens)||Number(request.max_completion_tokens)>output||Number(request.max_completion_tokens)<1)throw new CatalogError('Chamada excede a reserva de IA.',503);
+    started++;
+    if(started>operationLimits.calls||!Number.isInteger(request.max_completion_tokens)||Number(request.max_completion_tokens)>operationLimits.maxCompletionTokens||Number(request.max_completion_tokens)<1)throw new CatalogError('Chamada excede a reserva de IA.',503);
     if(pricing&&(request.model!==pricing.model||Buffer.byteLength(JSON.stringify({messages:request.messages,response_format:request.response_format}))+2048+Number(request.max_completion_tokens)>pricing.max_context_tokens))throw new CatalogError('Modelo ou entrada excede o contexto reservado. Reduza os fatos/candidatos ou confira a tabela de preços.',422);
   }},finish:async(status:'completed'|'failed',failure?:unknown)=>{
     const estimated=pricing&&calls.length?calls.reduce((sum,call)=>sum+costMicroUsd(pricing,call.prompt_tokens,call.completion_tokens),0):null;

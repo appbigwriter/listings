@@ -7,6 +7,7 @@ export const AI_FACT_FIELDS = [
 export type AiGenerationInput = {
   fbrFacts: Record<string, unknown>;
   referenceData?: Record<string, unknown>;
+  imageUrls?: string[];
   fieldId?: AiListingField;
 };
 type Validation<T> = { ok: true; value: T } | { ok: false; error: string };
@@ -28,15 +29,20 @@ function stringsIn(value: unknown): Set<string> {
 
 export function buildAiGenerationPayload(form: Record<string, unknown>, fieldId?: AiListingField): AiGenerationInput {
   const fbrFacts = Object.fromEntries(AI_FACT_FIELDS.filter((key) => form[key] !== undefined && form[key] !== '').map((key) => [key, form[key]]));
+  const snapshot = (form._catalog as { source?: { snapshot?: Record<string, unknown> } } | undefined)?.source?.snapshot;
+  if (!fbrFacts.description && typeof snapshot?.detailed_description === 'string') fbrFacts.description = snapshot.detailed_description.slice(0, 12000);
+  for (const key of ['short_description', 'features'] as const) if (typeof snapshot?.[key] === 'string' && snapshot[key]) fbrFacts[`source_${key}`] = String(snapshot[key]).slice(0, 6000);
+  const imageUrls = (Array.isArray(form.images) ? form.images : String(form.images || '').split(/\n+/)).map(String).filter(url => /^https:\/\//i.test(url)).slice(0, 4);
   const referenceData = Object.fromEntries(['source_text', 'source_url'].filter((key) => form[key] !== undefined && form[key] !== '').map((key) => [key, form[key]]));
-  return { fbrFacts, ...(Object.keys(referenceData).length ? { referenceData } : {}), ...(fieldId ? { fieldId } : {}) };
+  return { fbrFacts, ...(imageUrls.length ? { imageUrls } : {}), ...(Object.keys(referenceData).length ? { referenceData } : {}), ...(fieldId ? { fieldId } : {}) };
 }
 
 export function validateAiInput(input: unknown): Validation<AiGenerationInput> {
   if (!isRecord(input) || !isRecord(input.fbrFacts)) return { ok: false, error: 'AI_INPUT_SCHEMA_INVALID' };
   if (input.referenceData !== undefined && !isRecord(input.referenceData)) return { ok: false, error: 'AI_INPUT_REFERENCE_DATA_INVALID' };
+  if (input.imageUrls !== undefined && (!Array.isArray(input.imageUrls) || input.imageUrls.length > 4 || input.imageUrls.some(url => typeof url !== 'string' || !/^https:\/\//i.test(url)))) return { ok: false, error: 'AI_INPUT_IMAGES_INVALID' };
   if (input.fieldId !== undefined && !AI_LISTING_FIELDS.includes(input.fieldId as AiListingField)) return { ok: false, error: 'AI_FIELD_NOT_ALLOWED' };
-  if (Object.keys(input).some((key) => !['fbrFacts', 'referenceData', 'fieldId'].includes(key))) return { ok: false, error: 'AI_INPUT_SCHEMA_INVALID' };
+  if (Object.keys(input).some((key) => !['fbrFacts', 'referenceData', 'imageUrls', 'fieldId'].includes(key))) return { ok: false, error: 'AI_INPUT_SCHEMA_INVALID' };
   return { ok: true, value: input as AiGenerationInput };
 }
 

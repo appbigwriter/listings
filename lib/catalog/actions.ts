@@ -115,10 +115,11 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
       delete listing.schema_refresh_pending;
       output = listing.schema; break;
     }
+    case 'prepare':
     case 'generate': {
       const result = await generateListing(buildAiGenerationPayload(product),aiRuntime,{channel,locale:'en_US'});
       listing.copy={...validateChannelCopy({locale:'en_US',...Object.fromEntries(COPY_FIELDS.map(field=>[field,String(result[field]||'')]))},channel),source:'ai',grounding:result.grounding};
-      output = result; break;
+      output = { ...result, classification: channel === 'amazon-us' && amazonConfig().endpoint.includes('sandbox') ? 'Categoria Amazon pendente de confirmação: Sandbox não fornece catálogo comparável.' : listing.recommendation || 'Classificação pendente de revisão.' }; break;
     }
     case 'media': {
       const urls = Array.isArray(product.images) ? product.images.map(String) : String(product.images || '').split(/\n+/).filter(Boolean);

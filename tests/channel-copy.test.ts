@@ -38,4 +38,12 @@ describe('independent marketplace content',()=>{
   expect(saved._catalog!.channels['ebay-us']!.copy).toMatchObject({title:'eBay steel sign',source:'ai',grounding:{supported:true}});
   expect(mocks.generate).toHaveBeenCalledWith(expect.objectContaining({fbrFacts:expect.objectContaining({title:'Shared base title',material:'Steel'})}),{}, {channel:'ebay-us',locale:'en_US'});
  });
+ it('prepares an Amazon draft without calling Amazon catalog in sandbox',async()=>{
+  const product=fixture();
+  mocks.generate.mockResolvedValue({title:'LED Light Box',description:'Illuminated display',bullets:'Display',keywords:'light box',grounding:{supported:false,visual_observations:['Front panel visible']}});
+  const result=await applyAction(product,auth,'prepare',{channel:'amazon-us'});
+  expect(result.product._catalog!.channels['amazon-us']!.copy).toMatchObject({title:'LED Light Box',source:'ai'});
+  expect(result.output).toMatchObject({classification:expect.anything()});
+  expect(mocks.generate).toHaveBeenCalledTimes(1);
+ });
 });

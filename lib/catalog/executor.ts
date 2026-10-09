@@ -54,7 +54,7 @@ async function executeActionStep(db:SupabaseClient,auth:AuthContext,sku:string,a
   }
   if (action==='review') await assertFamily(db, auth, loaded.product, channel);
   if (action !== 'submit') {
-    const usage=['generate','classify','research'].includes(action) ? await reserveAiOperation(db,auth,sku,action) : undefined;
+    const usage=['generate','prepare','classify','research'].includes(action) ? await reserveAiOperation(db,auth,sku,action) : undefined;
     try {
       const result = await applyAction(loaded.product, auth, action, options, usage?.runtime);
       await execution.beforePersist?.();

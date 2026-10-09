@@ -14,11 +14,15 @@ export function costMicroUsd(pricing:AiPricing,promptTokens:number,completionTok
   const cost=Math.ceil(promptTokens*pricing.input_usd_per_million+completionTokens*pricing.output_usd_per_million);
   if(!Number.isSafeInteger(cost))throw new CatalogError('Custo de IA acima do limite.',503);return cost;
 }
+export function aiOperationLimits(action:string) {
+  if(action==='generate'||action==='prepare')return {calls:2,maxCompletionTokens:2500};
+  if(action==='classify'||action==='research')return {calls:1,maxCompletionTokens:2500};
+  throw new CatalogError('Ação IA inválida.');
+}
 export function reservationMicroUsd(pricing:AiPricing,action:string) {
-  if(!['generate','classify','research'].includes(action))throw new CatalogError('Ação IA inválida.');
+  const limits=aiOperationLimits(action);
   // Reserve all context as input plus the full output allowance for every possible call.
-  const calls=action==='generate'?2:1,output=action==='generate'?5000:action==='research'?2500:1000;
-  return costMicroUsd(pricing,pricing.max_context_tokens*calls,output);
+  return costMicroUsd(pricing,pricing.max_context_tokens*limits.calls,limits.maxCompletionTokens*limits.calls);
 }
 export function dailyMicroUsd() {
   const value=process.env.PRELISTING_AI_DAILY_USD?.trim();if(!value)return null;
