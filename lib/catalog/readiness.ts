@@ -10,7 +10,15 @@ import {validateEbayAdvancedAspects} from '../marketplaces/ebay-advanced-aspects
 export function evaluateReadiness(input: ProductInput, channel: Channel = channelFrom(input.channel), requireApproval = true) {
   input=channelProduct(input,channel);
   const issues: Issue[] = [];
-  const add = (code: string, field: string, message: string, action: string, severity: Issue['severity'] = 'error') => issues.push({ code, field, message, action, severity });
+  const issueHref = (field: string) => {
+    if (['kind', 'eligibility'].includes(field)) return '#eligibility';
+    if (['category', 'product_type', 'schema'].includes(field)) return '#classification';
+    if (['images', 'media'].includes(field)) return '#media';
+    if (['description', 'title', 'bullets', 'keywords'].includes(field)) return '#copy';
+    if (field === 'source') return '#source';
+    return '#facts';
+  };
+  const add = (code: string, field: string, message: string, action: string, severity: Issue['severity'] = 'error') => issues.push({ code, field, message, action, severity, href: issueHref(field) });
   const catalog = input._catalog; const listing = catalog?.channels[channel];
   if(listing?.schema_refresh_pending)add('schema_refresh_pending','schema','Uma notificação solicitou atualizar os requisitos oficiais.','Atualize o schema e revise as alterações antes de enviar.');
   if(channel==='ebay-us'&&listing)for(const [name,value] of Object.entries(listing.attributes)){const fact=catalog?.facts['ebay.aspect.'+name];if(!fact||fact.status!=='confirmed'||hash(fact.value)!==hash(value)||typeof fact.source!=='string'||!fact.source.trim()||!Number.isFinite(Date.parse(fact.observed_at))||Date.parse(fact.observed_at)>Date.now()+300000)add('ebay_aspect_fact_unconfirmed',name,'Aspecto eBay ainda não comprovado nesta versão.','Confirme os aspectos salvos com a documentação do produto.');}

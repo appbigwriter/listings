@@ -1,7 +1,7 @@
 import type { AuthContext } from '../auth';
 import { buildAiGenerationPayload } from '../ai/contracts';
 import { generateListing } from '../ai/generate';
-import { recommendCategory } from '../ai/classify';
+import { isCategorySemanticallyCompatible, recommendCategory } from '../ai/classify';
 import { amazonAttributes, amazonDiscover, amazonFees, amazonPayload, amazonPreview, amazonReadback, amazonRestrictions } from '../marketplaces/amazon';
 import { categorySuggestions, channelSchema } from '../marketplaces/adapters';
 import { checkImage } from './media';
@@ -20,6 +20,8 @@ import {reconcileSource} from './source-reconciliation';
 import {traceSnapshot} from '../operations/trace';
 import {schemaChange} from './schema-change';
 import {buildWalmartPackage} from '../marketplaces/walmart-package';
+import { amazonRelatedProducts } from '../marketplaces/amazon';
+import { researchProduct } from '../ai/research';
 
 export async function applyAction(input: ProductInput, auth: AuthContext, action: string, options: Record<string, unknown> = {}, aiRuntime:AiRuntime={}) {
   const product = structuredClone(input); product._catalog = createCatalog(product, product._catalog);
@@ -29,6 +31,15 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
   const listing = catalog.channels[channel] ||= { product_type: '', category: '', attributes: {} };
   let output: unknown;
   switch (action) {
+    case 'research': {
+      if (channel !== 'amazon-us') throw new CatalogError('Pesquisa comparativa disponível para Amazon US.');
+      const related = await amazonRelatedProducts(product);
+      const ai = await researchProduct(product, related, aiRuntime);
+      catalog.research = { researched_at: new Date().toISOString(), environment: amazonConfig().endpoint.includes('sandbox') ? 'sandbox' : 'production', related_products: related, ai, review_required: true };
+      listing.copy = { ...validateChannelCopy({ locale: 'en_US', ...ai.listing_draft }, channel), source: 'ai', grounding: catalog.research };
+      output = catalog.research;
+      break;
+    }
     case 'account-preparation': {
       if(channel!=='ebay-us'||!listing.category)throw new CatalogError('Selecione a categoria eBay antes de consultar policies e condições.');
       output=await ebayAccountPreparation(listing.category);break;
@@ -71,7 +82,15 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
     }
     case 'classify': {
       listing.suggestions = await categorySuggestions(channel, String(product.title));
-      const recommendation = await recommendCategory(String(product.title), String(product.description || ''), listing.suggestions!, aiRuntime);
+      let recommendation;
+      if (channel === 'amazon-us') {
+        const related = await amazonRelatedProducts(product);
+        const ai = await researchProduct(product, related, aiRuntime);
+        catalog.research = { researched_at: new Date().toISOString(), environment: amazonConfig().endpoint.includes('sandbox') ? 'sandbox' : 'production', related_products: related, ai, review_required: true };
+        listing.copy = { ...validateChannelCopy({ locale: 'en_US', ...ai.listing_draft }, channel), source: 'ai', grounding: catalog.research };
+        const hypothesis = ai.category_hypotheses.find(item => listing.suggestions!.some(candidate => candidate.id === item.product_type && isCategorySemanticallyCompatible(String(product.title), String(product.description || ''), candidate)));
+        recommendation = hypothesis ? { id: hypothesis.product_type, confidence: hypothesis.confidence, reason: `${hypothesis.reason} Evidências: ${hypothesis.evidence_asins.join(', ') || 'pesquisa de catálogo'}.`, accepted: true } : null;
+      } else recommendation = await recommendCategory(String(product.title), String(product.description || ''), listing.suggestions!, aiRuntime);
       if (recommendation) {
         listing.recommendation = recommendation;
         if (channel === 'amazon-us' && recommendation.accepted === false) {
@@ -85,7 +104,7 @@ export async function applyAction(input: ProductInput, auth: AuthContext, action
         // A category suggestion is evidence for review, never an automatic assignment.
         if (channel === 'ebay-us' && recommendation.accepted !== false && !listing.category && recommendation.confidence >= 0.85) listing.category = recommendation.id;
       }
-      output = { suggestions: listing.suggestions, recommendation }; break;
+      output = { research: catalog.research, suggestions: listing.suggestions, recommendation }; break;
     }
     case 'schema': {
       if (!listing.product_type || channel !== 'amazon-us' && !listing.category) throw new CatalogError('Selecione tipo de produto antes de carregar requisitos.');

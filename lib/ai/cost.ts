@@ -15,9 +15,9 @@ export function costMicroUsd(pricing:AiPricing,promptTokens:number,completionTok
   if(!Number.isSafeInteger(cost))throw new CatalogError('Custo de IA acima do limite.',503);return cost;
 }
 export function reservationMicroUsd(pricing:AiPricing,action:string) {
-  if(!['generate','classify'].includes(action))throw new CatalogError('Ação IA inválida.');
+  if(!['generate','classify','research'].includes(action))throw new CatalogError('Ação IA inválida.');
   // Reserve all context as input plus the full output allowance for every possible call.
-  const calls=action==='generate'?2:1,output=action==='generate'?5000:1000;
+  const calls=action==='generate'?2:1,output=action==='generate'?5000:action==='research'?2500:1000;
   return costMicroUsd(pricing,pricing.max_context_tokens*calls,output);
 }
 export function dailyMicroUsd() {

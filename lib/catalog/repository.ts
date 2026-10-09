@@ -5,7 +5,7 @@ import { createCatalog, draftIssues, hash, type ProductInput } from './model';
 import {recordFieldSource} from './field-provenance';
 
 export class CatalogError extends Error { constructor(message: string, public status = 400) { super(message);this.name='CatalogError'; } }
-const SERVER_PRODUCT_FIELDS=new Set(['__proto__','constructor','prototype','_catalog','human_reviewed','review_hash','source_snapshot','source_update','source_resolution','archive_transition','amazon_preview','amazon_fees','amazon_discovery','amazon_restrictions','ai_grounding','submission','archived_at','owner_id','organization_id','id','status','created_at','updated_at']);
+const SERVER_PRODUCT_FIELDS=new Set(['__proto__','constructor','prototype','_catalog','human_reviewed','review_hash','source_snapshot','source_update','source_resolution','archive_transition','amazon_preview','amazon_fees','amazon_discovery','amazon_restrictions','amazon_research','ai_grounding','submission','archived_at','owner_id','organization_id','id','status','created_at','updated_at']);
 export function editableProductPatch(body:Record<string,unknown>):Record<string,unknown>{
  return Object.fromEntries(Object.entries(body).filter(([field])=>!SERVER_PRODUCT_FIELDS.has(field)));
 }

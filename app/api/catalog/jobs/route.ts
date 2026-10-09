@@ -25,7 +25,7 @@ async function handlePOST(req: NextRequest) {
     if (body.action === 'process') return NextResponse.json({ job: await processJob(db, auth, String(body.id)) });
     if (!JOB_KINDS.includes(body.kind) || body.kind === 'import' || !Array.isArray(body.skus) || body.skus.length > 5000 || !isChannel(body.channel)) throw new CatalogError('Processamento inválido.');
     const skus: string[] = [...new Set<string>(body.skus.map((value: unknown) => String(value)))];
-    if (['classify', 'generate'].includes(body.kind)) {
+    if (['research', 'classify', 'generate'].includes(body.kind)) {
       const limit = Number(process.env.PRELISTING_AI_DAILY_OPERATIONS || 200);
       const today = new Date().toISOString().slice(0, 10);
       const current = await db.from('catalog_ai_operations').select('reserved_usd_micro').eq('organization_id', auth.organizationId).eq('day', today).in('status', ['reserved', 'completed']);

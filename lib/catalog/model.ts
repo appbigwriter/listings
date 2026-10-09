@@ -5,7 +5,7 @@ export { CHANNELS, CHANNEL_LABELS, type Channel } from './channels';
 export type ProductKind = 'physical' | 'custom' | 'service' | 'unknown';
 export type Fact = { value: unknown; source: string; status: 'confirmed' | 'pending'; observed_at: string };
 export type FieldSource = { authority:'source'|'human';source_id?:string;source_hash?:string;actor?:string;observed_at:string;value_hash:string };
-export type Issue = { code: string; field: string; message: string; severity: 'error' | 'warning'; action: string };
+export type Issue = { code: string; field: string; message: string; severity: 'error' | 'warning'; action: string; href?: string };
 export type SchemaSnapshot = { channel: Channel; category: string; product_type: string; version: string; fetched_at: string; checksum: string; schema: Record<string, unknown>;metadata?:{category_tree_id:string;taxonomy:import('../marketplaces/ebay-advanced-aspects').EbayTaxonomyAspects} };
 export type MediaCheck = { url: string; checked_at: string; width: number; height: number; format: string; sha256: string };
 export type ChannelListing = {
@@ -26,6 +26,7 @@ export type CatalogDocument = {
   version: 1; product_id: string; kind: ProductKind; eligibility_confirmed: boolean;
   facts: Record<string, Fact>; variants: { sku: string; attributes: Record<string, unknown> }[];
   channels: Partial<Record<Channel, ChannelListing>>; media: MediaCheck[];
+  research?: { researched_at: string; environment: 'sandbox' | 'production'; related_products: unknown[]; ai: unknown; review_required: true };
   source?: { id: string; hash: string; imported_at: string; snapshot: Record<string, unknown> };
   field_sources?: Record<string,FieldSource>;
 };
@@ -46,7 +47,7 @@ export const hash = (value: unknown) => createHash('sha256').update(stableString
 export function contentHash(input: ProductInput, channel: Channel = 'amazon-us') {
   const { _catalog, human_reviewed, review_hash,amazon_fees,amazon_discovery,amazon_restrictions,ai_grounding, ...fields } = channelProduct(input,channel);
   const listing = _catalog?.channels[channel];
-  return hash({ fields, kind: _catalog?.kind, eligibility_confirmed: _catalog?.eligibility_confirmed, facts: _catalog?.facts, variants: _catalog?.variants,
+  return hash({ fields, kind: _catalog?.kind, eligibility_confirmed: _catalog?.eligibility_confirmed, facts: _catalog?.facts, variants: _catalog?.variants, research: _catalog?.research,
     listing: listing && { product_type: listing.product_type, category: listing.category, attributes: listing.attributes, schema_checksum: listing.schema?.checksum,...(listing.schema?.metadata?{schema_metadata_hash:hash(listing.schema.metadata)}:{}),...(listing.family?{family:listing.family}:{}),...(listing.copy?{locale:listing.copy.locale}:{}) }, media: _catalog?.media });
 }
 export function channelFrom(value: unknown): Channel {

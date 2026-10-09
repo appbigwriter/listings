@@ -25,7 +25,7 @@ export async function reserveAiOperation(db:SupabaseClient,auth:AuthContext,sku:
   const calls:Usage[]=[];
   let started=0;
   return {runtime:{onUsage:(usage:Usage)=>{calls.push(usage);},beforeCall:(request:{model:string;max_completion_tokens?:number|null;messages:unknown;response_format?:unknown})=>{
-    started++;const allowed=action==='generate'?2:1,output=action==='generate'?2500:1000;
+    started++;const allowed=action==='generate'?2:1,output=action==='generate'?2500:action==='research'?2500:1000;
     if(started>allowed||!Number.isInteger(request.max_completion_tokens)||Number(request.max_completion_tokens)>output||Number(request.max_completion_tokens)<1)throw new CatalogError('Chamada excede a reserva de IA.',503);
     if(pricing&&(request.model!==pricing.model||Buffer.byteLength(JSON.stringify({messages:request.messages,response_format:request.response_format}))+2048+Number(request.max_completion_tokens)>pricing.max_context_tokens))throw new CatalogError('Modelo ou entrada excede o contexto reservado. Reduza os fatos/candidatos ou confira a tabela de preços.',422);
   }},finish:async(status:'completed'|'failed',failure?:unknown)=>{

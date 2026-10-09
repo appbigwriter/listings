@@ -64,6 +64,21 @@ export async function amazonCategories(title: string) {
   const result = await amazonRequest('/definitions/2020-09-01/productTypes', { marketplaceIds: amazonConfig().marketplaceId, itemName: title, locale: 'en_US', searchLocale: 'en_US' });
   return (result.productTypes || []).map((item: { name: string; displayName: string }) => ({ id: item.name, name: item.displayName || item.name }));
 }
+export async function amazonRelatedProducts(input: ProductInput) {
+  const config = amazonConfig();
+  const title = String(input.title || '').trim();
+  if (!title) throw new Error('Título necessário para pesquisar produtos correlatos.');
+  const keywords = title.replace(/[^a-zA-Z0-9\s-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 200);
+  const result = await amazonRequest('/catalog/2022-04-01/items', { keywords, marketplaceIds: config.marketplaceId, includedData: 'summaries,identifiers,productTypes,classifications', locale: 'en_US', pageSize: '10' });
+  const items = Array.isArray(result.items) ? result.items : [];
+  return items.slice(0, 10).map((item: any) => ({
+    asin: String(item.asin || ''),
+    title: String(item.summaries?.[0]?.itemName || ''),
+    brand: String(item.summaries?.[0]?.brand || ''),
+    productTypes: (item.productTypes || []).map((value: any) => String(value.productTypeId || value.productType || '')).filter(Boolean),
+    classifications: item.classifications || [],
+  })).filter((item: any) => item.asin || item.title);
+}
 export async function amazonSchema(productType: string, category: string, parentage = 'NONE'): Promise<SchemaSnapshot> {
   const config = amazonConfig();
   const result = await amazonRequest(`/definitions/2020-09-01/productTypes/${encodeURIComponent(productType)}`, { marketplaceIds: config.marketplaceId, sellerId: config.sellerId, requirements: 'LISTING', requirementsEnforced: 'ENFORCED', locale: 'en_US', parentageLevel: parentage });

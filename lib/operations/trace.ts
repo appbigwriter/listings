@@ -5,7 +5,7 @@ const ids=new Set(['correlation_id','span_id','parent_span_id','job_id','feed_id
 const hashes=new Set(['sku_hash','organization_hash','workflow_hash','content_hash']);
 const numbers=new Set(['duration_ms','http_status','cursor','total','attempt','prompt_tokens','completion_tokens']);
 const states=new Set(['accepted','rejected','unknown','published','processing','completed','cancelled','pending','failed','returned']);
-const actions=new Set(['configure','confirm-facts','classify','schema','generate','media','validate','discover','fees','apply-source-update','review','restrictions','preview','submit','monitor','reconcile','account-preparation']);
+const actions=new Set(['configure','confirm-facts','research','classify','schema','generate','media','validate','discover','fees','apply-source-update','review','restrictions','preview','submit','monitor','reconcile','account-preparation']);
 type TraceFields=Record<string,unknown>;
 type Context={fields:TraceFields;sink:(line:string)=>void};
 const context=new AsyncLocalStorage<Context>();

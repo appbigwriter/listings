@@ -7,6 +7,8 @@ services:
       NODE_ENV: production
       PRELISTING_AUTH_MODE: supabase-session
       PRELISTING_ALLOW_LOCAL_ONLY: "false"
+      PRELISTING_RECOVERY_MODE: "false"
+      PRELISTING_ENABLE_PUBLICATION: "false"
     ports:
       - "127.0.0.1:3000:3000"
     healthcheck:
@@ -20,6 +22,7 @@ services:
     env_file: .env
     environment:
       NODE_ENV: production
+      PRELISTING_RECOVERY_MODE: "false"
     command: ["./node_modules/.bin/tsx", "scripts/catalog-worker.ts"]
     stop_grace_period: 60s
   notifications:
